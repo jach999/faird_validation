@@ -676,8 +676,9 @@ cat("=== SECTION 5: TAXONOMIC BREADTH (FAIRD) ===\n\n")
 # --- 5a. Table 18: Diptera dominance by Habitat (Ambient) and Site ---
 cat("--- TABLE 18: Diptera dominance by Habitat and Site ---\n\n")
 
-# By habitat (Ambient = Maize / Meadow)
+# By habitat (Ambient = Maize / Meadow) — #N/C excluded: not a valid taxon
 faird_by_ambient <- data_list$faird %>%
+  dplyr::filter(is.na(Order) | Order != nc) %>%
   dplyr::group_by(Ambient, Order) %>%
   dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
   dplyr::group_by(Ambient) %>%
@@ -698,8 +699,9 @@ faird_by_ambient %>%
   dplyr::rename(Diptera_n = n, Total_n = total, Diptera_pct = pct) %>%
   print()
 
-# By site
+# By site — #N/C excluded
 faird_by_site <- data_list$faird %>%
+  dplyr::filter(is.na(Order) | Order != nc) %>%
   dplyr::group_by(Site, Ambient, Order) %>%
   dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
   dplyr::group_by(Site) %>%
@@ -720,9 +722,10 @@ faird_by_site %>%
   dplyr::rename(Diptera_n = n, Total_n = total, Diptera_pct = pct) %>%
   print()
 
-# Overall reference
-cat("\n--- Diptera % overall (all sites) ---\n")
+# Overall reference — #N/C excluded
+cat("\n--- Diptera % overall (all sites, #N/C excluded) ---\n")
 diptera_overall <- data_list$faird %>%
+  dplyr::filter(is.na(Order) | Order != nc) %>%
   dplyr::group_by(Order) %>%
   dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
   dplyr::mutate(total = sum(n), pct = round(n / total * 100, 1)) %>%
@@ -743,7 +746,10 @@ cat("--- TABLE 19: Taxonomic resolution by Order ---\n\n")
 
 is_valid <- function(x) !is.na(x) & x != "#N/C" & x != ""
 
+# Filter #N/C at the source: these individuals have no valid Order-level classification
+# and must not appear as a row in Table 19 or inflate the Overall totals.
 resolution_data <- data_list$faird %>%
+  dplyr::filter(is.na(Order) | Order != nc) %>%
   dplyr::mutate(
     finest_level = dplyr::case_when(
       is_valid(Genus)       ~ "Genus",

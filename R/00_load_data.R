@@ -433,13 +433,36 @@ summary_stats <- tibble::tibble(
 )
 print(summary_stats)
 
-cat("\n--- Taxonomic richness ---\n")
-cat("E-traps: Orders =",   dplyr::n_distinct(etraps_data$Order,  na.rm = TRUE),
-    "| Families =", dplyr::n_distinct(etraps_data$Family, na.rm = TRUE),
-    "| Genera =",   dplyr::n_distinct(etraps_data$Genus,  na.rm = TRUE), "\n")
+cat("\n--- Taxonomic richness (#N/C excluded from all counts) ---\n")
+cat("E-traps (filtered): Orders =",
+    dplyr::n_distinct(etraps_data$Order[ etraps_data$Order  != "#N/C"], na.rm = TRUE),
+    "| Families =",
+    dplyr::n_distinct(etraps_data$Family[etraps_data$Family != "#N/C"], na.rm = TRUE),
+    "| Genera =",
+    dplyr::n_distinct(etraps_data$Genus[ etraps_data$Genus  != "#N/C"], na.rm = TRUE), "\n")
 cat("AMMOD:   Orders =",   dplyr::n_distinct(ammod_taxonomy_presence$Order,  na.rm = TRUE),
     "| Families =", dplyr::n_distinct(ammod_taxonomy_presence$Family, na.rm = TRUE),
     "| Genera =",   dplyr::n_distinct(ammod_taxonomy_presence$Genus,  na.rm = TRUE), "\n")
+
+cat("FAIRD:   Orders =",
+    dplyr::n_distinct(etraps_data$Order[etraps_data$Device_type == "FAIRD" & 
+                                          etraps_data$Order != "#N/C"], na.rm = TRUE),
+    "| Families =", 
+    dplyr::n_distinct(etraps_data$Family[etraps_data$Device_type == "FAIRD" & 
+                                           etraps_data$Family != "#N/C"], na.rm = TRUE),
+    "| Genera =",   
+    dplyr::n_distinct(etraps_data$Genus[etraps_data$Device_type == "FAIRD" & 
+                                          etraps_data$Genus != "#N/C"], na.rm = TRUE), "\n")
+cat("ID:   Orders =",
+    dplyr::n_distinct(etraps_data$Order[etraps_data$Device_type == "ID" & 
+                                          etraps_data$Order != "#N/C"], na.rm = TRUE),
+    "| Families =", 
+    dplyr::n_distinct(etraps_data$Family[etraps_data$Device_type == "ID" & 
+                                           etraps_data$Family != "#N/C"], na.rm = TRUE),
+    "| Genera =",   
+    dplyr::n_distinct(etraps_data$Genus[etraps_data$Device_type == "ID" & 
+                                          etraps_data$Genus != "#N/C"], na.rm = TRUE), "\n")
+
 
 cat("\n--- Site availability ---\n")
 dplyr::bind_rows(

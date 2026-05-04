@@ -1,26 +1,8 @@
 # ==============================================================================
-# H1: QUALITATIVE INTRA-SYSTEM CONSISTENCY — §3.2.2
-# ==============================================================================
-# Metrics:
-#   FAIRD — Morisita-Horn (1 - vegdist(method="horn")):
-#            abundance-based, appropriate for FAIRD count data
-#   AMMOD — Izsak-Price delta-S (presence/absence + taxonomic distance):
-#            presence/absence-based, required for AMMOD OTU data
-#
-# Temporal resolution: daily (unfiltered) + 3-day windows (filtered >= 3)
-#
-# Pairs:
-#   Intra-habitat FAIRD: FAIRD1<->FAIRD2 (Maize), FAIRD3<->FAIRD4 (Meadow)
-#   Intra-habitat AMMOD: AMMOD1<->AMMOD2 (Maize), AMMOD3<->AMMOD4 (Meadow)
-#   Inter-habitat FAIRD: Pool(FAIRD1+2) vs Pool(FAIRD3+4)
-#   Inter-habitat AMMOD: Pool(AMMOD1+2) vs Pool(AMMOD3+4)
-#
-# Outputs:
-#   Figures 12-15  -> outputs/figures/
-#   Tables 11-12   -> outputs/tables/
-#   Console log    -> outputs/console/
-#
-# Author: Juan Chiavassa & Claude
+# H1_quali_consistency.R  — §3.2.2 Qualitative Intra-System Consistency
+# FAIRD: Morisita-Horn | AMMOD: Izsak-Price | 3-day windows
+# Intra-Habitat: §3.2.2.1 (Figs 12–15, Tables 11–12)
+# Inter-Habitat: §3.2.2.2 (Table 11 inter-habitat rows)
 # ==============================================================================
 
 library(tidyverse)
@@ -30,9 +12,6 @@ library(effsize)   # cohen.d()
 library(car)       # leveneTest()
 library(here)
 
-# Anchor here to the project root regardless of where this script is executed from.
-# here::i_am() walks upward from the script location until it finds a directory
-# that contains R/H1_quali_consistency.R — that directory becomes the project root.
 here::i_am("R/H1_quali_consistency.R")
 
 # ==============================================================================

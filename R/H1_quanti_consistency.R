@@ -81,7 +81,12 @@ analyze_pair <- function(df_wide, device1, device2) {
   intercept   <- coefs["(Intercept)", "Estimate"]
   intercept_p <- coefs["(Intercept)", "Pr(>|t|)"]
 
-  # Daily changes for non-parametric stats (raw un-logged values per CLAUDE.md)
+  # Spearman — two variants:
+  # spearman_abs: on absolute log-transformed values → Tables 8, 9, 10 (matches manuscript)
+  # spearman_chg: on daily raw changes               → printed alongside Kendall for context
+  sp_abs <- stats::cor.test(df$dev1_log, df$dev2_log, method = "spearman", exact = FALSE)
+
+  # Daily changes for non-parametric stats (raw un-logged values)
   changes <- df %>%
     dplyr::arrange(Date) %>%
     dplyr::mutate(
@@ -126,7 +131,9 @@ analyze_pair <- function(df_wide, device1, device2) {
     bp_p            = bp_test$p,
     dw_stat         = as.numeric(dw_test$statistic),
     dw_p            = dw_test$p.value,
-    spearman_rho    = as.numeric(spearman$estimate),
+    spearman_abs    = as.numeric(sp_abs$estimate),   # absolute log values → tables
+    spearman_abs_p  = sp_abs$p.value,
+    spearman_rho    = as.numeric(spearman$estimate), # daily changes → console
     spearman_p      = spearman$p.value,
     kendall_tau     = as.numeric(kendall$estimate),
     kendall_p       = kendall$p.value,
@@ -150,9 +157,11 @@ print_pair <- function(res, label) {
               res$intercept, res$intercept_p))
   cat(sprintf("  Shapiro-Wilk p = %.4f | Breusch-Pagan p = %.4f | DW stat = %.3f (p = %.3f)\n",
               res$shapiro_p, res$bp_p, res$dw_stat, res$dw_p))
-  cat(sprintf("  Spearman ρ (changes) = %.3f%s | Kendall τ (changes) = %.3f%s\n",
-              res$spearman_rho, sig_stars(res$spearman_p),
-              res$kendall_tau,  sig_stars(res$kendall_p)))
+  cat(sprintf("  Spearman ρ [abs log] = %.3f%s | [daily chg] = %.3f%s\n",
+              res$spearman_abs, sig_stars(res$spearman_abs_p),
+              res$spearman_rho, sig_stars(res$spearman_p)))
+  cat(sprintf("  Kendall τ [raw chg] = %.3f%s\n",
+              res$kendall_tau, sig_stars(res$kendall_p)))
   cat(sprintf("  Concordance: %.1f%% (%d/%d days)\n",
               res$concordance_pct, res$n_concordant, res$n_changes))
   cat(sprintf("  Robust pseudo-R² = %.3f | Low-weight days (<0.5): %d/%d\n",
@@ -223,12 +232,13 @@ make_temporal <- function(df_long, panel_title, subtitle_text, y_lab,
 }
 
 # Build temporal subtitle from a pair result
+# Spearman ρ shown is on absolute log values (matching Tables 8/9/10).
 temporal_subtitle <- function(res) {
   sprintf(
     "R² = %.3f | Concordance: %.1f%% | Spearman ρ = %.3f%s | Kendall τ = %.3f%s",
     res$r_squared,
     res$concordance_pct,
-    res$spearman_rho, sig_stars(res$spearman_p),
+    res$spearman_abs, sig_stars(res$spearman_abs_p),
     res$kendall_tau,  sig_stars(res$kendall_p)
   )
 }
@@ -836,15 +846,15 @@ ggplot2::ggsave("outputs/figures/Fig11_H1_AMMOD_InterHabitat_A2vsA3.png",
 cat("[OK] Fig11_H1_AMMOD_InterHabitat_A2vsA3.png\n\n")
 
 cat("--- AMMOD Inter-Habitat Summary ---\n")
-cat(sprintf("  AMMOD1 vs AMMOD3: R² = %.3f%s | Concordance: %.1f%% | Spearman ρ = %.3f%s | Kendall τ = %.3f%s\n",
+cat(sprintf("  AMMOD1 vs AMMOD3: R² = %.3f%s | Concordance: %.1f%% | Spearman ρ [abs]=%.3f%s | τ=%.3f%s\n",
             res_ammod_a1a3$r_squared, sig_stars(res_ammod_a1a3$slope_p),
             res_ammod_a1a3$concordance_pct,
-            res_ammod_a1a3$spearman_rho, sig_stars(res_ammod_a1a3$spearman_p),
+            res_ammod_a1a3$spearman_abs, sig_stars(res_ammod_a1a3$spearman_abs_p),
             res_ammod_a1a3$kendall_tau,  sig_stars(res_ammod_a1a3$kendall_p)))
-cat(sprintf("  AMMOD2 vs AMMOD3: R² = %.3f%s | Concordance: %.1f%% | Spearman ρ = %.3f%s | Kendall τ = %.3f%s\n\n",
+cat(sprintf("  AMMOD2 vs AMMOD3: R² = %.3f%s | Concordance: %.1f%% | Spearman ρ [abs]=%.3f%s | τ=%.3f%s\n\n",
             res_ammod_a2a3$r_squared, sig_stars(res_ammod_a2a3$slope_p),
             res_ammod_a2a3$concordance_pct,
-            res_ammod_a2a3$spearman_rho, sig_stars(res_ammod_a2a3$spearman_p),
+            res_ammod_a2a3$spearman_abs, sig_stars(res_ammod_a2a3$spearman_abs_p),
             res_ammod_a2a3$kendall_tau,  sig_stars(res_ammod_a2a3$kendall_p)))
 
 
@@ -881,8 +891,8 @@ res_to_row <- function(res, pair_label, habitat, level, system) {
     Pseudo_R2       = res$pseudo_r2,
     n_low_wt        = res$n_low_wt,
     Concordance_pct = res$concordance_pct,
-    Spearman_rho    = res$spearman_rho,
-    Spearman_p      = res$spearman_p,
+    Spearman_rho    = res$spearman_abs,    # absolute log values → manuscript tables
+    Spearman_p      = res$spearman_abs_p,
     Kendall_tau     = res$kendall_tau,
     Kendall_p       = res$kendall_p
   )
@@ -932,7 +942,7 @@ cat("=== TABLE 9: H1 Intra-Habitat Level (§3.2.1.1) ===\n\n")
 print(table9_display, n = Inf)
 cat("\nSignificance: *** p<0.001 | ** p<0.01 | * p<0.05 | ns p>=0.05\n")
 cat("R² significance from slope p-value.\n")
-cat("Spearman ρ and Kendall τ computed on daily changes (not absolute values).\n\n")
+cat("Spearman ρ on absolute log values (manuscript tables). Kendall τ on raw daily changes.\n\n")
 
 readr::write_csv(table9_display,
                  "outputs/tables/Table09_H1_intra_habitat.csv")

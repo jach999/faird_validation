@@ -90,12 +90,18 @@ analyze_site_ols <- function(df, site_id) {
   dw_stat <- dw$statistic[[1]]
   dw_p    <- dw$p.value
 
-  # Spearman on daily log changes (per CLAUDE.md: on changes, not absolute values)
+  # Spearman — two variants:
+  # spearman_abs: on absolute log values → reported in Tables 8/10/13 (matches manuscript)
+  # spearman_chg: on daily log changes  → reported alongside Kendall for temporal sync
+  sp_abs <- stats::cor.test(df$log_faird, df$log_ammod, method = "spearman", exact = FALSE)
+  spearman_abs   <- sp_abs$estimate[[1]]
+  spearman_abs_p <- sp_abs$p.value
+
   delta_log_faird <- diff(df$log_faird)
   delta_log_ammod <- diff(df$log_ammod)
-  sp <- stats::cor.test(delta_log_faird, delta_log_ammod, method = "spearman", exact = FALSE)
-  spearman_rho <- sp$estimate[[1]]
-  spearman_p   <- sp$p.value
+  sp_chg <- stats::cor.test(delta_log_faird, delta_log_ammod, method = "spearman", exact = FALSE)
+  spearman_chg   <- sp_chg$estimate[[1]]
+  spearman_chg_p <- sp_chg$p.value
 
   # Kendall and concordance on raw biomass changes (matching run_temporal_sync in source)
   # Log transformation reorders change magnitudes, shifting concordant/discordant counts.
@@ -121,7 +127,8 @@ analyze_site_ols <- function(df, site_id) {
     slope = slope, slope_ci_low = slope_ci[1], slope_ci_high = slope_ci[2],
     slope_p = slope_p, intercept = intercept, intercept_p = intercept_p,
     sw_p = sw_p, bp_p = bp_p, dw_stat = dw_stat, dw_p = dw_p,
-    spearman_rho = spearman_rho, spearman_p = spearman_p,
+    spearman_rho = spearman_abs, spearman_p = spearman_abs_p,       # abs log → tables
+    spearman_chg = spearman_chg, spearman_chg_p = spearman_chg_p,   # changes → console
     kendall_tau = kendall_tau, kendall_p = kendall_p,
     concordance_pct = concordance,
     pseudo_r2 = pseudo_r2, n_low_wt = n_low_wt,
@@ -224,8 +231,10 @@ for (res in list(res_site1, res_site2, res_site3)) {
               res$r_squared, res$adj_r_squared,
               res$slope, res$slope_ci_low, res$slope_ci_high,
               res$slope_p, sig_stars(res$slope_p)))
-  cat(sprintf("  Spearman ρ=%.3f (p=%.4f %s)  Kendall τ=%.3f (p=%.4f %s)\n",
+  cat(sprintf("  Spearman ρ [abs log]=%.3f (p=%.4f %s)  [daily chg]=%.3f (p=%.4f %s)\n",
               res$spearman_rho, res$spearman_p, sig_stars(res$spearman_p),
+              res$spearman_chg, res$spearman_chg_p, sig_stars(res$spearman_chg_p)))
+  cat(sprintf("  Kendall τ [raw chg]=%.3f (p=%.4f %s)\n",
               res$kendall_tau, res$kendall_p, sig_stars(res$kendall_p)))
   cat(sprintf("  Concordance=%.1f%%  Pseudo-R²=%.3f  n_low_wt=%d\n",
               res$concordance_pct, res$pseudo_r2, res$n_low_wt))
@@ -342,8 +351,15 @@ robust_maize  <- MASS::rlm(log_faird ~ log_ammod, data = df_maize, psi = psi.hub
 pseudo_r2_m   <- 1 - sum(robust_maize$residuals^2) / sum((df_maize$log_faird - mean(df_maize$log_faird))^2)
 n_low_wt_m    <- sum(robust_maize$w < 0.5)
 
-# Spearman/Kendall on within-site daily changes
-# Spearman: log changes | Kendall + concordance: raw changes (matching run_temporal_sync)
+# Spearman — two variants (same split as site-level):
+# spearman_abs: on pooled absolute log values → Table 13
+# spearman_chg: on within-site daily log changes → console temporal sync
+sp_abs_m <- stats::cor.test(df_maize$log_faird, df_maize$log_ammod,
+                             method = "spearman", exact = FALSE)
+spearman_abs_m   <- sp_abs_m$estimate[[1]]
+spearman_abs_m_p <- sp_abs_m$p.value
+
+# Kendall + concordance on within-site daily raw changes (matching run_temporal_sync)
 changes_maize <- df_maize %>%
   dplyr::arrange(Site, Date) %>%
   dplyr::group_by(Site) %>%
@@ -373,9 +389,12 @@ boot_ci_m <- stats::quantile(boot_r2_maize, c(0.025, 0.975))
 
 cat(sprintf("Maize pooled OLS: R²=%.3f%s [Boot 95%% CI: %.3f–%.3f]\n",
             r2_maize, sig_stars(slope_p_m), boot_ci_m[1], boot_ci_m[2]))
-cat(sprintf("  slope=%.3f [%.3f, %.3f]  Spearman ρ=%.3f%s  Kendall τ=%.3f%s\n",
-            slope_maize, slope_ci_m[1], slope_ci_m[2],
-            sp_m$estimate[[1]], sig_stars(sp_m$p.value),
+cat(sprintf("  slope=%.3f [%.3f, %.3f]\n",
+            slope_maize, slope_ci_m[1], slope_ci_m[2]))
+cat(sprintf("  Spearman ρ [abs log]=%.3f%s  [daily chg]=%.3f%s\n",
+            spearman_abs_m, sig_stars(spearman_abs_m_p),
+            sp_m$estimate[[1]], sig_stars(sp_m$p.value)))
+cat(sprintf("  Kendall τ [raw chg]=%.3f%s\n",
             kt_m$estimate[[1]], sig_stars(kt_m$p.value)))
 cat(sprintf("  Concordance=%.1f%%  Pseudo-R²=%.3f  n_low_wt=%d\n",
             conc_m, pseudo_r2_m, n_low_wt_m))
@@ -390,7 +409,7 @@ site_colors_maize <- c(
 
 r2_label_m <- sprintf("R² = %.3f%s [Boot CI: %.3f–%.3f]",
                        r2_maize, sig_stars(slope_p_m), boot_ci_m[1], boot_ci_m[2])
-sp_label_m <- sprintf("ρ = %.3f%s", sp_m$estimate[[1]], sig_stars(sp_m$p.value))
+sp_label_m <- sprintf("ρ = %.3f%s", spearman_abs_m, sig_stars(spearman_abs_m_p))
 
 fig19 <- ggplot2::ggplot(df_maize, ggplot2::aes(x = log_ammod, y = log_faird, color = Site)) +
   ggplot2::geom_point(size = 2.5, alpha = 0.8) +
@@ -470,8 +489,13 @@ robust_ov  <- MASS::rlm(log_faird ~ log_ammod, data = df_overall, psi = psi.hube
 pseudo_r2_ov  <- 1 - sum(robust_ov$residuals^2) / sum((df_overall$log_faird - mean(df_overall$log_faird))^2)
 n_low_wt_ov   <- sum(robust_ov$w < 0.5)
 
-# Spearman/Kendall on within-site daily changes
-# Spearman: log changes | Kendall + concordance: raw changes (matching run_temporal_sync)
+# Spearman — two variants:
+sp_abs_ov <- stats::cor.test(df_overall$log_faird, df_overall$log_ammod,
+                              method = "spearman", exact = FALSE)
+spearman_abs_ov   <- sp_abs_ov$estimate[[1]]
+spearman_abs_ov_p <- sp_abs_ov$p.value
+
+# Kendall + concordance on within-site daily raw changes
 changes_overall <- df_overall %>%
   dplyr::arrange(Site, Date) %>%
   dplyr::group_by(Site) %>%
@@ -501,9 +525,12 @@ boot_ci_ov <- stats::quantile(boot_r2_overall, c(0.025, 0.975))
 
 cat(sprintf("Overall OLS: R²=%.3f%s [Boot 95%% CI: %.3f–%.3f]\n",
             r2_overall, sig_stars(slope_p_ov), boot_ci_ov[1], boot_ci_ov[2]))
-cat(sprintf("  slope=%.3f [%.3f, %.3f]  Spearman ρ=%.3f%s  Kendall τ=%.3f%s\n",
-            slope_ov, slope_ci_ov[1], slope_ci_ov[2],
-            sp_ov$estimate[[1]], sig_stars(sp_ov$p.value),
+cat(sprintf("  slope=%.3f [%.3f, %.3f]\n",
+            slope_ov, slope_ci_ov[1], slope_ci_ov[2]))
+cat(sprintf("  Spearman ρ [abs log]=%.3f%s  [daily chg]=%.3f%s\n",
+            spearman_abs_ov, sig_stars(spearman_abs_ov_p),
+            sp_ov$estimate[[1]], sig_stars(sp_ov$p.value)))
+cat(sprintf("  Kendall τ [raw chg]=%.3f%s\n",
             kt_ov$estimate[[1]], sig_stars(kt_ov$p.value)))
 cat(sprintf("  Concordance=%.1f%%  Pseudo-R²=%.3f  n_low_wt=%d\n",
             conc_ov, pseudo_r2_ov, n_low_wt_ov))
@@ -519,7 +546,7 @@ site_colors_ov <- c(
 
 r2_label_ov <- sprintf("R² = %.3f%s [Boot CI: %.3f–%.3f]",
                         r2_overall, sig_stars(slope_p_ov), boot_ci_ov[1], boot_ci_ov[2])
-sp_label_ov <- sprintf("ρ = %.3f%s", sp_ov$estimate[[1]], sig_stars(sp_ov$p.value))
+sp_label_ov <- sprintf("ρ = %.3f%s", spearman_abs_ov, sig_stars(spearman_abs_ov_p))
 
 fig20 <- ggplot2::ggplot(df_overall, ggplot2::aes(x = log_ammod, y = log_faird, color = Site)) +
   ggplot2::geom_point(size = 2.5, alpha = 0.8) +
@@ -565,7 +592,9 @@ cat("===========================================================================
 cat("SECTION 4: CROSS-CORRELATION ANALYSIS — §3.3.1.4\n")
 cat("==============================================================================\n\n")
 
-# Build time series data: log10(x+1) biomass per site per day (FAIRD only)
+# Build time series data: RAW biomass per site per day (FAIRD only).
+# z-scoring inside analyze_ccf() normalizes scale — log-transforming before z-scoring
+# changes the correlation structure and shifts lag-0 CCF values.
 ts_data <- dplyr::inner_join(
   etraps_daily %>%
     dplyr::filter(Device_type == "FAIRD") %>%
@@ -575,8 +604,8 @@ ts_data <- dplyr::inner_join(
   by = c("Date", "Site")
 ) %>%
   dplyr::mutate(
-    faird_value = log10(faird_biomass + 1),
-    ammod_value = log10(Live_mass + 1)
+    faird_value = faird_biomass,   # raw mg — z-scored inside analyze_ccf()
+    ammod_value = Live_mass        # raw mg — z-scored inside analyze_ccf()
   ) %>%
   dplyr::arrange(Site, Date)
 
@@ -1126,7 +1155,7 @@ table13_raw <- dplyr::bind_rows(
                sw_maize, bp_maize, dw_stat_m, dw_p_m,
                pseudo_r2_m, n_low_wt_m,
                conc_m,
-               sp_m$estimate[[1]], sp_m$p.value,
+               spearman_abs_m, spearman_abs_m_p,      # abs log → table
                kt_m$estimate[[1]], kt_m$p.value,
                boot_ci_low = boot_ci_m[1], boot_ci_high = boot_ci_m[2],
                ccf_lag0 = ccf_maize_summed$lag0_r,
@@ -1141,7 +1170,7 @@ table13_raw <- dplyr::bind_rows(
                sw_ov, bp_ov, dw_stat_ov, dw_p_ov,
                pseudo_r2_ov, n_low_wt_ov,
                conc_ov,
-               sp_ov$estimate[[1]], sp_ov$p.value,
+               spearman_abs_ov, spearman_abs_ov_p,    # abs log → table
                kt_ov$estimate[[1]], kt_ov$p.value,
                boot_ci_low = boot_ci_ov[1], boot_ci_high = boot_ci_ov[2],
                ccf_lag0 = ccf_overall_desc$lag0_r,

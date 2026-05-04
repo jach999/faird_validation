@@ -15,8 +15,6 @@
 # Output: A table of AMMOD-exclusive Superfamilies on high-residual days,
 #         with full taxonomy down to Species for manual expert review.
 #
-# Author: JCA / Claude
-# Date: 2026-03-28
 # ==============================================================================
 
 # --- Setup ---
