@@ -225,7 +225,7 @@ xyplot(biomass_mg~Date,groups=Device_type,
        data=etraps.ammod.bio,type=c("p","smooth"),
        auto.key=list(columns=2),jitter.x=T,
        par.settings=simpleTheme(pch=16,cex=1.5,lwd=2))
-
+1
 
 
 
