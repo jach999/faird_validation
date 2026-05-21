@@ -225,7 +225,12 @@ xyplot(biomass_mg~Date,groups=Device_type,
        data=etraps.ammod.bio,type=c("p","smooth"),
        auto.key=list(columns=2),jitter.x=T,
        par.settings=simpleTheme(pch=16,cex=1.5,lwd=2))
-1
+
+
+
+B1=glmmTMB(biomass_mg~bs(Date.num,3)*Device_type
+           +(1 | Site/Device),zi=~1,
+           family="ziGamma",data=etraps.ammod.bio)
 
 
 
