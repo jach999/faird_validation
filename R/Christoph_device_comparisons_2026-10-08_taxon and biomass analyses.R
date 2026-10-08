@@ -63,7 +63,7 @@ head(subdata)
 eff.date.1 <- Effect("Date.num", mmod1)
 
 getwd()
-pdf("Device effects 2026-10-08-1.pdf")
+pdf("Device effects 2026-10-08-2.pdf")
 
 plot(allEffects(mmod1,xlevels=100),style="stacked",
      lattice=list(key.args=list(columns=3)),
