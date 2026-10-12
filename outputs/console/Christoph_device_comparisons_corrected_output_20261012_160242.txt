@@ -1,0 +1,75 @@
+Run started: 2026-10-12 16:02:42 
+Working directory: C:/Users/juan/Downloads/Re__[EXTERN]_RV__FAIR-Device_paper__roter_Faden_und_Struktur 
+
+Input objects found in session: using existing objects
+
+AMMOD presence records, genus level: 2023 | order level: 319 
+E-traps presence records (order level): 271 
+
+Order frequency, all systems (order-level presence records):
+
+       Diptera    Hymenoptera     Coleoptera    Lepidoptera      Hemiptera         Indet. 
+           216            105             92             48             42             30 
+       Araneae      Opiliones     Psocoptera    Trichoptera     Orthoptera     Dermaptera 
+            13             10             10              7              6              3 
+    Neuroptera        Isopoda        Odonata Trombidiformes 
+             3              2              2              1 
+
+Order frequency by system:
+                
+                 AMMOD FAIRD ID
+  Indet.             0    13 17
+  Araneae            8     5  0
+  Coleoptera        51    30 11
+  Dermaptera         2     1  0
+  Diptera           76    79 61
+  Hemiptera         34     5  3
+  Hymenoptera       67    24 14
+  Isopoda            2     0  0
+  Lepidoptera       43     3  2
+  Neuroptera         2     1  0
+  Odonata            2     0  0
+  Opiliones         10     0  0
+  Orthoptera         5     1  0
+  Psocoptera        10     0  0
+  Trichoptera        6     1  0
+  Trombidiformes     1     0  0
+
+Selected orders:
+[1] "Diptera"     "Hymenoptera" "Coleoptera"  "Lepidoptera" "Hemiptera"   "Araneae"    
+# weights:  78 (60 variable)
+initial  value 924.547886 
+iter  10 value 725.156779
+iter  20 value 711.104154
+iter  30 value 705.482655
+iter  40 value 703.084875
+iter  50 value 702.367807
+iter  60 value 701.740682
+iter  70 value 701.630156
+iter  80 value 701.264345
+iter  90 value 700.587541
+iter 100 value 700.440731
+iter 110 value 700.406444
+iter 120 value 700.157673
+iter 130 value 699.995513
+iter 140 value 699.976554
+iter 150 value 699.950705
+iter 160 value 699.920909
+iter 170 value 699.899532
+iter 180 value 699.896052
+iter 190 value 699.892234
+iter 200 value 699.884950
+iter 210 value 699.856044
+iter 220 value 699.848570
+iter 230 value 699.840907
+final  value 699.829929 
+converged
+Analysis of Deviance Table (Type II tests)
+
+Response: Order
+                            LR Chisq Df Pr(>Chisq)    
+bs(Date.num, 3)               17.160 15   0.309376    
+Device_type                   86.092 10  3.178e-14 ***
+bs(Date.num, 3):Device_type   59.003 30   0.001214 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

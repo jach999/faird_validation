@@ -1,0 +1,84 @@
+Run started: 2026-10-12 14:36:00 
+Working directory: C:/Users/juan/Downloads/Re__[EXTERN]_RV__FAIR-Device_paper__roter_Faden_und_Struktur 
+
+Input objects found in session: using existing objects
+[1] "Diptera"     "Hymenoptera" "Coleoptera"  "Lepidoptera" "Hemiptera"   "Araneae"    
+# weights:  78 (60 variable)
+initial  value 3977.706022 
+iter  10 value 1974.336742
+iter  20 value 1930.268268
+iter  30 value 1921.271692
+iter  40 value 1917.734159
+iter  50 value 1916.482496
+iter  60 value 1915.743377
+iter  70 value 1915.564181
+iter  80 value 1915.477949
+iter  90 value 1914.869953
+iter 100 value 1914.378819
+iter 110 value 1914.341214
+iter 120 value 1914.195453
+iter 130 value 1913.965989
+iter 140 value 1913.931449
+iter 150 value 1913.912213
+iter 160 value 1913.901490
+iter 170 value 1913.897654
+iter 180 value 1913.896195
+iter 190 value 1913.894285
+iter 200 value 1913.892213
+iter 210 value 1913.884092
+iter 220 value 1913.872602
+final  value 1913.865530 
+converged
+Analysis of Deviance Table (Type II tests)
+
+Response: Order
+                            LR Chisq Df Pr(>Chisq)    
+bs(Date.num, 3)               41.039 15  0.0003154 ***
+Device_type                   70.626 10  3.356e-11 ***
+bs(Date.num, 3):Device_type   72.047 30  2.569e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+NULL
+[1] 116  16
+[1] 12
+[1] 4
+[1] 3
+=============================================================================================================================================================================================================================================================================================================================================NULL
+[1]    0.000 2229.776
+ Family: tweedie  ( log )
+Formula:          biomass_mg ~ bs(Date.num, 3) * Device_type + (1 | Site/Device)
+Data: etraps.ammod.bio
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   1577.0    1621.0    -772.5    1545.0       100 
+
+Random effects:
+
+Conditional model:
+ Groups      Name        Variance  Std.Dev. 
+ Device:Site (Intercept) 4.589e-02 2.142e-01
+ Site        (Intercept) 1.740e-09 4.171e-05
+Number of obs: 116, groups:  Device:Site, 10; Site, 4
+
+Dispersion parameter for tweedie family (): 12.6 
+
+Conditional model:
+                                  Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                         6.8486     0.3326  20.589  < 2e-16 ***
+bs(Date.num, 3)1                    0.5986     1.0067   0.595 0.552089    
+bs(Date.num, 3)2                   -2.9190     0.8807  -3.315 0.000918 ***
+bs(Date.num, 3)3                   -0.3863     0.5674  -0.681 0.495908    
+Device_typeFAIRD                   -2.0391     0.5459  -3.735 0.000188 ***
+Device_typeID                      -0.7609     0.5260  -1.447 0.148014    
+bs(Date.num, 3)1:Device_typeFAIRD   2.3262     1.5385   1.512 0.130527    
+bs(Date.num, 3)2:Device_typeFAIRD   2.0139     1.2691   1.587 0.112547    
+bs(Date.num, 3)3:Device_typeFAIRD   0.4286     0.8765   0.489 0.624816    
+bs(Date.num, 3)1:Device_typeID     -1.2118     1.5402  -0.787 0.431441    
+bs(Date.num, 3)2:Device_typeID      2.8121     1.1600   2.424 0.015346 *  
+bs(Date.num, 3)3:Device_typeID      0.8095     0.7772   1.042 0.297601    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+[1] 19592 19603
+
+Done. Figures written to: C:/Users/juan/Downloads/Re__[EXTERN]_RV__FAIR-Device_paper__roter_Faden_und_Struktur/Device effects 2026-10-08-2.pdf 
+Run finished: 2026-10-12 14:36:17 

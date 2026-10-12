@@ -1,0 +1,123 @@
+Run started: 2026-10-12 15:32:22 
+Working directory: C:/Users/juan/Downloads/Re__[EXTERN]_RV__FAIR-Device_paper__roter_Faden_und_Struktur 
+
+Input objects found in session: using existing objects
+
+AMMOD presence records, genus level: 2023 | order level: 319 
+E-traps presence records (order level): 271 
+
+Order frequency, all systems (order-level presence records):
+
+       Diptera    Hymenoptera     Coleoptera    Lepidoptera      Hemiptera         Indet. 
+           216            105             92             48             42             30 
+       Araneae      Opiliones     Psocoptera    Trichoptera     Orthoptera     Dermaptera 
+            13             10             10              7              6              3 
+    Neuroptera        Isopoda        Odonata Trombidiformes 
+             3              2              2              1 
+
+Order frequency by system:
+                
+                 AMMOD FAIRD ID
+  Indet.             0    13 17
+  Araneae            8     5  0
+  Coleoptera        51    30 11
+  Dermaptera         2     1  0
+  Diptera           76    79 61
+  Hemiptera         34     5  3
+  Hymenoptera       67    24 14
+  Isopoda            2     0  0
+  Lepidoptera       43     3  2
+  Neuroptera         2     1  0
+  Odonata            2     0  0
+  Opiliones         10     0  0
+  Orthoptera         5     1  0
+  Psocoptera        10     0  0
+  Trichoptera        6     1  0
+  Trombidiformes     1     0  0
+
+Selected orders:
+[1] "Diptera"     "Hymenoptera" "Coleoptera"  "Lepidoptera" "Hemiptera"   "Araneae"    
+# weights:  78 (60 variable)
+initial  value 924.547886 
+iter  10 value 725.156779
+iter  20 value 711.104154
+iter  30 value 705.482655
+iter  40 value 703.084875
+iter  50 value 702.367807
+iter  60 value 701.740682
+iter  70 value 701.630156
+iter  80 value 701.264345
+iter  90 value 700.587541
+iter 100 value 700.440731
+iter 110 value 700.406444
+iter 120 value 700.157673
+iter 130 value 699.995513
+iter 140 value 699.976554
+iter 150 value 699.950705
+iter 160 value 699.920909
+iter 170 value 699.899532
+iter 180 value 699.896052
+iter 190 value 699.892234
+iter 200 value 699.884950
+iter 210 value 699.856044
+iter 220 value 699.848570
+iter 230 value 699.840907
+final  value 699.829929 
+converged
+Analysis of Deviance Table (Type II tests)
+
+Response: Order
+                            LR Chisq Df Pr(>Chisq)    
+bs(Date.num, 3)               17.160 15   0.309376    
+Device_type                   86.092 10  3.178e-14 ***
+bs(Date.num, 3):Device_type   59.003 30   0.001214 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+NULL
+[1] 116  16
+[1] 12
+[1] 4
+[1] 3
+<simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]>
+fitdist gamma failed: the function mle failed to estimate the parameters, 
+                with the error code 100
+ 
+=============================================================================================================================================================================================================================================================================================================================================NULL
+[1]    0 7300
+ Family: tweedie  ( log )
+Formula:          biomass_mg ~ bs(Date.num, 3) * Device_type + (1 | Site/Device)
+Data: etraps.ammod.bio
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   1657.4    1701.4    -812.7    1625.4       100 
+
+Random effects:
+
+Conditional model:
+ Groups      Name        Variance  Std.Dev. 
+ Device:Site (Intercept) 3.795e-02 1.948e-01
+ Site        (Intercept) 2.636e-09 5.134e-05
+Number of obs: 116, groups:  Device:Site, 10; Site, 4
+
+Dispersion parameter for tweedie family (): 12.1 
+
+Conditional model:
+                                  Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                         8.2354     0.2644  31.144  < 2e-16 ***
+bs(Date.num, 3)1                    0.5890     0.7760   0.759  0.44780    
+bs(Date.num, 3)2                   -2.9186     0.6737  -4.332 1.48e-05 ***
+bs(Date.num, 3)3                   -0.3695     0.4406  -0.839  0.40169    
+Device_typeFAIRD                   -3.4157     0.5248  -6.508 7.62e-11 ***
+Device_typeID                      -2.1405     0.5079  -4.214 2.51e-05 ***
+bs(Date.num, 3)1:Device_typeFAIRD   2.2963     1.4533   1.580  0.11410    
+bs(Date.num, 3)2:Device_typeFAIRD   2.0409     1.1817   1.727  0.08415 .  
+bs(Date.num, 3)3:Device_typeFAIRD   0.4001     0.8327   0.481  0.63082    
+bs(Date.num, 3)1:Device_typeID     -1.2155     1.4765  -0.823  0.41040    
+bs(Date.num, 3)2:Device_typeID      2.8266     1.0525   2.686  0.00724 ** 
+bs(Date.num, 3)3:Device_typeID      0.7873     0.7231   1.089  0.27627    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+[1] 19592 19603
+
+Done. Figures written to: C:/Users/juan/Downloads/Re__[EXTERN]_RV__FAIR-Device_paper__roter_Faden_und_Struktur/Device effects 2026-10-08-2_corrected.pdf 
+Run finished: 2026-10-12 15:32:35 
