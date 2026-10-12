@@ -56,4 +56,9 @@ data_cleaned.RData
 outputs/
 
 # Old/backup folders (tracked selectively if needed)
-old/
+# Old/backup folders: root ignored entirely; in R/old only R scripts and notes are tracked
+/old/
+R/old/**
+!R/old/**/
+!R/old/**/*.R
+!R/old/**/*.md
