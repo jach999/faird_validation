@@ -129,21 +129,43 @@ effort_base <- tidyr::expand_grid(
       stringr::str_detect(Device, "AMMOD") & Date >= "2023-09-05"             ~ FALSE,
       Device == "AMMOD3" & Date >= "2023-08-31" & Date <= "2023-09-03"        ~ FALSE,
       TRUE ~ TRUE
+    ),
+    # Operational flag for the ID battery-depletion episode (Aug 28-Sep 1).
+    # Mirrors the "operational analysis" (n=17) reported for ID in V5: it starts
+    # from Field_Valid and additionally marks FALSE the ID power-failure window
+    # for the affected units (ID1, ID2, ID4). ID3 is already FALSE via Field_Valid.
+    # NOTE: this column is provided for downstream use but is NOT yet consumed by
+    # any analysis; adding it here does not alter any existing result.
+    Field_Valid_Operational_ID = dplyr::case_when(
+      !Field_Valid                                                            ~ FALSE,
+      Device %in% c("ID1", "ID2", "ID4") &
+        Date >= "2023-08-28" & Date <= "2023-09-01"                           ~ FALSE,
+      TRUE ~ TRUE
     )
   )
 
 effort_summary <- effort_base %>%
   dplyr::group_by(Device) %>%
   dplyr::summarise(
-    Field_Days_Effort = sum(Field_Valid),
-    Valid_Taxo_Days   = sum(Taxo_Valid),
-    Valid_Bio_Days    = sum(Bio_Valid),
+    Field_Days_Effort       = sum(Field_Valid),
+    Valid_Taxo_Days         = sum(Taxo_Valid),
+    Valid_Bio_Days          = sum(Bio_Valid),
+    Operational_ID_Days     = sum(Field_Valid_Operational_ID),
     .groups = "drop"
   )
 
 cat("Truth Calendar built for", length(all_devices), "devices over",
     as.numeric(experiment_end - experiment_start + 1), "days.\n")
 print(effort_summary)
+
+# Confirmation of the new operational-ID flag (not yet consumed by any analysis).
+n_op_excluded <- effort_base %>%
+  dplyr::filter(Field_Valid, !Field_Valid_Operational_ID) %>%
+  nrow()
+cat(sprintf(paste0("\nField_Valid_Operational_ID: %d additional device-days marked ",
+                   "FALSE\n  (ID1/ID2/ID4 battery window Aug 28-Sep 1; expected 15). ",
+                   "This column is not used by any analysis yet.\n"),
+            n_op_excluded))
 
 # Apply Taxo_Valid to ammod_taxonomy_presence — single authoritative filter
 n_before <- nrow(ammod_taxonomy_presence)

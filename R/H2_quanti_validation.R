@@ -1215,6 +1215,181 @@ readr::write_csv(table13_display, "outputs/tables/Table13_H2_quanti_validation_d
 cat("Saved: Table13_H2_quanti_validation_display.csv\n\n")
 
 # ==============================================================================
+# SECTION 8: REGISTRY DIAGNOSTICS (Results Registry v0.4, Section 6 and R-OBS-02)
+# Purpose: test the hypotheses recorded for values reported by V5 or PC V16 that
+# Sections 1 to 7 do not reproduce. Diagnostic only, not for the manuscript.
+# Output goes to its own console file; the main output above is unchanged.
+# Uses objects created in Sections 1 to 4: df_site1-3, df_maize, df_overall,
+# changes_maize, df_ts_s1-3, ts_maize_summed.
+#   8A  Durbin-Watson by row order  (PC V16 Maize 1.385, p = 0.041;
+#                                    V5 and PC V16 Overall 0.917, p < 0.001)
+#   8B  Kendall tau variants        (PC V16 Section 11 site tau 0.152 / 0.455 / 0.071;
+#                                    V5 Maize tau p = 0.011)
+#   8C  CCF lag tables, raw and log10(x+1) series
+#                                   (V5 lag +1 0.548 / 0.622 / 0.575, Maize 0.589;
+#                                    PC V16 lag 0 0.382 / 0.696 / -0.010,
+#                                    lag 1 0.621 / 0.658 / 0.487)
+# ==============================================================================
+
+sink("outputs/console/H2_quanti_registry_diagnostics_output.txt", split = TRUE)
+
+cat("==============================================================================\n")
+cat("SECTION 8: REGISTRY DIAGNOSTICS\n")
+cat(sprintf("Run: %s\n", format(Sys.time(), "%Y-%m-%d %H:%M:%S")))
+cat("==============================================================================\n\n")
+
+# --- 8A: Durbin-Watson by row order -------------------------------------------
+cat("--- 8A: Durbin-Watson of the pooled OLS by row order ---\n")
+cat("OLS coefficients and R2 do not depend on row order; DW does.\n")
+cat("Targets: Maize DW 1.385 (p = 0.041, PC V16); Overall DW 0.917 (p < 0.001, V5, PC V16)\n\n")
+
+dw_by_order <- function(df, level_label) {
+  orders <- list(
+    "Site then Date (script order)" = df %>% dplyr::arrange(Site, Date),
+    "Date then Site"                = df %>% dplyr::arrange(Date, Site)
+  )
+  dplyr::bind_rows(purrr::imap(orders, function(d, order_label) {
+    m  <- stats::lm(log_faird ~ log_ammod, data = d)
+    dw <- lmtest::dwtest(m)
+    tibble::tibble(
+      Level   = level_label,
+      Order   = order_label,
+      n       = nrow(d),
+      R2      = round(summary(m)$r.squared, 3),
+      DW_stat = round(dw$statistic[[1]], 3),
+      DW_p    = signif(dw$p.value, 3)
+    )
+  }))
+}
+
+dw_table <- dplyr::bind_rows(
+  dw_by_order(df_maize,   "Maize pooled (Sites 1+2)"),
+  dw_by_order(df_overall, "Overall pooled (Sites 1-3)")
+)
+print(dw_table, width = Inf)
+cat("\n")
+
+# --- 8B: Kendall tau variants ---------------------------------------------------
+cat("--- 8B: Kendall tau variants ---\n")
+cat("Targets: site tau 0.152 / 0.455 / 0.071 (PC V16, Section 11 table);\n")
+cat("         Maize tau 0.359 with p = 0.011 (V5) vs p = 0.0193 (script)\n\n")
+
+kendall_row <- function(x, y, level_label, variant_label,
+                        exact = FALSE, alternative = "two.sided",
+                        continuity = FALSE) {
+  kt <- suppressWarnings(
+    stats::cor.test(x, y, method = "kendall", exact = exact,
+                    alternative = alternative, continuity = continuity)
+  )
+  tibble::tibble(
+    Level   = level_label,
+    Variant = variant_label,
+    n_pairs = length(x),
+    ties    = any(duplicated(x)) || any(duplicated(y)),
+    tau     = round(kt$estimate[[1]], 3),
+    p       = signif(kt$p.value, 3)
+  )
+}
+
+site_dfs <- list(Site1 = df_site1, Site2 = df_site2, Site3 = df_site3)
+
+kendall_sites <- dplyr::bind_rows(purrr::imap(site_dfs, function(d, s) {
+  d <- d %>% dplyr::arrange(Date)
+  dplyr::bind_rows(
+    kendall_row(diff(d$faird_biomass), diff(d$Live_mass), s,
+                "raw daily changes (script, V5)"),
+    kendall_row(diff(d$log_faird), diff(d$log_ammod), s,
+                "log daily changes"),
+    kendall_row(d$log_faird, d$log_ammod, s,
+                "absolute log values")
+  )
+}))
+
+kendall_maize <- dplyr::bind_rows(
+  kendall_row(changes_maize$d_faird_raw, changes_maize$d_ammod_raw, "Maize pooled",
+              "raw changes, normal approximation (script)"),
+  kendall_row(changes_maize$d_faird_raw, changes_maize$d_ammod_raw, "Maize pooled",
+              "raw changes, normal approximation, continuity correction",
+              continuity = TRUE),
+  kendall_row(changes_maize$d_faird_raw, changes_maize$d_ammod_raw, "Maize pooled",
+              "raw changes, exact", exact = TRUE),
+  kendall_row(changes_maize$d_faird_raw, changes_maize$d_ammod_raw, "Maize pooled",
+              "raw changes, one-sided (greater)", alternative = "greater"),
+  kendall_row(changes_maize$d_faird_log, changes_maize$d_ammod_log, "Maize pooled",
+              "log changes"),
+  kendall_row(df_maize$log_faird, df_maize$log_ammod, "Maize pooled",
+              "absolute log values")
+)
+
+print(dplyr::bind_rows(kendall_sites, kendall_maize), n = Inf, width = Inf)
+cat("Note: with ties = TRUE an exact p is not available and R falls back to the\n")
+cat("normal approximation.\n\n")
+
+# --- 8C: CCF lag tables ---------------------------------------------------------
+cat("--- 8C: CCF lag tables, raw (script) and log10(x+1) series ---\n")
+cat("acf_12: script definition, acf(cbind(z_faird, z_ammod))$acf[, 1, 2], lags >= 0.\n")
+cat("ccf:    stats::ccf(faird, ammod); lag k = cor(FAIRD[t+k], AMMOD[t]),\n")
+cat("        so k < 0 means FAIRD earlier than AMMOD.\n")
+cat("Targets: V5 lag +1 0.548 / 0.622 / 0.575 (sites), 0.589 (Maize summed);\n")
+cat("         PC V16 lag 0 0.382 / 0.696 / -0.010, lag 1 0.621 / 0.658 / 0.487\n\n")
+
+ccf_lag_tables <- function(fa, am, series_label, transform_label) {
+  n       <- length(fa)
+  lag_max <- min(10L, floor(n / 3L))
+  ci      <- round(stats::qnorm(0.975) / sqrt(n), 3)
+  z_fa    <- scale(fa)[, 1]
+  z_am    <- scale(am)[, 1]
+
+  obj_acf <- stats::acf(cbind(z_fa, z_am), lag.max = lag_max,
+                        type = "correlation", plot = FALSE)
+  obj_ccf <- stats::ccf(z_fa, z_am, lag.max = lag_max, plot = FALSE)
+
+  tab_acf <- tibble::tibble(
+    lag    = as.integer(obj_acf$lag[, 1, 2]),
+    acf_12 = round(as.numeric(obj_acf$acf[, 1, 2]), 3)
+  )
+  tab_ccf <- tibble::tibble(
+    lag = as.integer(round(as.numeric(obj_ccf$lag))),
+    ccf = round(as.numeric(obj_ccf$acf), 3)
+  )
+
+  dplyr::full_join(tab_ccf, tab_acf, by = "lag") %>%
+    dplyr::arrange(lag) %>%
+    dplyr::mutate(
+      Series    = series_label,
+      Transform = transform_label,
+      n         = n,
+      CI_bound  = ci,
+      .before   = 1
+    )
+}
+
+ccf_series <- list(
+  Site1          = df_ts_s1,
+  Site2          = df_ts_s2,
+  Site3          = df_ts_s3,
+  "Maize summed" = ts_maize_summed
+)
+
+ccf_all <- dplyr::bind_rows(purrr::imap(ccf_series, function(d, s) {
+  d <- d %>% dplyr::arrange(Date)
+  dplyr::bind_rows(
+    ccf_lag_tables(d$faird_value, d$ammod_value, s, "raw (script)"),
+    ccf_lag_tables(log10(d$faird_value + 1), log10(d$ammod_value + 1), s,
+                   "log10(x+1)")
+  )
+}))
+
+print(ccf_all, n = Inf, width = Inf)
+cat("\n")
+
+cat("==============================================================================\n")
+cat("SECTION 8 COMPLETE\n")
+cat("==============================================================================\n\n")
+
+sink()   # close the diagnostics diversion; the main sink stays active
+
+# ==============================================================================
 # END
 # ==============================================================================
 
