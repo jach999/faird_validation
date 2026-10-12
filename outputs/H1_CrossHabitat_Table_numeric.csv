@@ -1,0 +1,3 @@
+Pair,Habitat,Metric,n,R2_log,R2_p,Slope,Slope_CI_low,Slope_CI_high,Concordance_pct,Kendall_tau,Kendall_p,Spearman_rho,Spearman_p,Pseudo_R2_robust
+FAIRD Maize vs Meadow,Maize vs Meadow,Abundance,22,0.7191,0,0.5996,0.4248,0.7743,80.9524,0.652,0,0.7954,0,0.7166
+AMMOD Maize vs Meadow,Maize vs Meadow,Biomass,8,0.3989,0.093,0.419,-0.0948,0.9328,42.8571,0.4286,0.1376,0.5952,0.1195,0.3963

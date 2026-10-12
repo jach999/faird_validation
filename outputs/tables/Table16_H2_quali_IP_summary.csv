@@ -1,0 +1,8 @@
+Level,Habitat,n_windows,Mean_DS,SD_DS
+Site1,Maize,7,65.2,2.5
+Site2,Maize,5,61.3,3
+Site3,Meadow,7,72.2,4.9
+Site4,Meadow,5,71.8,3.2
+Maize (Intra-Habitat),Maize,12,63.6,3.3
+Meadow (Intra-Habitat),Meadow,12,72,4.1
+Overall,All,24,67.8,5.6

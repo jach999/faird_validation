@@ -1,0 +1,382 @@
+==============================================================================
+H1 QUANTITATIVE CONSISTENCY — §3.2.1
+log10(x+1) | OLS + diagnostics | Spearman & Kendall on daily changes
+==============================================================================
+Script started: 2026-07-22 11:37:18 
+
+
+=== LOADING E-TRAPS DATA ===
+indexing FAIRD_For_Statistics.csv [===============================================] 1.73GB/s, eta:  0s                                                                                                      FAIRD loaded: 1128 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: FAIRD1, FAIRD2, FAIRD3, FAIRD4 
+indexing ID_For_Statistics.csv [==============------------------------------------] 2.15GB/s, eta:  0sindexing ID_For_Statistics.csv [=================================================] 33.28MB/s, eta:  0s                                                                                                      ID loaded: 2370 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: ID1, ID2, ID4 
+ID3 has no data (device failure as expected)
+
+Total e-traps individuals: 3498 
+
+=== LOADING AMMOD TAXONOMIC DATA ===
+indexing AMMOD_24h_OTUs_For_Statistics.csv [======================================] 2.15GB/s, eta:  0s                                                                                                      AMMOD taxonomy loaded: 2338 OTUs
+Date range: 2023-08-23 to 2023-09-16 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+IMPORTANT: AMMOD taxonomy is QUALITATIVE (presence/absence)
+  'Count' = DNA sequence reads, NOT individual insect counts.
+  Use ONLY for presence/absence analyses.
+Converted to presence/absence format
+
+=== BUILDING TRUTH CALENDAR ===
+Truth Calendar built for 12 devices over 22 days.
+# A tibble: 12 × 4
+   Device Field_Days_Effort Valid_Taxo_Days Valid_Bio_Days
+   <chr>              <int>           <int>          <int>
+ 1 AMMOD1                21              21             12
+ 2 AMMOD2                21              21             12
+ 3 AMMOD3                21              21              8
+ 4 AMMOD4                14              13              0
+ 5 FAIRD1                22              22             22
+ 6 FAIRD2                22              22             22
+ 7 FAIRD3                22              22             22
+ 8 FAIRD4                22              22             22
+ 9 ID1                   22              22             22
+10 ID2                   22              22             22
+11 ID3                    0               0              0
+12 ID4                   22              22             22
+
+ammod_taxonomy_presence filtered by Truth Calendar:
+  Before: 2109 | After: 2023 | Removed: 86
+  Removed: AMMOD4 jammed-bottle period (Aug 28-Sep 3) + contaminated sample R2_4_06 (AMMOD4, Sep 10).
+
+=== LOADING AMMOD BIOMASS DATA ===
+indexing AMMOD_24h_live_mass_For_Statistics.csv [===============================] 322.69MB/s, eta:  0s                                                                                                      Raw columns: Date, Device, Device_type, Site, Ambient, DevicexAmbien, Dry_mass_g, Live_mass 
+AMMOD biomass loaded: 48 daily measurements
+Date range: 2023-08-23 to 2023-09-03 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+=== AMMOD DATA QUALITY ASSESSMENT ===
+
+Completeness by device:
+# A tibble: 4 × 6
+  Device Site  Ambient total_days days_with_biomass days_missing
+  <chr>  <chr> <chr>        <int>             <int>        <int>
+1 AMMOD1 Site1 Maize           12                12            0
+2 AMMOD2 Site2 Maize           12                12            0
+3 AMMOD3 Site3 Meadow          12                 8            4
+4 AMMOD4 Site4 Meadow          12                 0           12
+
+DEVICES WITH INCOMPLETE DATA:
+
+AMMOD3 (Site3, Meadow):
+  Days available: 8 | Days missing: 4
+  Status: Processing method changed in cursu (ATL) from day 9.
+  Impact: Site3 for H2 has reduced matching days (n=8).
+  Note:   OTU data available for H1 qualitative analysis.
+
+AMMOD4 (Site4, Meadow):
+  Days available: 0 | Days missing: 12
+  Status: Mechanical failure — rotation jammed (Aug 28-Sep 3).
+  Missing dates: 2023-08-23 to 2023-09-03
+  All biomass unavailable (ATL Batch 1). Excluded from H2.
+
+
+Summary for statistical analyses:
+# A tibble: 3 × 5
+  Site  Device Ambient n_days mean_biomass
+  <chr> <chr>  <chr>    <int>        <dbl>
+1 Site1 AMMOD1 Maize       12        1946.
+2 Site2 AMMOD2 Maize       12        2085.
+3 Site3 AMMOD3 Meadow       8        3349.
+
+Total valid measurements: 32 
+  Site1 (Maize):  n = 12 
+  Site2 (Maize):  n = 12 
+  Site3 (Meadow): n = 8 
+  Site4 (Meadow): n = 0 
+
+=== AGGREGATING E-TRAPS TO DAILY BIOMASS ===
+E-traps daily aggregation complete
+
+=== ENFORCING DATA COMPLETENESS (E-TRAPS) ===
+Full grid: 7 devices x 22 days
+Zero-capture days filled (abundance = 0, biomass_mg = 0).
+mean_body_length/width left as NA on zero-capture days.
+
+  ID2: 22 days (expected 22)
+  ID4: 22 days (expected 22)
+  FAIRD2: 22 days (expected 22)
+  FAIRD3: 22 days (expected 22)
+  FAIRD4: 22 days (expected 22)
+  ID1: 22 days (expected 22)
+  FAIRD1: 22 days (expected 22)
+
+=== CREATING PRESENCE/ABSENCE MATRICES ===
+E-traps presence records: 271 
+AMMOD presence records: 2023 
+
+=== CREATING ANALYSIS-READY DATASETS ===
+FAIRD-AMMOD overlapping date range:
+  Start: 2023-08-23 
+  End: 2023-09-03 
+  Days: 12 
+
+=== EXPORTING CLEANED DATASETS ===
+data_list saved to: data_cleaned.RData
+
+=== DATA SUMMARY ===
+# A tibble: 5 × 3
+  Dataset        N_rows N_devices
+  <chr>           <int>     <int>
+1 FAIRD            1128         4
+2 ID               2370         3
+3 E-traps Total    3498         7
+4 AMMOD Taxonomy   2023         4
+5 AMMOD Biomass      32         3
+
+--- Taxonomic richness (#N/C excluded from all counts) ---
+E-traps (filtered): Orders = 10 | Families = 47 | Genera = 54 
+AMMOD:   Orders = 15 | Families = 118 | Genera = 341 
+FAIRD:   Orders = 10 | Families = 45 | Genera = 53 
+ID:   Orders = 5 | Families = 8 | Genera = 4 
+
+--- Site availability ---
+# A tibble: 10 × 4
+   Site  Device_type n_days Dataset      
+   <chr> <chr>        <int> <chr>        
+ 1 Site1 AMMOD           12 AMMOD Biomass
+ 2 Site1 FAIRD           22 E-traps      
+ 3 Site1 ID              22 E-traps      
+ 4 Site2 AMMOD           12 AMMOD Biomass
+ 5 Site2 FAIRD           22 E-traps      
+ 6 Site2 ID              22 E-traps      
+ 7 Site3 AMMOD            8 AMMOD Biomass
+ 8 Site3 FAIRD           22 E-traps      
+ 9 Site4 FAIRD           22 E-traps      
+10 Site4 ID              22 E-traps      
+
+=== DATA LOADING COMPLETE ===
+Access datasets via: data_list$faird, data_list$etraps_daily, etc.
+=== SECTION 1: DIAGNOSTIC HETEROSCEDASTICITY (Fig 3) ===
+
+Diagnostic pair: FAIRD1 vs FAIRD2 (Maize) | n = 22 days
+
+Original scale:
+  R² = 0.934 | SW p = 0.1343 (normal) | BP p = 0.0281 (HETEROSCEDASTIC) | DW = 1.521
+  Cook's D (threshold 0.1818): 3/22 influential points
+
+Log-transformed:
+  R² = 0.674 | SW p = 0.2162 (normal) | BP p = 0.3921 (homoscedastic) | DW = 1.645
+
+[DECISION] Use log10(x+1): homoscedasticity restored (BP p = 0.3921)
+
+[OK] Fig03_H1_diagnostic_heteroscedasticity.png
+
+=== SECTION 2: FAIRD INTRA-HABITAT ===
+
+
+--- FAIRD1 vs FAIRD2 (Maize) (n = 22) ---
+  R² = 0.674 | Adj.R² = 0.658 | p = 0.0000***
+  Slope = 0.836 ± 0.130 SE [95% CI: 0.565, 1.107]
+  Intercept = -0.046 (p = 0.712)
+  Shapiro-Wilk p = 0.2162 | Breusch-Pagan p = 0.3921 | DW stat = 1.645 (p = 0.172)
+  Spearman ρ [abs log] = 0.808*** | [daily chg] = 0.573**
+  Kendall τ [raw chg] = 0.445**
+  Concordance: 57.1% (12/21 days)
+  Robust pseudo-R² = 0.674 | Low-weight days (<0.5): 0/22
+
+--- FAIRD3 vs FAIRD4 (Meadow) (n = 22) ---
+  R² = 0.733 | Adj.R² = 0.719 | p = 0.0000***
+  Slope = 1.154 ± 0.156 SE [95% CI: 0.829, 1.479]
+  Intercept = -0.089 (p = 0.600)
+  Shapiro-Wilk p = 0.4114 | Breusch-Pagan p = 0.1744 | DW stat = 1.417 (p = 0.055)
+  Spearman ρ [abs log] = 0.837*** | [daily chg] = 0.727***
+  Kendall τ [raw chg] = 0.601***
+  Concordance: 71.4% (15/21 days)
+  Robust pseudo-R² = 0.731 | Low-weight days (<0.5): 0/22
+
+Shared FAIRD axis limits: [-0.098, 2.057]
+
+[OK] Fig04_H1_FAIRD_Maize.png
+
+[OK] Fig05_H1_FAIRD_Meadow.png
+
+--- FAIRD Intra-Habitat Summary ---
+  Maize  (F1 vs F2): R² = 0.674*** | Concordance: 57.1% | Spearman ρ = 0.573** | Kendall τ = 0.445**
+  Meadow (F3 vs F4): R² = 0.733*** | Concordance: 71.4% | Spearman ρ = 0.727*** | Kendall τ = 0.601***
+
+=== SECTION 3: AMMOD INTRA-HABITAT ===
+
+Note: Only Maize pair available (AMMOD1 vs AMMOD2, Sites 1–2).
+      AMMOD3 excluded (mechanical failure Aug 30–Sep 3).
+      AMMOD4 excluded (complete data loss).
+
+AMMOD Maize pair: n = 12 days with complete biomass data
+  Date range: 2023-08-23 to 2023-09-03
+
+
+--- AMMOD1 vs AMMOD2 (Maize) (n = 12) ---
+  R² = 0.741 | Adj.R² = 0.716 | p = 0.0003***
+  Slope = 1.135 ± 0.212 SE [95% CI: 0.663, 1.607]
+  Intercept = -0.484 (p = 0.495)
+  Shapiro-Wilk p = 0.7023 | Breusch-Pagan p = 0.2249 | DW stat = 2.034 (p = 0.442)
+  Spearman ρ [abs log] = 0.874*** | [daily chg] = 0.409ns
+  Kendall τ [raw chg] = 0.345ns
+  Concordance: 63.6% (7/11 days)
+  Robust pseudo-R² = 0.740 | Low-weight days (<0.5): 0/12
+
+[OK] Fig06_H1_AMMOD_Maize.png
+
+--- AMMOD Intra-Habitat Summary ---
+  Maize (A1 vs A2): R² = 0.741*** | Concordance: 63.6% | Spearman ρ = 0.409ns | Kendall τ = 0.345ns
+  Meadow: no pair available (AMMOD4 failed)
+
+==============================================================================
+PART 1 COMPLETE (Sections 1–3) — continue with Sections 4–7
+==============================================================================
+Script checkpoint: 2026-07-22 11:37:30 
+
+=== SECTION 4: ROBUST REGRESSION SUPPLEMENTARY ===
+
+OLS R² vs Pseudo-R² (robust, log scale | low-weight threshold = 0.5):
+
+# A tibble: 3 × 13
+  System Pair    Habitat     n OLS_R2 OLS_AdjR2 Pseudo_R2 n_low_wt Delta_R2  SW_p  BP_p DW_stat   DW_p
+  <chr>  <chr>   <chr>   <int>  <dbl>     <dbl>     <dbl>    <int>    <dbl> <dbl> <dbl>   <dbl>  <dbl>
+1 FAIRD  FAIRD1… Maize      22  0.674     0.658     0.674        0 -4.17e-5 0.216 0.392    1.65 0.172 
+2 FAIRD  FAIRD3… Meadow     22  0.733     0.719     0.731        0 -1.96e-3 0.411 0.174    1.42 0.0555
+3 AMMOD  AMMOD1… Maize      12  0.741     0.716     0.740        0 -1.80e-3 0.702 0.225    2.03 0.442 
+
+Interpretation:
+  |ΔR²| < 0.05 → OLS result not driven by outliers
+  Low-weight days (<0.5 Huber weight) indicate high-leverage observations
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    [OK] Table09_supp_OLS_vs_robust.csv
+
+=== SECTION 5: INTER-HABITAT FAIRD ===
+
+Note: Averaging approach — site-pair covariate p = 0.013, pooling invalid.
+      Compare daily mean(FAIRD1+FAIRD2) [Maize] vs mean(FAIRD3+FAIRD4) [Meadow].
+
+FAIRD inter-habitat: n = 22 days
+  Date range: 2023-08-23 to 2023-09-13
+
+
+--- FAIRD Maize vs Meadow (Inter-Habitat) (n = 22) ---
+  R² = 0.719 | Adj.R² = 0.705 | p = 0.0000***
+  Slope = 0.600 ± 0.084 SE [95% CI: 0.425, 0.774]
+  Intercept = 0.626 (p = 0.000)
+  Shapiro-Wilk p = 0.2037 | Breusch-Pagan p = 0.0846 | DW stat = 1.522 (p = 0.098)
+  Spearman ρ [abs log] = 0.795*** | [daily chg] = 0.765***
+  Kendall τ [raw chg] = 0.640***
+  Concordance: 81.0% (17/21 days)
+  Robust pseudo-R² = 0.717 | Low-weight days (<0.5): 1/22
+
+[OK] Fig09_H1_FAIRD_InterHabitat.png
+
+--- FAIRD Inter-Habitat Summary ---
+  Maize vs Meadow: R² = 0.719*** | Concordance: 81.0% | Spearman ρ = 0.765*** | Kendall τ = 0.640***
+
+=== SECTION 6: INTER-HABITAT AMMOD ===
+
+Note: Two separate pairs — averaging impossible (AMMOD4 failed).
+      data_list$ammod_biomass used (raw); NA filter excludes invalid days.
+
+AMMOD1 vs AMMOD3: n = 8 overlapping biomass days
+AMMOD2 vs AMMOD3: n = 8 overlapping biomass days
+
+
+--- AMMOD1 vs AMMOD3 (Site 1 Maize vs Site 3 Meadow) (n = 8) ---
+  R² = 0.472 | Adj.R² = 0.385 | p = 0.0596ns
+  Slope = 0.534 ± 0.230 SE [95% CI: -0.030, 1.097]
+  Intercept = 1.746 (p = 0.057)
+  Shapiro-Wilk p = 0.8537 | Breusch-Pagan p = 0.5074 | DW stat = 1.503 (p = 0.135)
+  Spearman ρ [abs log] = 0.667ns | [daily chg] = -0.071ns
+  Kendall τ [raw chg] = -0.048ns
+  Concordance: 57.1% (4/7 days)
+  Robust pseudo-R² = 0.470 | Low-weight days (<0.5): 0/8
+
+
+--- AMMOD2 vs AMMOD3 (Site 2 Maize vs Site 3 Meadow) (n = 8) ---
+  R² = 0.351 | Adj.R² = 0.243 | p = 0.1219ns
+  Slope = 0.345 ± 0.192 SE [95% CI: -0.124, 0.814]
+  Intercept = 2.343 (p = 0.010)
+  Shapiro-Wilk p = 0.6726 | Breusch-Pagan p = 0.5943 | DW stat = 1.544 (p = 0.147)
+  Spearman ρ [abs log] = 0.571ns | [daily chg] = -0.500ns
+  Kendall τ [raw chg] = -0.333ns
+  Concordance: 42.9% (3/7 days)
+  Robust pseudo-R² = 0.350 | Low-weight days (<0.5): 0/8
+
+[OK] Fig10_H1_AMMOD_InterHabitat_A1vsA3.png
+
+[OK] Fig11_H1_AMMOD_InterHabitat_A2vsA3.png
+
+--- AMMOD Inter-Habitat Summary ---
+  AMMOD1 vs AMMOD3: R² = 0.472ns | Concordance: 57.1% | Spearman ρ [abs]=0.667ns | τ=-0.048ns
+  AMMOD2 vs AMMOD3: R² = 0.351ns | Concordance: 42.9% | Spearman ρ [abs]=0.571ns | τ=-0.333ns
+
+=== SECTION 7: SUMMARY TABLES ===
+
+=== TABLE 9: H1 Intra-Habitat Level (§3.2.1.1) ===
+
+# A tibble: 3 × 13
+  System Pair    Habitat     n `R² (log)` `Slope [95% CI]` Concordance `Spearman ρ` `Kendall τ` `SW p`
+  <chr>  <chr>   <chr>   <int> <chr>      <chr>            <chr>       <chr>        <chr>       <chr> 
+1 FAIRD  FAIRD1… Maize      22 0.674 ***  0.84 [0.56, 1.1… 57.1%       0.808 ***    0.445 **    0.216 
+2 FAIRD  FAIRD3… Meadow     22 0.733 ***  1.15 [0.83, 1.4… 71.4%       0.837 ***    0.601 ***   0.411 
+3 AMMOD  AMMOD1… Maize      12 0.741 ***  1.13 [0.66, 1.6… 63.6%       0.874 ***    0.345 ns    0.702 
+# ℹ 3 more variables: `BP p` <chr>, DW <chr>, `Pseudo-R²` <chr>
+
+Significance: *** p<0.001 | ** p<0.01 | * p<0.05 | ns p>=0.05
+R² significance from slope p-value.
+Spearman ρ on absolute log values (manuscript tables). Kendall τ on raw daily changes.
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    wrote 2.15GB in  0s, 2.15GB/s                                                                                                    [OK] Table09_H1_intra_habitat.csv
+[OK] Table09_H1_intra_habitat_numeric.csv
+
+=== TABLE 10: H1 Inter-Habitat Level (§3.2.1.3) ===
+
+# A tibble: 3 × 12
+  System Pair         n `R² (log)` `Slope [95% CI]` Concordance `Spearman ρ` `Kendall τ` `SW p` `BP p`
+  <chr>  <chr>    <int> <chr>      <chr>            <chr>       <chr>        <chr>       <chr>  <chr> 
+1 FAIRD  Maize m…    22 0.719 ***  0.60 [0.42, 0.7… 81.0%       0.795 ***    0.640 ***   0.204  0.085 
+2 AMMOD  AMMOD1 …     8 0.472 ns   0.53 [-0.03, 1.… 57.1%       0.667 ns     -0.048 ns   0.854  0.507 
+3 AMMOD  AMMOD2 …     8 0.351 ns   0.35 [-0.12, 0.… 42.9%       0.571 ns     -0.333 ns   0.673  0.594 
+# ℹ 2 more variables: DW <chr>, `Pseudo-R²` <chr>
+
+Significance: *** p<0.001 | ** p<0.01 | * p<0.05 | ns p>=0.05
+FAIRD: daily mean(FAIRD1+FAIRD2) [Maize] vs mean(FAIRD3+FAIRD4) [Meadow].
+       Averaging used (not pooling) — site-pair covariate p = 0.013.
+AMMOD: two separate pairs — no averaging because AMMOD4 failed.
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    wrote 2.15GB in  0s, 2.15GB/s                                                                                                    [OK] Table10_H1_inter_habitat.csv
+[OK] Table10_H1_inter_habitat_numeric.csv
+
+=== TABLE 8: H1 Overview (§3.2.1 all levels) ===
+
+# A tibble: 6 × 10
+  System Level     Pair  Habitat     n `R² (log)` `Slope [95% CI]` Concordance `Kendall τ` `Pseudo-R²`
+  <chr>  <chr>     <chr> <chr>   <int> <chr>      <chr>            <chr>       <chr>       <chr>      
+1 FAIRD  Intra-Ha… FAIR… Maize      22 0.674 ***  0.84 [0.56, 1.1… 57.1%       0.445 **    0.674      
+2 FAIRD  Intra-Ha… FAIR… Meadow     22 0.733 ***  1.15 [0.83, 1.4… 71.4%       0.601 ***   0.731      
+3 AMMOD  Intra-Ha… AMMO… Maize      12 0.741 ***  1.13 [0.66, 1.6… 63.6%       0.345 ns    0.740      
+4 FAIRD  Inter-Ha… Maiz… Maize/…    22 0.719 ***  0.60 [0.42, 0.7… 81.0%       0.640 ***   0.717      
+5 AMMOD  Inter-Ha… AMMO… Maize/…     8 0.472 ns   0.53 [-0.03, 1.… 57.1%       -0.048 ns   0.470      
+6 AMMOD  Inter-Ha… AMMO… Maize/…     8 0.351 ns   0.35 [-0.12, 0.… 42.9%       -0.333 ns   0.350      
+
+Significance: *** p<0.001 | ** p<0.01 | * p<0.05 | ns p>=0.05
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    wrote 2.15GB in  0s, 2.15GB/s                                                                                                    [OK] Table08_H1_overview.csv
+[OK] Table08_H1_overview_numeric.csv
+
+==============================================================================
+H1_quanti_consistency.R — COMPLETE
+Sections 1-7 (Figs 3-11, Tables 8-10) generated successfully.
+==============================================================================
+
+Outputs summary:
+  Figures:  outputs/figures/Fig03 through Fig11
+  Tables:   outputs/tables/Table08, Table09 (+ supp), Table10 (+ numeric copies)
+  Console:  outputs/console/H1_quanti_consistency_output.txt
+
+Script completed: 2026-07-22 11:37:35 
+

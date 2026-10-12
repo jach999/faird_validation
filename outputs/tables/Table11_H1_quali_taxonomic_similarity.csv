@@ -1,0 +1,7 @@
+System,Level,Pair,Habitat,Metric,n_windows,mean_sim,sd_sim,median_sim,min_sim,max_sim
+AMMOD,Inter-Habitat,Maize_Pool vs Meadow_Pool,Inter-Habitat,Izsak-Price,7,86.6,2.3,85.9,83.7,89.9
+AMMOD,Intra-Habitat,AMMOD1 vs AMMOD2,Maize,Izsak-Price,7,87.9,5.3,89,80,94.5
+AMMOD,Intra-Habitat,AMMOD3 vs AMMOD4,Meadow,Izsak-Price,5,87.8,4.2,87.4,82.5,93.5
+FAIRD,Inter-Habitat,Maize_Pool vs Meadow_Pool,Inter-Habitat,Morisita-Horn,7,86.1,12.1,88.2,61.5,97.1
+FAIRD,Intra-Habitat,FAIRD1 vs FAIRD2,Maize,Morisita-Horn,5,88.6,17.3,95.2,58.1,99.9
+FAIRD,Intra-Habitat,FAIRD3 vs FAIRD4,Meadow,Morisita-Horn,7,82.9,13.6,79,65.7,99.1

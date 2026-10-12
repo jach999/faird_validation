@@ -1,0 +1,273 @@
+==============================================================================
+SCHERBER TEMPORAL ABUNDANCE ANALYSIS (FAIRD vs ID, camera pair)
+Mixed models: bs(Date, 3) * Device_type + Block/Site/Device nesting + AR1
+Two runs compared: conservative (22 days) vs operational (17 days)
+==============================================================================
+Script started: 2026-09-02 15:16:54 
+
+=== OPTIONAL PACKAGE AVAILABILITY ===
+
+  mixedup : available
+  sjPlot  : available
+  ape     : available
+
+To enable skipped steps, install once, separately, e.g.:
+  install.packages(c("sjPlot", "ape"))
+  remotes::install_github("m-clark/mixedup")
+
+=== DATA PREPARATION (FAIRD + ID daily abundance) ===
+
+[OK] All abundance rows matched effort_base on Device+Date.
+
+Base camera-pair dataset: 154 device-day observations
+Device types: FAIRD, ID
+Date span: 2023-08-23 to 2023-09-13
+
+Conservative scenario: 154 rows, 22 distinct days
+Operational scenario : 139 rows, 22 distinct days
+
+==============================================================================
+RUN: CONSERVATIVE
+==============================================================================
+
+Observations: 154 | distinct days: 22
+Blocks: BLOCK1 = Site1+Site2 (Maize), BLOCK2 = Site3+Site4 (Meadow)
+
+Observations per Device_type:
+# A tibble: 2 × 4
+  Device_type     n n_devices mean_abund
+  <fct>       <int>     <int>      <dbl>
+1 FAIRD          88         4       12.8
+2 ID             66         3       35.9
+
+Observations per Device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 FAIRD       FAIRD1 Site1    22
+2 BLOCK1 FAIRD       FAIRD2 Site2    22
+3 BLOCK1 ID          ID1    Site1    22
+4 BLOCK1 ID          ID2    Site2    22
+5 BLOCK2 FAIRD       FAIRD3 Site3    22
+6 BLOCK2 FAIRD       FAIRD4 Site4    22
+7 BLOCK2 ID          ID4    Site4    22
+
+--- MODEL FITTING ---
+
+--- Model BX: nlme::lme (random slope, Block/Site/Device, corAR1) ---
+  [OK] BX converged.
+
+--- BX Type II ANOVA (car::Anova) ---
+Analysis of Deviance Table (Type II tests)
+
+Response: abundance
+                             Chisq Df Pr(>Chisq)   
+bs(Date.num, 3)             8.9862  3   0.029475 * 
+Device_type                 8.9924  1   0.002711 **
+bs(Date.num, 3):Device_type 0.8883  3   0.828258   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+  BX Date x Device_type interaction (Type II): p = 0.8283 -> Trajectories parallel
+  [OK] Saved variance-components plot: outputs/figures/Scherber_abund_conservative_BX_varcomp.png
+
+--- Model B0: glmmTMB Tweedie, (1 | Block/Site/Device), no AR1 ---
+  [OK] B0 converged (valid).
+
+--- Model B1: B0 + ar1(times + 0 | Device) ---
+  [OK] B1 converged (valid).
+
+--- Model B_simple (fallback): glmmTMB Tweedie, (1 | Site/Device) ---
+  [OK] B_simple converged (valid).
+
+--- AIC comparison (converged glmmTMB models only) ---
+    Model df      AIC     dAIC
+       B1 15 1198.449  0.00000
+ B_simple 12 1215.323 16.87441
+       B0 13 1217.323 18.87441
+
+  Best by AIC: B1 (dAIC = 0)
+
+------------------------------------------------------------------------
+CONVERGENCE SUMMARY (conservative run)
+  BX  (nlme lme, random slope + AR1) : converged
+  B0  (glmmTMB, no AR1)              : converged
+  B1  (glmmTMB + AR1)                : converged
+  B_simple (fallback)                : converged
+  --> Model feeding the figures      : B1 (Block/Site/Device + AR1)
+------------------------------------------------------------------------
+
+--- Type III ANOVA (plotting model) ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: abundance
+                             Chisq Df Pr(>Chisq)    
+(Intercept)                 42.245  1  8.053e-11 ***
+bs(Date.num, 3)             55.329  3  5.842e-12 ***
+Device_type                  1.401  1  0.2365633    
+bs(Date.num, 3):Device_type 20.128  3  0.0001596 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+  Date x Device_type interaction: p = 0.0002 -> Trajectories NOT parallel
+
+--- Variance components (mixedup::extract_vc) ---
+# A tibble: 4 × 6
+  group             variance    sd sd_2.5 sd_97.5 var_prop
+  <chr>                <dbl> <dbl>  <dbl>   <dbl>    <dbl>
+1 Device:Site:Block    0.068 0.262  0.093   0.739    0.005
+2 Site:Block           0     0      0     Inf        0    
+3 Block                0.029 0.17   0.018   1.64     0.002
+4 Device               0.662 0.814  0.687   0.963    0.045
+  [OK] Saved random-effects plot: outputs/figures/Scherber_abund_conservative_RE.png
+
+==============================================================================
+RUN: OPERATIONAL
+==============================================================================
+
+Observations: 139 | distinct days: 22
+Blocks: BLOCK1 = Site1+Site2 (Maize), BLOCK2 = Site3+Site4 (Meadow)
+
+Observations per Device_type:
+# A tibble: 2 × 4
+  Device_type     n n_devices mean_abund
+  <fct>       <int>     <int>      <dbl>
+1 FAIRD          88         4       12.8
+2 ID             51         3       32.4
+
+Observations per Device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 FAIRD       FAIRD1 Site1    22
+2 BLOCK1 FAIRD       FAIRD2 Site2    22
+3 BLOCK1 ID          ID1    Site1    17
+4 BLOCK1 ID          ID2    Site2    17
+5 BLOCK2 FAIRD       FAIRD3 Site3    22
+6 BLOCK2 FAIRD       FAIRD4 Site4    22
+7 BLOCK2 ID          ID4    Site4    17
+
+--- MODEL FITTING ---
+
+--- Model BX: nlme::lme (random slope, Block/Site/Device, corAR1) ---
+  [OK] BX converged.
+
+--- BX Type II ANOVA (car::Anova) ---
+Analysis of Deviance Table (Type II tests)
+
+Response: abundance
+                              Chisq Df Pr(>Chisq)    
+bs(Date.num, 3)             28.8709  3  2.384e-06 ***
+Device_type                 17.4959  1  2.879e-05 ***
+bs(Date.num, 3):Device_type  1.6533  3     0.6474    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+  BX Date x Device_type interaction (Type II): p = 0.6474 -> Trajectories parallel
+  [OK] Saved variance-components plot: outputs/figures/Scherber_abund_operational_BX_varcomp.png
+
+--- Model B0: glmmTMB Tweedie, (1 | Block/Site/Device), no AR1 ---
+  [OK] B0 converged (valid).
+
+--- Model B1: B0 + ar1(times + 0 | Device) ---
+  [INVALID] B1 returned a fit but failed the strict check.
+            Numerical instability: the ar1(times + 0 | Device) structure
+            is degenerate here (non-positive-definite Hessian, NA AIC).
+            This is the false-convergence case; B1 is discarded and does
+            NOT enter the AIC comparison or the plot cascade.
+
+--- Model B_simple (fallback): glmmTMB Tweedie, (1 | Site/Device) ---
+  [OK] B_simple converged (valid).
+
+--- AIC comparison (converged glmmTMB models only) ---
+    Model df      AIC     dAIC
+ B_simple 12 1039.723 0.000000
+       B0 13 1041.135 1.411893
+
+  Best by AIC: B_simple (dAIC = 0)
+
+[WARNING] B1 not valid -> falling back to B0 for figures.
+
+------------------------------------------------------------------------
+CONVERGENCE SUMMARY (operational run)
+  BX  (nlme lme, random slope + AR1) : converged
+  B0  (glmmTMB, no AR1)              : converged
+  B1  (glmmTMB + AR1)                : FAILED
+  B_simple (fallback)                : converged
+  --> Model feeding the figures      : B0 (Block/Site/Device, no AR1)
+------------------------------------------------------------------------
+
+--- Type III ANOVA (plotting model) ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: abundance
+                              Chisq Df Pr(>Chisq)    
+(Intercept)                 71.6309  1  < 2.2e-16 ***
+bs(Date.num, 3)             98.6212  3  < 2.2e-16 ***
+Device_type                  1.5978  1     0.2062    
+bs(Date.num, 3):Device_type 24.2546  3   2.21e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+  Date x Device_type interaction: p = 0.0000 -> Trajectories NOT parallel
+
+--- Variance components (mixedup::extract_vc) ---
+# A tibble: 3 × 7
+  group             effect    variance    sd sd_2.5 sd_97.5 var_prop
+  <chr>             <chr>        <dbl> <dbl>  <dbl>   <dbl>    <dbl>
+1 Device:Site:Block Intercept    0.054 0.232  0.09    0.596    0.613
+2 Site:Block        Intercept    0     0      0     Inf        0    
+3 Block             Intercept    0.034 0.184  0.033   1.04     0.387
+  [OK] Saved random-effects plot: outputs/figures/Scherber_abund_operational_RE.png
+
+==============================================================================
+CENTRAL COMPARISON: Date x Device_type interaction across runs
+Two analytical frames side by side (robustness to family and ANOVA type):
+  - BX      : nlme::lme (gaussian), Type II  ANOVA. Robust reference,
+              fits cleanly in both runs.
+  - glmmTMB : best VALID Tweedie model, Type III ANOVA. Label in parentheses
+              shows which model (B0 / B1 / B_simple) fed each cell; B1 is
+              dropped when its AR1 structure is numerically degenerate.
+==============================================================================
+
+          Run Days BX_p_TypeII BX_verdict glmmTMB_p_TypeIII glmmTMB_verdict
+ conservative   22   0.8282584   parallel       0.0002 (B1)    NOT parallel
+  operational   22   0.6473581   parallel       0.0000 (B0)    NOT parallel
+
+Interpretation:
+  Conservative (22 days): BX (Type II) p = 0.8283 -> parallel | glmmTMB B1 (Type III) p = 0.0002 -> NOT parallel
+  Operational  (22 days): BX (Type II) p = 0.6474 -> parallel | glmmTMB B0 (Type III) p = 0.0000 -> NOT parallel
+
+  Reading the table:
+  - BX is the robust anchor. If its interaction is non-significant in BOTH
+    runs, FAIRD and ID follow PARALLEL temporal trajectories (they may still
+    differ in level via the Device_type main effect).
+  - A significant glmmTMB interaction that BX does not corroborate, and that
+    coincides with B1 being dropped for AR1 degeneracy, should be read as
+    numerical instability of the AR1 term, not as a real divergence.
+  - Agreement between BX and a VALID glmmTMB (B0 / B_simple) across both runs
+    is the strongest evidence, robust to family and to ANOVA type.
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             
+[OK] Saved: outputs/tables/Scherber_abundance_FAIRD_ID_interaction_comparison.csv
+
+=== SHARED Y-AXIS CAP ===
+  p98 of abundance = 90.9 -> rounded up to 100 (nearest ten)
+
+=== GENERATING TEMPORAL PLOTS ===
+
+  conservative run: 3 point(s) > 100 abundance outside plotted range (fit uses all data)
+[OK] Saved: outputs/figures/Scherber_temporal_abundance_FAIRD_ID_conservative.png
+[OK] Saved: outputs/figures/Scherber_temporal_abundance_FAIRD_ID_conservative_log10.png
+  operational run: 1 point(s) > 100 abundance outside plotted range (fit uses all data)
+[OK] Saved: outputs/figures/Scherber_temporal_abundance_FAIRD_ID_operational.png
+[OK] Saved: outputs/figures/Scherber_temporal_abundance_FAIRD_ID_operational_log10.png
+
+=== EXPORT ===
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] Saved: outputs/tables/Scherber_abundance_FAIRD_ID_conservative_ANOVA_III.csv
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] Saved: outputs/tables/Scherber_abundance_FAIRD_ID_operational_ANOVA_III.csv
+
+==============================================================================
+ANALYSIS COMPLETE
+Finished: 2026-09-02 15:17:12
+==============================================================================

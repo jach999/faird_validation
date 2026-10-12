@@ -1,0 +1,6 @@
+Level,Site_Habitat,n,R2,Adj_R2,Boot_CI_low,Boot_CI_high,Slope,Slope_CI_low,Slope_CI_high,Slope_p,Sig,Intercept,Intercept_p,Pseudo_R2,n_low_wt,Concordance_pct,Spearman_rho,Spearman_p,Kendall_tau,Kendall_p,SW_p,BP_p,DW_stat,DW_p,CCF_lag0,CCF_CI_bound,CCF_sig
+Site Level,Site1 (Maize),12,0.282,0.21,NA,NA,1.438,-0.178,3.054,0.0755,ns,-2.635,0.2862,0.28,0,45.5,0.238,0.4568,0.2,0.3918,0.728,0.202,1.988,0.41,0.347,0.566,ns
+Site Level,Site2 (Maize),12,0.445,0.389,NA,NA,0.862,0.183,1.541,0.0179,*,-0.835,0.4095,0.445,0,81.8,0.566,0.0548,0.673,0.004,0.403,0.877,1.429,0.096,0.781,0.566,sig
+Site Level,Site3 (Meadow),8,0.058,-0.099,NA,NA,0.335,-1.013,1.682,0.5655,ns,1.177,0.5603,0.048,0,28.6,0.214,0.6103,-0.238,0.4527,0.974,0.559,1.8,0.264,-0.002,0.693,ns
+Intra-Habitat Level,Maize (Sites 1+2),24,0.311,0.279,0.041,0.556,1.077,0.368,1.787,0.0047,**,-1.496,0.1862,0.302,0,63.6,0.482,0.0171,0.359,0.0193,0.278,0.193,1.845,0.299,0.657,0.566,sig
+Overall Level,All Sites (1+2+3),32,0.321,0.298,0.064,0.541,1.026,0.469,1.582,7e-4,***,-1.302,0.1548,0.314,0,55.2,0.491,0.0044,0.187,0.154,0.089,0.082,1.864,0.306,0.52,0.566,ns [descriptive only — Site3 n=8]

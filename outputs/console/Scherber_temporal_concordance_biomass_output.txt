@@ -1,0 +1,528 @@
+==============================================================================
+SYSTEM-LEVEL TEMPORAL CONCORDANCE, DAILY BIOMASS
+Components: LOW (shared shape), HIGH (shared day-to-day fluctuation), TOTAL
+==============================================================================
+Script started: 2026-10-03 12:50:58 
+
+Spline df: 3 (sensitivity 4) | coefficient draws: 1000
+
+=== DATA PREPARATION ===
+
+A_12d: 2023-08-23 to 2023-09-03 (12 dates)
+B_22d: 2023-08-23 to 2023-09-13 (22 dates)
+Adverse window (5 dates): 2023-08-28, 2023-08-29, 2023-08-30, 2023-08-31, 2023-09-01
+
+Observations per device (all valid days):
+# A tibble: 10 × 4
+   Block  Device_type Device     n
+   <chr>  <chr>       <chr>  <int>
+ 1 BLOCK1 AMMOD       AMMOD1    12
+ 2 BLOCK1 AMMOD       AMMOD2    12
+ 3 BLOCK1 FAIRD       FAIRD1    22
+ 4 BLOCK1 FAIRD       FAIRD2    22
+ 5 BLOCK1 ID          ID1       22
+ 6 BLOCK1 ID          ID2       22
+ 7 BLOCK2 AMMOD       AMMOD3     8
+ 8 BLOCK2 FAIRD       FAIRD3    22
+ 9 BLOCK2 FAIRD       FAIRD4    22
+10 BLOCK2 ID          ID4       22
+
+23 comparisons defined (10 between systems, 13 internal references).
+
+
+=== CONCORDANCE, SPLINE DF 3 ===
+
+>>> AMMOD vs FAIRD | A_12d | two_block | spline df 3
+  72 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 AMMOD BLOCK1 AMMOD1    12
+2 AMMOD BLOCK1 AMMOD2    12
+3 AMMOD BLOCK2 AMMOD3     8
+4 FAIRD BLOCK1 FAIRD1    12
+5 FAIRD BLOCK1 FAIRD2    12
+6 FAIRD BLOCK2 FAIRD3     8
+7 FAIRD BLOCK2 FAIRD4     8
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.250 [-0.391, 0.779] | HIGH r = 0.607 [0.050, 0.876] | TOTAL r = 0.376
+
+>>> AMMOD vs FAIRD | A_12d | maize_only | spline df 3
+  48 observations, 12 dates, blocks: BLOCK1
+# A tibble: 4 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 AMMOD BLOCK1 AMMOD1    12
+2 AMMOD BLOCK1 AMMOD2    12
+3 FAIRD BLOCK1 FAIRD1    12
+4 FAIRD BLOCK1 FAIRD2    12
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.052 [-0.653, 0.788] | HIGH r = 0.869 [0.588, 0.963] | TOTAL r = 0.657
+
+>>> AMMOD vs ID | A_12d | two_block | spline df 3
+  64 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 6 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 AMMOD BLOCK1 AMMOD1    12
+2 AMMOD BLOCK1 AMMOD2    12
+3 AMMOD BLOCK2 AMMOD3     8
+4 ID    BLOCK1 ID1       12
+5 ID    BLOCK1 ID2       12
+6 ID    BLOCK2 ID4        8
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = -0.204 [-0.898, 0.853] | HIGH r = 0.646 [0.115, 0.890] | TOTAL r = 0.204
+
+>>> AMMOD vs ID | A_12d | maize_only | spline df 3
+  48 observations, 12 dates, blocks: BLOCK1
+# A tibble: 4 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 AMMOD BLOCK1 AMMOD1    12
+2 AMMOD BLOCK1 AMMOD2    12
+3 ID    BLOCK1 ID1       12
+4 ID    BLOCK1 ID2       12
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = -0.723 [-0.957, 0.668] | HIGH r = 0.529 [-0.065, 0.846] | TOTAL r = 0.053
+
+>>> FAIRD vs ID | A_12d | two_block | spline df 3
+  84 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    12
+2 FAIRD BLOCK1 FAIRD2    12
+3 FAIRD BLOCK2 FAIRD3    12
+4 FAIRD BLOCK2 FAIRD4    12
+5 ID    BLOCK1 ID1       12
+6 ID    BLOCK1 ID2       12
+7 ID    BLOCK2 ID4       12
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = -0.460 [-0.913, 0.646] | HIGH r = 0.122 [-0.486, 0.650] | TOTAL r = -0.071
+
+>>> FAIRD vs ID | A_12d | maize_only | spline df 3
+  48 observations, 12 dates, blocks: BLOCK1
+# A tibble: 4 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    12
+2 FAIRD BLOCK1 FAIRD2    12
+3 ID    BLOCK1 ID1       12
+4 ID    BLOCK1 ID2       12
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = -0.438 [-0.889, 0.888] | HIGH r = 0.334 [-0.296, 0.762] | TOTAL r = 0.127
+
+>>> FAIRD vs ID | B_22d_full | two_block | spline df 3
+  154 observations, 22 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    22
+2 FAIRD BLOCK1 FAIRD2    22
+3 FAIRD BLOCK2 FAIRD3    22
+4 FAIRD BLOCK2 FAIRD4    22
+5 ID    BLOCK1 ID1       22
+6 ID    BLOCK1 ID2       22
+7 ID    BLOCK2 ID4       22
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.916 [-0.384, 0.972] | HIGH r = -0.020 [-0.438, 0.405] | TOTAL r = 0.146
+
+>>> FAIRD vs ID | B_22d_full | maize_only | spline df 3
+  88 observations, 22 dates, blocks: BLOCK1
+# A tibble: 4 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    22
+2 FAIRD BLOCK1 FAIRD2    22
+3 ID    BLOCK1 ID1       22
+4 ID    BLOCK1 ID2       22
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.920 [-0.113, 0.980] | HIGH r = 0.110 [-0.327, 0.508] | TOTAL r = 0.307
+
+>>> FAIRD vs ID | B_22d_excl | two_block | spline df 3
+  119 observations, 17 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    17
+2 FAIRD BLOCK1 FAIRD2    17
+3 FAIRD BLOCK2 FAIRD3    17
+4 FAIRD BLOCK2 FAIRD4    17
+5 ID    BLOCK1 ID1       17
+6 ID    BLOCK1 ID2       17
+7 ID    BLOCK2 ID4       17
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.933 [0.505, 0.978] | HIGH r = -0.344 [-0.707, 0.164] | TOTAL r = 0.113
+
+>>> FAIRD vs ID | B_22d_excl | maize_only | spline df 3
+  68 observations, 17 dates, blocks: BLOCK1
+# A tibble: 4 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    17
+2 FAIRD BLOCK1 FAIRD2    17
+3 ID    BLOCK1 ID1       17
+4 ID    BLOCK1 ID2       17
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.936 [0.694, 0.973] | HIGH r = -0.125 [-0.571, 0.379] | TOTAL r = 0.353
+
+>>> FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 | A_12d | two_block | spline df 3
+  48 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 4 × 4
+  Unit          Block  Device     n
+  <fct>         <fct>  <fct>  <int>
+1 FAIRD1+FAIRD3 BLOCK1 FAIRD1    12
+2 FAIRD1+FAIRD3 BLOCK2 FAIRD3    12
+3 FAIRD2+FAIRD4 BLOCK1 FAIRD2    12
+4 FAIRD2+FAIRD4 BLOCK2 FAIRD4    12
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.962 [-0.349, 0.987] | HIGH r = 0.863 [0.574, 0.961] | TOTAL r = 0.923
+
+>>> FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 | A_12d | two_block | spline df 3
+  48 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 4 × 4
+  Unit          Block  Device     n
+  <fct>         <fct>  <fct>  <int>
+1 FAIRD1+FAIRD4 BLOCK1 FAIRD1    12
+2 FAIRD1+FAIRD4 BLOCK2 FAIRD4    12
+3 FAIRD2+FAIRD3 BLOCK1 FAIRD2    12
+4 FAIRD2+FAIRD3 BLOCK2 FAIRD3    12
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.847 [-0.349, 0.985] | HIGH r = 0.875 [0.606, 0.965] | TOTAL r = 0.902
+
+>>> FAIRD: FAIRD1 vs FAIRD2 | A_12d | maize_only | spline df 3
+  24 observations, 12 dates, blocks: BLOCK1
+# A tibble: 2 × 4
+  Unit   Block  Device     n
+  <fct>  <fct>  <fct>  <int>
+1 FAIRD1 BLOCK1 FAIRD1    12
+2 FAIRD2 BLOCK1 FAIRD2    12
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.632 [-0.779, 0.969] | HIGH r = 0.856 [0.554, 0.959] | TOTAL r = 0.877
+
+>>> AMMOD: AMMOD1 vs AMMOD2 | A_12d | maize_only | spline df 3
+  24 observations, 12 dates, blocks: BLOCK1
+# A tibble: 2 × 4
+  Unit   Block  Device     n
+  <fct>  <fct>  <fct>  <int>
+1 AMMOD1 BLOCK1 AMMOD1    12
+2 AMMOD2 BLOCK1 AMMOD2    12
+  [INFO] level 'simple' valid but its covariance matrix is not finite -> next level.
+  Reported model level: fixed | residual (no-AR1) model level: simple
+  LOW r = 0.848 [0.115, 0.987] | HIGH r = 0.665 [0.147, 0.897] | TOTAL r = 0.800
+
+>>> ID: ID1 vs ID2 | A_12d | maize_only | spline df 3
+  24 observations, 12 dates, blocks: BLOCK1
+# A tibble: 2 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 ID1   BLOCK1 ID1       12
+2 ID2   BLOCK1 ID2       12
+  Reported model level: simple | residual (no-AR1) model level: simple
+  LOW r = 0.088 [-0.840, 0.927] | HIGH r = 0.195 [-0.427, 0.691] | TOTAL r = 0.075
+
+>>> FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 | B_22d_full | two_block | spline df 3
+  88 observations, 22 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 4 × 4
+  Unit          Block  Device     n
+  <fct>         <fct>  <fct>  <int>
+1 FAIRD1+FAIRD3 BLOCK1 FAIRD1    22
+2 FAIRD1+FAIRD3 BLOCK2 FAIRD3    22
+3 FAIRD2+FAIRD4 BLOCK1 FAIRD2    22
+4 FAIRD2+FAIRD4 BLOCK2 FAIRD4    22
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.996 [0.665, 0.998] | HIGH r = 0.787 [0.546, 0.907] | TOTAL r = 0.941
+
+>>> FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 | B_22d_full | two_block | spline df 3
+  88 observations, 22 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 4 × 4
+  Unit          Block  Device     n
+  <fct>         <fct>  <fct>  <int>
+1 FAIRD1+FAIRD4 BLOCK1 FAIRD1    22
+2 FAIRD1+FAIRD4 BLOCK2 FAIRD4    22
+3 FAIRD2+FAIRD3 BLOCK1 FAIRD2    22
+4 FAIRD2+FAIRD3 BLOCK2 FAIRD3    22
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.951 [0.564, 0.998] | HIGH r = 0.810 [0.591, 0.918] | TOTAL r = 0.928
+
+>>> FAIRD: FAIRD1 vs FAIRD2 | B_22d_full | maize_only | spline df 3
+  44 observations, 22 dates, blocks: BLOCK1
+# A tibble: 2 × 4
+  Unit   Block  Device     n
+  <fct>  <fct>  <fct>  <int>
+1 FAIRD1 BLOCK1 FAIRD1    22
+2 FAIRD2 BLOCK1 FAIRD2    22
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.961 [0.309, 0.991] | HIGH r = 0.754 [0.486, 0.892] | TOTAL r = 0.901
+
+>>> ID: ID1 vs ID2 | B_22d_full | maize_only | spline df 3
+  44 observations, 22 dates, blocks: BLOCK1
+# A tibble: 2 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 ID1   BLOCK1 ID1       22
+2 ID2   BLOCK1 ID2       22
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.991 [-0.558, 0.982] | HIGH r = 0.158 [-0.282, 0.544] | TOTAL r = 0.253
+
+>>> FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 | B_22d_excl | two_block | spline df 3
+  68 observations, 17 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 4 × 4
+  Unit          Block  Device     n
+  <fct>         <fct>  <fct>  <int>
+1 FAIRD1+FAIRD3 BLOCK1 FAIRD1    17
+2 FAIRD1+FAIRD3 BLOCK2 FAIRD3    17
+3 FAIRD2+FAIRD4 BLOCK1 FAIRD2    17
+4 FAIRD2+FAIRD4 BLOCK2 FAIRD4    17
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.987 [0.809, 0.999] | HIGH r = 0.693 [0.319, 0.881] | TOTAL r = 0.953
+
+>>> FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 | B_22d_excl | two_block | spline df 3
+  68 observations, 17 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 4 × 4
+  Unit          Block  Device     n
+  <fct>         <fct>  <fct>  <int>
+1 FAIRD1+FAIRD4 BLOCK1 FAIRD1    17
+2 FAIRD1+FAIRD4 BLOCK2 FAIRD4    17
+3 FAIRD2+FAIRD3 BLOCK1 FAIRD2    17
+4 FAIRD2+FAIRD3 BLOCK2 FAIRD3    17
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.986 [0.834, 0.999] | HIGH r = 0.700 [0.331, 0.884] | TOTAL r = 0.940
+
+>>> FAIRD: FAIRD1 vs FAIRD2 | B_22d_excl | maize_only | spline df 3
+  34 observations, 17 dates, blocks: BLOCK1
+# A tibble: 2 × 4
+  Unit   Block  Device     n
+  <fct>  <fct>  <fct>  <int>
+1 FAIRD1 BLOCK1 FAIRD1    17
+2 FAIRD2 BLOCK1 FAIRD2    17
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.993 [0.886, 0.997] | HIGH r = 0.695 [0.322, 0.881] | TOTAL r = 0.935
+
+>>> ID: ID1 vs ID2 | B_22d_excl | maize_only | spline df 3
+  34 observations, 17 dates, blocks: BLOCK1
+# A tibble: 2 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 ID1   BLOCK1 ID1       17
+2 ID2   BLOCK1 ID2       17
+  Reported model level: AR1 | residual (no-AR1) model level: simple
+  LOW r = 0.954 [0.248, 0.991] | HIGH r = 0.416 [-0.081, 0.747] | TOTAL r = 0.690
+
+------------------------------------------------------------------------
+RESULTS, SPLINE DF 3 
+------------------------------------------------------------------------
+# A tibble: 23 × 15
+   comparison                            window     version    role          split n_dates
+   <chr>                                 <chr>      <chr>      <chr>         <chr>   <dbl>
+ 1 AMMOD vs FAIRD                        A_12d      two_block  primary       <NA>       12
+ 2 AMMOD vs FAIRD                        A_12d      maize_only benchmark     <NA>       12
+ 3 AMMOD vs ID                           A_12d      two_block  primary       <NA>       12
+ 4 AMMOD vs ID                           A_12d      maize_only benchmark     <NA>       12
+ 5 FAIRD vs ID                           A_12d      two_block  primary       <NA>       12
+ 6 FAIRD vs ID                           A_12d      maize_only benchmark     <NA>       12
+ 7 FAIRD vs ID                           B_22d_full two_block  complementary <NA>       22
+ 8 FAIRD vs ID                           B_22d_full maize_only benchmark     <NA>       22
+ 9 FAIRD vs ID                           B_22d_excl two_block  complementary <NA>       17
+10 FAIRD vs ID                           B_22d_excl maize_only benchmark     <NA>       17
+11 FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 A_12d      two_block  reference     S1         12
+12 FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 A_12d      two_block  reference     S2         12
+13 FAIRD: FAIRD1 vs FAIRD2               A_12d      maize_only reference     maize      12
+14 AMMOD: AMMOD1 vs AMMOD2               A_12d      maize_only reference     maize      12
+15 ID: ID1 vs ID2                        A_12d      maize_only reference     maize      12
+16 FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 B_22d_full two_block  reference     S1         22
+17 FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 B_22d_full two_block  reference     S2         22
+18 FAIRD: FAIRD1 vs FAIRD2               B_22d_full maize_only reference     maize      22
+19 ID: ID1 vs ID2                        B_22d_full maize_only reference     maize      22
+20 FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 B_22d_excl two_block  reference     S1         17
+21 FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 B_22d_excl two_block  reference     S2         17
+22 FAIRD: FAIRD1 vs FAIRD2               B_22d_excl maize_only reference     maize      17
+23 ID: ID1 vs ID2                        B_22d_excl maize_only reference     maize      17
+   model_level residual_level  r_low low_lo low_hi r_high high_lo high_hi r_total
+   <chr>       <chr>           <dbl>  <dbl>  <dbl>  <dbl>   <dbl>   <dbl>   <dbl>
+ 1 AR1         noAR1           0.25  -0.391  0.779  0.607   0.05    0.876   0.376
+ 2 AR1         simple          0.052 -0.653  0.788  0.869   0.588   0.963   0.657
+ 3 AR1         noAR1          -0.204 -0.898  0.853  0.646   0.115   0.89    0.204
+ 4 AR1         simple         -0.723 -0.957  0.668  0.529  -0.065   0.846   0.053
+ 5 AR1         noAR1          -0.46  -0.913  0.646  0.122  -0.486   0.65   -0.071
+ 6 AR1         simple         -0.438 -0.889  0.888  0.334  -0.296   0.762   0.127
+ 7 AR1         noAR1           0.916 -0.384  0.972 -0.02   -0.438   0.405   0.146
+ 8 AR1         simple          0.92  -0.113  0.98   0.11   -0.327   0.508   0.307
+ 9 AR1         noAR1           0.933  0.505  0.978 -0.344  -0.707   0.164   0.113
+10 AR1         simple          0.936  0.694  0.973 -0.125  -0.571   0.379   0.353
+11 AR1         simple          0.962 -0.349  0.987  0.863   0.574   0.961   0.923
+12 AR1         noAR1           0.847 -0.349  0.985  0.875   0.606   0.965   0.902
+13 AR1         simple          0.632 -0.779  0.969  0.856   0.554   0.959   0.877
+14 fixed       simple          0.848  0.115  0.987  0.665   0.147   0.897   0.8  
+15 simple      simple          0.088 -0.84   0.927  0.195  -0.427   0.691   0.075
+16 AR1         noAR1           0.996  0.665  0.998  0.787   0.546   0.907   0.941
+17 AR1         noAR1           0.951  0.564  0.998  0.81    0.591   0.918   0.928
+18 AR1         simple          0.961  0.309  0.991  0.754   0.486   0.892   0.901
+19 AR1         simple          0.991 -0.558  0.982  0.158  -0.282   0.544   0.253
+20 AR1         noAR1           0.987  0.809  0.999  0.693   0.319   0.881   0.953
+21 AR1         noAR1           0.986  0.834  0.999  0.7     0.331   0.884   0.94 
+22 AR1         simple          0.993  0.886  0.997  0.695   0.322   0.881   0.935
+23 AR1         simple          0.954  0.248  0.991  0.416  -0.081   0.747   0.69 
+
+--- FAIRD split-half over both blocks, mean of the two splits ---
+# A tibble: 3 × 5
+  window     r_low r_high r_total n_splits
+  <chr>      <dbl>  <dbl>   <dbl>    <dbl>
+1 A_12d      0.905  0.869   0.913        2
+2 B_22d_excl 0.986  0.697   0.946        2
+3 B_22d_full 0.974  0.799   0.934        2
+
+--- Disattenuated HIGH-frequency r, Maize only (Spearman-Brown) ---
+# A tibble: 5 × 8
+  comparison     window     r_high r_ref_A rel_A r_ref_B rel_B r_high_dis
+  <chr>          <chr>       <dbl>   <dbl> <dbl>   <dbl> <dbl>      <dbl>
+1 AMMOD vs FAIRD A_12d       0.869   0.665 0.798   0.856 0.922      1.01 
+2 AMMOD vs ID    A_12d       0.529   0.665 0.798   0.195 0.326      1.04 
+3 FAIRD vs ID    A_12d       0.334   0.856 0.922   0.195 0.326      0.61 
+4 FAIRD vs ID    B_22d_full  0.11    0.754 0.859   0.158 0.273      0.226
+5 FAIRD vs ID    B_22d_excl -0.125   0.695 0.82    0.416 0.587     -0.18 
+
+  NOTES:
+  - LOW: r between fitted unit curves, raw scale, interval from coefficient
+    simulation; lower limit pessimistic (supports shared shape, not its absence).
+  - HIGH: r between unit series of Pearson residuals (no-AR1 model), lag 0;
+    CI by Fisher z, indicative only (ignores spline df and autocorrelation).
+  - Estimation only: no p-values in this script. Parallelism tests, between
+    and within systems: Scherber_temporal_biomass_5.R, Sections 2e to 2g.
+  - TOTAL: r between daily unit means, descriptive.
+  - maize_only rows: balanced 2-vs-2 devices; disattenuation only there.
+  - An interval including 0 is not evidence of absent shared fluctuation.
+
+
+=== SENSITIVITY, SPLINE DF 4 ===
+
+>>> AMMOD vs FAIRD | A_12d | two_block | spline df 4
+  72 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 AMMOD BLOCK1 AMMOD1    12
+2 AMMOD BLOCK1 AMMOD2    12
+3 AMMOD BLOCK2 AMMOD3     8
+4 FAIRD BLOCK1 FAIRD1    12
+5 FAIRD BLOCK1 FAIRD2    12
+6 FAIRD BLOCK2 FAIRD3     8
+7 FAIRD BLOCK2 FAIRD4     8
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.529 [0.005, 0.820] | HIGH r = 0.532 [-0.060, 0.847] | TOTAL r = 0.376
+
+>>> AMMOD vs ID | A_12d | two_block | spline df 4
+  64 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 6 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 AMMOD BLOCK1 AMMOD1    12
+2 AMMOD BLOCK1 AMMOD2    12
+3 AMMOD BLOCK2 AMMOD3     8
+4 ID    BLOCK1 ID1       12
+5 ID    BLOCK1 ID2       12
+6 ID    BLOCK2 ID4        8
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = -0.008 [-0.544, 0.713] | HIGH r = 0.594 [0.030, 0.871] | TOTAL r = 0.204
+
+>>> FAIRD vs ID | A_12d | two_block | spline df 4
+  84 observations, 12 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    12
+2 FAIRD BLOCK1 FAIRD2    12
+3 FAIRD BLOCK2 FAIRD3    12
+4 FAIRD BLOCK2 FAIRD4    12
+5 ID    BLOCK1 ID1       12
+6 ID    BLOCK1 ID2       12
+7 ID    BLOCK2 ID4       12
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = -0.023 [-0.694, 0.730] | HIGH r = 0.118 [-0.489, 0.648] | TOTAL r = -0.071
+
+>>> FAIRD vs ID | B_22d_full | two_block | spline df 4
+  154 observations, 22 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    22
+2 FAIRD BLOCK1 FAIRD2    22
+3 FAIRD BLOCK2 FAIRD3    22
+4 FAIRD BLOCK2 FAIRD4    22
+5 ID    BLOCK1 ID1       22
+6 ID    BLOCK1 ID2       22
+7 ID    BLOCK2 ID4       22
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.092 [-0.391, 0.687] | HIGH r = 0.130 [-0.309, 0.523] | TOTAL r = 0.146
+
+>>> FAIRD vs ID | B_22d_excl | two_block | spline df 4
+  119 observations, 17 dates, blocks: BLOCK1, BLOCK2
+# A tibble: 7 × 4
+  Unit  Block  Device     n
+  <fct> <fct>  <fct>  <int>
+1 FAIRD BLOCK1 FAIRD1    17
+2 FAIRD BLOCK1 FAIRD2    17
+3 FAIRD BLOCK2 FAIRD3    17
+4 FAIRD BLOCK2 FAIRD4    17
+5 ID    BLOCK1 ID1       17
+6 ID    BLOCK1 ID2       17
+7 ID    BLOCK2 ID4       17
+  Reported model level: AR1 | residual (no-AR1) model level: noAR1
+  LOW r = 0.399 [-0.033, 0.764] | HIGH r = -0.085 [-0.543, 0.413] | TOTAL r = 0.113
+
+--- Primary (df 3) vs sensitivity (df 4) ---
+# A tibble: 10 × 11
+   comparison     window     spline_df model_level  r_low low_lo low_hi r_high high_lo high_hi
+   <chr>          <chr>          <dbl> <chr>        <dbl>  <dbl>  <dbl>  <dbl>   <dbl>   <dbl>
+ 1 AMMOD vs FAIRD A_12d              3 AR1          0.25  -0.391  0.779  0.607   0.05    0.876
+ 2 AMMOD vs FAIRD A_12d              4 AR1          0.529  0.005  0.82   0.532  -0.06    0.847
+ 3 AMMOD vs ID    A_12d              3 AR1         -0.204 -0.898  0.853  0.646   0.115   0.89 
+ 4 AMMOD vs ID    A_12d              4 AR1         -0.008 -0.544  0.713  0.594   0.03    0.871
+ 5 FAIRD vs ID    A_12d              3 AR1         -0.46  -0.913  0.646  0.122  -0.486   0.65 
+ 6 FAIRD vs ID    A_12d              4 AR1         -0.023 -0.694  0.73   0.118  -0.489   0.648
+ 7 FAIRD vs ID    B_22d_excl         3 AR1          0.933  0.505  0.978 -0.344  -0.707   0.164
+ 8 FAIRD vs ID    B_22d_excl         4 AR1          0.399 -0.033  0.764 -0.085  -0.543   0.413
+ 9 FAIRD vs ID    B_22d_full         3 AR1          0.916 -0.384  0.972 -0.02   -0.438   0.405
+10 FAIRD vs ID    B_22d_full         4 AR1          0.092 -0.391  0.687  0.13   -0.309   0.523
+   r_total
+     <dbl>
+ 1   0.376
+ 2   0.376
+ 3   0.204
+ 4   0.204
+ 5  -0.071
+ 6  -0.071
+ 7   0.113
+ 8   0.113
+ 9   0.146
+10   0.146
+
+
+=== FIGURES ===
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_shape_AMMOD_FAIRD_A_12d.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_fluct_AMMOD_FAIRD_A_12d.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_shape_AMMOD_ID_A_12d.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_fluct_AMMOD_ID_A_12d.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_shape_FAIRD_ID_A_12d.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_fluct_FAIRD_ID_A_12d.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_shape_FAIRD_ID_B_22d_full.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_fluct_FAIRD_ID_B_22d_full.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_shape_FAIRD_ID_B_22d_excl.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_fluct_FAIRD_ID_B_22d_excl.png
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_internal_shape_A_12d.png 
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_internal_fluct_A_12d.png 
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_internal_shape_B_22d_full.png 
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_internal_fluct_B_22d_full.png 
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_internal_shape_B_22d_excl.png 
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_internal_fluct_B_22d_excl.png 
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/Scherber_concordance_forest.png
+
+=== EXPORT ===
+
+wrote 4.25kB in  0s, 223.03MB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/tables/Scherber_concordance_biomass.csv 
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/tables/Scherber_concordance_disattenuation.csv 
+
+==============================================================================
+ANALYSIS COMPLETE
+Finished: 2026-10-03 12:53:51 (2.9 min)
+==============================================================================

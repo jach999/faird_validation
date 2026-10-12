@@ -1,0 +1,129 @@
+==============================================================================
+BIOMASS TEMPORAL MODEL: BLOCK RANDOM vs BLOCK FIXED
+Identical fixed structure and AR1; only the role of Block differs.
+==============================================================================
+Script started: 2026-09-29 13:38:45 
+
+=== DATA PREPARATION ===
+
+Overlap period (2023-08-23 to 2023-09-03): 116 observations
+Distinct days: 12
+Blocks: BLOCK1 = Site1+Site2 (Maize), BLOCK2 = Site3+Site4 (Meadow)
+Block levels: 2 | Site levels: 4 | Device levels: 10
+
+Observations per Device (overlap period):
+# A tibble: 10 × 5
+   Block  Device_type Device Site      n
+   <fct>  <fct>       <fct>  <fct> <int>
+ 1 BLOCK1 AMMOD       AMMOD1 Site1    12
+ 2 BLOCK1 AMMOD       AMMOD2 Site2    12
+ 3 BLOCK1 FAIRD       FAIRD1 Site1    12
+ 4 BLOCK1 FAIRD       FAIRD2 Site2    12
+ 5 BLOCK1 ID          ID1    Site1    12
+ 6 BLOCK1 ID          ID2    Site2    12
+ 7 BLOCK2 AMMOD       AMMOD3 Site3     8
+ 8 BLOCK2 FAIRD       FAIRD3 Site3    12
+ 9 BLOCK2 FAIRD       FAIRD4 Site4    12
+10 BLOCK2 ID          ID4    Site4    12
+
+=== MODEL FITTING ===
+
+--- Fitting: Block RANDOM (1|Block/Site/Device) ---
+  [OK] AR1 model valid (positive-definite Hessian, finite AIC).
+
+--- Fitting: Block FIXED (+ Block, 1|Site/Device) ---
+  [OK] AR1 model valid (positive-definite Hessian, finite AIC).
+
+=== TYPE III ANOVA (both specifications) ===
+
+--- Block RANDOM (1|Block/Site/Device) + AR1 ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                              Chisq Df Pr(>Chisq)    
+(Intercept)                 647.014  1  < 2.2e-16 ***
+bs(Date.num, 3)              17.397  3  0.0005855 ***
+Device_type                  44.107  2  2.644e-10 ***
+bs(Date.num, 3):Device_type  18.453  6  0.0051934 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Variance components (random specification):
+
+Conditional model:
+ Groups            Name            Std.Dev.   Corr       
+ Device:Site:Block (Intercept)     1.4113e-01            
+ Site:Block        (Intercept)     6.0842e-05            
+ Block             (Intercept)     1.8243e-02            
+ Device            times2023-08-23 4.9468e-01 0.158 (ar1)
+
+--- Block FIXED (+ Block, 1|Site/Device) + AR1 ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                               Chisq Df Pr(>Chisq)    
+(Intercept)                 643.1610  1  < 2.2e-16 ***
+bs(Date.num, 3)              16.2159  3   0.001024 ** 
+Device_type                  47.0122  2  6.186e-11 ***
+Block                         2.9734  1   0.084645 .  
+bs(Date.num, 3):Device_type  17.9551  6   0.006345 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Fixed-effect coefficients incl. Block (fixed specification):
+                      (Intercept)                  bs(Date.num, 3)1 
+                        8.1304539                         0.2493579 
+                 bs(Date.num, 3)2                  bs(Date.num, 3)3 
+                       -2.8747339                        -0.4034240 
+                 Device_typeFAIRD                     Device_typeID 
+                       -3.5125533                        -2.3272028 
+                      BlockBLOCK2 bs(Date.num, 3)1:Device_typeFAIRD 
+                        0.2929972                         2.3951138 
+bs(Date.num, 3)2:Device_typeFAIRD bs(Date.num, 3)3:Device_typeFAIRD 
+                        2.1076844                         0.3595639 
+   bs(Date.num, 3)1:Device_typeID    bs(Date.num, 3)2:Device_typeID 
+                       -0.4520500                         2.0749802 
+   bs(Date.num, 3)3:Device_typeID 
+                        1.0593743 
+
+=== SIDE-BY-SIDE COMPARISON ===
+
+ Quantity                          Block_random                            
+ Model label                       Block RANDOM (1|Block/Site/Device) + AR1
+ AR1 retained                      TRUE                                    
+ p: Date x Device_type interaction 0.0052                                  
+ p: spline bs(Date.num,3)          0.0006                                  
+ p: Device_type                    0.0000                                  
+ p: Block (fixed only)             — (not in model)                        
+ Block variance (random only)      0.0003328                               
+ AIC                               1658.74                                 
+ Block_fixed                               
+ Block FIXED (+ Block, 1|Site/Device) + AR1
+ TRUE                                      
+ 0.0063                                    
+ 0.0010                                    
+ 0.0000                                    
+ 0.0846                                    
+ — (not in model)                          
+ 1656.08                                   
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             
+[OK] Saved: outputs/tables/Scherber_biomass_block_comparison.csv
+
+=== HOW TO READ THIS ===
+- The interaction p-value is the manuscript-relevant number. If it is
+  stable across the two specifications, the trajectory-parallelism
+  conclusion does not depend on the Block modelling choice.
+- Block variance (random spec): if it is ~0 or tiny relative to Site/Device,
+  the 2-level random effect has collapsed (singular fit) and the fixed
+  specification is the better-calibrated one.
+- Device_type p-value is the term most likely to move, because Block and
+  Device_type share mean-level variation under an unbalanced habitat layout
+  (AMMOD4/Meadow absent, Site3/Meadow reduced).
+- AIC is NOT comparable between the two specifications as a model-selection
+  criterion here, because a fixed and a random treatment of the same factor
+  are not nested in the usual sense; use it only as a rough sanity check. 
+
+==============================================================================
+COMPARISON COMPLETE
+Finished: 2026-09-29 13:38:47
+==============================================================================

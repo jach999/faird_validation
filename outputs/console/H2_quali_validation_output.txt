@@ -1,0 +1,415 @@
+==============================================================================
+H2 QUALITATIVE VALIDATION — §3.3.2
+FAIRD vs AMMOD | Izsak-Price ΔS | Superfamily | 3-day windows
+==============================================================================
+Script started: 2026-07-22 11:38:19 
+
+
+=== LOADING E-TRAPS DATA ===
+indexing FAIRD_For_Statistics.csv [===============================================] 2.15GB/s, eta:  0s                                                                                                      FAIRD loaded: 1128 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: FAIRD1, FAIRD2, FAIRD3, FAIRD4 
+indexing ID_For_Statistics.csv [==================================================] 2.15GB/s, eta:  0s                                                                                                      ID loaded: 2370 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: ID1, ID2, ID4 
+ID3 has no data (device failure as expected)
+
+Total e-traps individuals: 3498 
+
+=== LOADING AMMOD TAXONOMIC DATA ===
+indexing AMMOD_24h_OTUs_For_Statistics.csv [======================================] 2.15GB/s, eta:  0s                                                                                                      AMMOD taxonomy loaded: 2338 OTUs
+Date range: 2023-08-23 to 2023-09-16 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+IMPORTANT: AMMOD taxonomy is QUALITATIVE (presence/absence)
+  'Count' = DNA sequence reads, NOT individual insect counts.
+  Use ONLY for presence/absence analyses.
+Converted to presence/absence format
+
+=== BUILDING TRUTH CALENDAR ===
+Truth Calendar built for 12 devices over 22 days.
+# A tibble: 12 × 4
+   Device Field_Days_Effort Valid_Taxo_Days Valid_Bio_Days
+   <chr>              <int>           <int>          <int>
+ 1 AMMOD1                21              21             12
+ 2 AMMOD2                21              21             12
+ 3 AMMOD3                21              21              8
+ 4 AMMOD4                14              13              0
+ 5 FAIRD1                22              22             22
+ 6 FAIRD2                22              22             22
+ 7 FAIRD3                22              22             22
+ 8 FAIRD4                22              22             22
+ 9 ID1                   22              22             22
+10 ID2                   22              22             22
+11 ID3                    0               0              0
+12 ID4                   22              22             22
+
+ammod_taxonomy_presence filtered by Truth Calendar:
+  Before: 2109 | After: 2023 | Removed: 86
+  Removed: AMMOD4 jammed-bottle period (Aug 28-Sep 3) + contaminated sample R2_4_06 (AMMOD4, Sep 10).
+
+=== LOADING AMMOD BIOMASS DATA ===
+indexing AMMOD_24h_live_mass_For_Statistics.csv [===============================] 185.55MB/s, eta:  0s                                                                                                      Raw columns: Date, Device, Device_type, Site, Ambient, DevicexAmbien, Dry_mass_g, Live_mass 
+AMMOD biomass loaded: 48 daily measurements
+Date range: 2023-08-23 to 2023-09-03 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+=== AMMOD DATA QUALITY ASSESSMENT ===
+
+Completeness by device:
+# A tibble: 4 × 6
+  Device Site  Ambient total_days days_with_biomass days_missing
+  <chr>  <chr> <chr>        <int>             <int>        <int>
+1 AMMOD1 Site1 Maize           12                12            0
+2 AMMOD2 Site2 Maize           12                12            0
+3 AMMOD3 Site3 Meadow          12                 8            4
+4 AMMOD4 Site4 Meadow          12                 0           12
+
+DEVICES WITH INCOMPLETE DATA:
+
+AMMOD3 (Site3, Meadow):
+  Days available: 8 | Days missing: 4
+  Status: Processing method changed in cursu (ATL) from day 9.
+  Impact: Site3 for H2 has reduced matching days (n=8).
+  Note:   OTU data available for H1 qualitative analysis.
+
+AMMOD4 (Site4, Meadow):
+  Days available: 0 | Days missing: 12
+  Status: Mechanical failure — rotation jammed (Aug 28-Sep 3).
+  Missing dates: 2023-08-23 to 2023-09-03
+  All biomass unavailable (ATL Batch 1). Excluded from H2.
+
+
+Summary for statistical analyses:
+# A tibble: 3 × 5
+  Site  Device Ambient n_days mean_biomass
+  <chr> <chr>  <chr>    <int>        <dbl>
+1 Site1 AMMOD1 Maize       12        1946.
+2 Site2 AMMOD2 Maize       12        2085.
+3 Site3 AMMOD3 Meadow       8        3349.
+
+Total valid measurements: 32 
+  Site1 (Maize):  n = 12 
+  Site2 (Maize):  n = 12 
+  Site3 (Meadow): n = 8 
+  Site4 (Meadow): n = 0 
+
+=== AGGREGATING E-TRAPS TO DAILY BIOMASS ===
+E-traps daily aggregation complete
+
+=== ENFORCING DATA COMPLETENESS (E-TRAPS) ===
+Full grid: 7 devices x 22 days
+Zero-capture days filled (abundance = 0, biomass_mg = 0).
+mean_body_length/width left as NA on zero-capture days.
+
+  ID2: 22 days (expected 22)
+  ID4: 22 days (expected 22)
+  FAIRD2: 22 days (expected 22)
+  FAIRD3: 22 days (expected 22)
+  FAIRD4: 22 days (expected 22)
+  ID1: 22 days (expected 22)
+  FAIRD1: 22 days (expected 22)
+
+=== CREATING PRESENCE/ABSENCE MATRICES ===
+E-traps presence records: 271 
+AMMOD presence records: 2023 
+
+=== CREATING ANALYSIS-READY DATASETS ===
+FAIRD-AMMOD overlapping date range:
+  Start: 2023-08-23 
+  End: 2023-09-03 
+  Days: 12 
+
+=== EXPORTING CLEANED DATASETS ===
+data_list saved to: data_cleaned.RData
+
+=== DATA SUMMARY ===
+# A tibble: 5 × 3
+  Dataset        N_rows N_devices
+  <chr>           <int>     <int>
+1 FAIRD            1128         4
+2 ID               2370         3
+3 E-traps Total    3498         7
+4 AMMOD Taxonomy   2023         4
+5 AMMOD Biomass      32         3
+
+--- Taxonomic richness (#N/C excluded from all counts) ---
+E-traps (filtered): Orders = 10 | Families = 47 | Genera = 54 
+AMMOD:   Orders = 15 | Families = 118 | Genera = 341 
+FAIRD:   Orders = 10 | Families = 45 | Genera = 53 
+ID:   Orders = 5 | Families = 8 | Genera = 4 
+
+--- Site availability ---
+# A tibble: 10 × 4
+   Site  Device_type n_days Dataset      
+   <chr> <chr>        <int> <chr>        
+ 1 Site1 AMMOD           12 AMMOD Biomass
+ 2 Site1 FAIRD           22 E-traps      
+ 3 Site1 ID              22 E-traps      
+ 4 Site2 AMMOD           12 AMMOD Biomass
+ 5 Site2 FAIRD           22 E-traps      
+ 6 Site2 ID              22 E-traps      
+ 7 Site3 AMMOD            8 AMMOD Biomass
+ 8 Site3 FAIRD           22 E-traps      
+ 9 Site4 FAIRD           22 E-traps      
+10 Site4 ID              22 E-traps      
+
+=== DATA LOADING COMPLETE ===
+Access datasets via: data_list$faird, data_list$etraps_daily, etc.
+=== SECTION 1: SITE LEVEL ===
+
+FAIRD individuals: 1128 
+  With Superfamily: 768 (68.1%)
+
+AMMOD OTUs: 2023 
+  With Superfamily: 2023 (100.0%)
+
+Building taxonomic distance matrix...
+Distance matrix: 78 x 78 | range: 17.3893 - 100.0000
+
+3-day windowed Izsak-Price (MIN_INDIV = 3 FAIRD individuals per window)
+
+Windowed computations: 28 
+Valid: 24 | Filtered: 4 
+
+--- Site-level windowed summary ---
+
+# A tibble: 4 × 9
+  Site  Habitat n_windows mean_DS sd_DS se_DS faird_sf_win ammod_sf_win shared_win
+  <chr> <chr>       <int>   <dbl> <dbl> <dbl>        <dbl>        <dbl>      <dbl>
+1 Site1 Maize           7    65.2   2.5  0.94          3.9         21.1        2.9
+2 Site2 Maize           5    61.3   3    1.33          2.6         19          1.8
+3 Site3 Meadow          7    72.2   4.9  1.83          7.4         30.6        6  
+4 Site4 Meadow          5    71.8   3.2  1.44          8.2         25.8        5  
+
+[OK] Fig25_H2_quali_site_level.png
+
+=== SECTION 2: INTRA-HABITAT LEVEL ===
+
+Maize:  63.6% +/- 3.3% (n = 12 windows)
+Meadow: 72.0% +/- 4.1% (n = 12 windows)
+
+Levene's test: F = 0.045, p = 0.8339 (equal variances assumed)
+t-test: t(22) = -5.619, p = 0.0000
+Cohen's d = -2.294 (large)
+
+[OK] Fig26_H2_quali_intra_habitat.png
+
+[OK] Fig27_H2_quali_intra_habitat_temporal.png
+
+=== SECTION 3: OVERALL LEVEL ===
+
+Overall ΔS: 67.8% ± 5.6% (n = 24, 95% CI: 65.5–70.0%)
+
+[OK] Fig28_H2_quali_overall_level.png
+
+--- TABLE 16: Izsak-Price ΔS Summary ---
+
+# A tibble: 7 × 5
+  Level                  Habitat n_windows Mean_DS SD_DS
+  <chr>                  <chr>       <int>   <dbl> <dbl>
+1 Site1                  Maize           7    65.2   2.5
+2 Site2                  Maize           5    61.3   3  
+3 Site3                  Meadow          7    72.2   4.9
+4 Site4                  Meadow          5    71.8   3.2
+5 Maize (Intra-Habitat)  Maize          12    63.6   3.3
+6 Meadow (Intra-Habitat) Meadow         12    72     4.1
+7 Overall                All            24    67.8   5.6
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    [OK] Table16_H2_quali_IP_summary.csv
+
+=== SECTION 4: SIZE-THRESHOLD SENSITIVITY ===
+
+Three AMMOD pools: raw (all OTUs), >=3mm, >=5mm. Same FAIRD pool in all three.
+
+AMMOD raw OTUs:    2023
+AMMOD >= 3mm OTUs: 1783 (88.1% of raw)
+AMMOD >= 5mm OTUs: 771 (38.1% of raw)
+
+Windows with all three ΔS computed: 24
+
+--- TABLE 17: Size-Threshold Sensitivity ---
+
+# A tibble: 5 × 11
+  Site      Habitat n_windows Mean_DS_raw Mean_DS_3mm Mean_DS_5mm Delta_raw_to_3mm Delta_3mm_to_5mm
+  <chr>     <chr>       <int>       <dbl>       <dbl>       <dbl>            <dbl>            <dbl>
+1 Site1     Maize           7        65.2        65.5        70.7              0.3              5.2
+2 Site2     Maize           5        61.3        60.3        64.1             -1                3.8
+3 Site3     Meadow          7        72.2        72.3        75.4              0.2              3.1
+4 Site4     Meadow          5        71.8        72.9        78.4              1.1              5.4
+5 All sites -              24        67.8        68          72.3              0.2              4.3
+# ℹ 3 more variables: Taxa_raw <dbl>, Taxa_3mm <dbl>, Taxa_5mm <dbl>
+
+NOTE: Delta_raw_to_3mm = DS_3mm - DS_raw (pp). Positive = filtering >=3mm improves concordance.
+      Delta_3mm_to_5mm = DS_5mm - DS_3mm (pp). Same interpretation for stricter threshold.
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    [OK] Table17_H2_quali_size_threshold.csv
+
+--- Sub-3mm Superfamily diagnostic ---
+
+For each site × window: do sub-3mm OTUs add NEW Superfamilies to the raw pool?
+(SF present in raw but absent in >=3mm fraction)
+
+# A tibble: 4 × 9
+  Site  Habitat n_windows mean_SF_raw mean_SF_3mm mean_new_SF max_new_SF windows_with_new_SF
+  <chr> <chr>       <int>       <dbl>       <dbl>       <dbl>      <int>               <int>
+1 Site1 Maize           7        21.1        19.3        1.86          3                   7
+2 Site2 Maize           7        19.7        18.3        1.43          3                   7
+3 Site3 Meadow          7        30.6        28.4        2.14          3                   7
+4 Site4 Meadow          5        25.8        23.4        2.4           4                   5
+# ℹ 1 more variable: mean_pct_new <dbl>
+
+Overall:
+# A tibble: 1 × 7
+  n_windows mean_SF_raw mean_SF_3mm mean_new_SF max_new_SF windows_with_new_SF mean_pct_new
+      <int>       <dbl>       <dbl>       <dbl>      <int>               <int>        <dbl>
+1        26        24.2        22.3        1.92          4                  26            8
+
+Unique Superfamilies appearing ONLY in sub-3mm fraction (across all windows):
+  Aleyrodoidea
+  Aphidoidea
+  Araneoidea
+  Chalcidoidea
+  Cucujoidea
+  Diaprioidea
+  Phoroidea
+  Platygastroidea
+  Platypezoidea
+  Psylloidea
+
+=== SECTION 5: TAXONOMIC BREADTH (FAIRD) ===
+
+--- TABLE 18: Diptera dominance by Habitat and Site ---
+
+--- Order composition by Habitat ---
+# A tibble: 15 × 5
+   Ambient Order           n total   pct
+   <chr>   <chr>       <int> <int> <dbl>
+ 1 Maize   Diptera       414   442  93.7
+ 2 Maize   Hymenoptera    12   442   2.7
+ 3 Maize   Coleoptera      8   442   1.8
+ 4 Maize   Araneae         6   442   1.4
+ 5 Maize   Lepidoptera     1   442   0.2
+ 6 Maize   Orthoptera      1   442   0.2
+ 7 Meadow  Diptera       572   660  86.7
+ 8 Meadow  Coleoptera     45   660   6.8
+ 9 Meadow  Hymenoptera    32   660   4.8
+10 Meadow  Hemiptera       5   660   0.8
+11 Meadow  Lepidoptera     2   660   0.3
+12 Meadow  Araneae         1   660   0.2
+13 Meadow  Dermaptera      1   660   0.2
+14 Meadow  Neuroptera      1   660   0.2
+15 Meadow  Trichoptera     1   660   0.2
+
+--- Diptera % by Habitat ---
+# A tibble: 2 × 4
+  Ambient Diptera_n Total_n Diptera_pct
+  <chr>       <int>   <int>       <dbl>
+1 Maize         414     442        93.7
+2 Meadow        572     660        86.7
+
+--- Order composition by Site ---
+# A tibble: 21 × 6
+   Site  Ambient Order           n total   pct
+   <chr> <chr>   <chr>       <int> <int> <dbl>
+ 1 Site1 Maize   Diptera       236   258  91.5
+ 2 Site1 Maize   Hymenoptera    12   258   4.7
+ 3 Site1 Maize   Araneae         6   258   2.3
+ 4 Site1 Maize   Coleoptera      3   258   1.2
+ 5 Site1 Maize   Lepidoptera     1   258   0.4
+ 6 Site2 Maize   Diptera       178   184  96.7
+ 7 Site2 Maize   Coleoptera      5   184   2.7
+ 8 Site2 Maize   Orthoptera      1   184   0.5
+ 9 Site3 Meadow  Diptera       234   276  84.8
+10 Site3 Meadow  Coleoptera     20   276   7.2
+11 Site3 Meadow  Hymenoptera    16   276   5.8
+12 Site3 Meadow  Hemiptera       3   276   1.1
+13 Site3 Meadow  Lepidoptera     2   276   0.7
+14 Site3 Meadow  Araneae         1   276   0.4
+15 Site4 Meadow  Diptera       338   384  88  
+16 Site4 Meadow  Coleoptera     25   384   6.5
+17 Site4 Meadow  Hymenoptera    16   384   4.2
+18 Site4 Meadow  Hemiptera       2   384   0.5
+19 Site4 Meadow  Dermaptera      1   384   0.3
+20 Site4 Meadow  Neuroptera      1   384   0.3
+21 Site4 Meadow  Trichoptera     1   384   0.3
+
+--- Diptera % by Site ---
+# A tibble: 4 × 5
+  Site  Ambient Diptera_n Total_n Diptera_pct
+  <chr> <chr>       <int>   <int>       <dbl>
+1 Site1 Maize         236     258        91.5
+2 Site2 Maize         178     184        96.7
+3 Site3 Meadow        234     276        84.8
+4 Site4 Meadow        338     384        88  
+
+--- Diptera % overall (all sites, #N/C excluded) ---
+# A tibble: 1 × 4
+  Order       n total   pct
+  <chr>   <int> <int> <dbl>
+1 Diptera   986  1102  89.5
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    
+[OK] Table18_H2_quali_diptera_dominance.csv
+
+--- TABLE 19: Taxonomic resolution by Order ---
+
+--- Resolution by Order (detailed) ---
+# A tibble: 10 × 14
+   Order       total n_Genus pct_Genus n_Family pct_Family n_Superfamily pct_Superfamily n_Infraorder
+   <chr>       <int>   <int>     <dbl>    <int>      <dbl>         <int>           <dbl>        <int>
+ 1 Diptera       986     409      41.5       40        4.1           203            20.6            1
+ 2 Coleoptera     53      35      66         18       34               0             0              0
+ 3 Hymenoptera    44      36      81.8        8       18.2             0             0              0
+ 4 Araneae         7       2      28.6        2       28.6             3            42.9            0
+ 5 Hemiptera       5       4      80          1       20               0             0              0
+ 6 Lepidoptera     3       1      33.3        1       33.3             1            33.3            0
+ 7 Dermaptera      1       1     100          0        0               0             0              0
+ 8 Neuroptera      1       1     100          0        0               0             0              0
+ 9 Orthoptera      1       1     100          0        0               0             0              0
+10 Trichoptera     1       0       0          1      100               0             0              0
+# ℹ 5 more variables: pct_Infraorder <dbl>, n_Suborder <int>, pct_Suborder <dbl>, n_Order <int>,
+#   pct_Order <dbl>
+
+--- Resolution condensed by Order ---
+# A tibble: 10 × 8
+   Order       total pct_Genus_ID n_Genus_ID pct_Family_only n_Family_only pct_Superfamily_or_lower
+   <chr>       <int>        <dbl>      <int>           <dbl>         <int>                    <dbl>
+ 1 Diptera       986         41.5        409             4.1            40                     54.5
+ 2 Coleoptera     53         66           35            34              18                      0  
+ 3 Hymenoptera    44         81.8         36            18.2             8                      0  
+ 4 Araneae         7         28.6          2            28.6             2                     42.9
+ 5 Hemiptera       5         80            4            20               1                      0  
+ 6 Lepidoptera     3         33.3          1            33.3             1                     33.3
+ 7 Dermaptera      1        100            1             0               0                      0  
+ 8 Neuroptera      1        100            1             0               0                      0  
+ 9 Orthoptera      1        100            1             0               0                      0  
+10 Trichoptera     1          0            0           100               1                      0  
+# ℹ 1 more variable: n_Superfamily_or_lower <int>
+
+--- Overall resolution (all Orders combined) ---
+# A tibble: 1 × 7
+  total n_Family_only n_Genus_ID n_Superfamily_or_lower pct_Family_only pct_Genus_ID
+  <int>         <int>      <int>                  <int>           <dbl>        <dbl>
+1  1102            71        490                    541             6.4         44.5
+# ℹ 1 more variable: pct_Superfamily_or_lower <dbl>
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    wrote 2.15GB in  0s, 2.15GB/s                                                                                                    
+[OK] Table19_H2_quali_resolution_by_order.csv
+[OK] Table19_H2_quali_resolution_condensed.csv
+
+==============================================================================
+H2_quali_validation.R COMPLETE
+==============================================================================
+
+FIGURES:
+  outputs/figures/Fig25_H2_quali_site_level.png
+  outputs/figures/Fig26_H2_quali_intra_habitat.png
+  outputs/figures/Fig27_H2_quali_intra_habitat_temporal.png
+  outputs/figures/Fig28_H2_quali_overall_level.png
+
+TABLES:
+  outputs/tables/Table16_H2_quali_IP_summary.csv
+  outputs/tables/Table17_H2_quali_size_threshold.csv
+  outputs/tables/Table18_H2_quali_diptera_dominance.csv
+  outputs/tables/Table19_H2_quali_resolution_by_order.csv
+  outputs/tables/Table19_H2_quali_resolution_condensed.csv
+
+Script finished: 2026-07-22 11:38:25 

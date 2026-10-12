@@ -1,0 +1,479 @@
+==============================================================================
+H1: QUALITATIVE INTRA-SYSTEM CONSISTENCY — §3.2.2
+Morisita-Horn (FAIRD) | Izsak-Price (AMMOD)
+==============================================================================
+Script started: 2026-07-22 11:37:39 
+
+
+=== LOADING E-TRAPS DATA ===
+indexing FAIRD_For_Statistics.csv [===============================================] 2.15GB/s, eta:  0s                                                                                                      FAIRD loaded: 1128 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: FAIRD1, FAIRD2, FAIRD3, FAIRD4 
+indexing ID_For_Statistics.csv [==================================================] 2.15GB/s, eta:  0s                                                                                                      ID loaded: 2370 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: ID1, ID2, ID4 
+ID3 has no data (device failure as expected)
+
+Total e-traps individuals: 3498 
+
+=== LOADING AMMOD TAXONOMIC DATA ===
+indexing AMMOD_24h_OTUs_For_Statistics.csv [======================================] 2.15GB/s, eta:  0s                                                                                                      AMMOD taxonomy loaded: 2338 OTUs
+Date range: 2023-08-23 to 2023-09-16 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+IMPORTANT: AMMOD taxonomy is QUALITATIVE (presence/absence)
+  'Count' = DNA sequence reads, NOT individual insect counts.
+  Use ONLY for presence/absence analyses.
+Converted to presence/absence format
+
+=== BUILDING TRUTH CALENDAR ===
+Truth Calendar built for 12 devices over 22 days.
+# A tibble: 12 × 4
+   Device Field_Days_Effort Valid_Taxo_Days Valid_Bio_Days
+   <chr>              <int>           <int>          <int>
+ 1 AMMOD1                21              21             12
+ 2 AMMOD2                21              21             12
+ 3 AMMOD3                21              21              8
+ 4 AMMOD4                14              13              0
+ 5 FAIRD1                22              22             22
+ 6 FAIRD2                22              22             22
+ 7 FAIRD3                22              22             22
+ 8 FAIRD4                22              22             22
+ 9 ID1                   22              22             22
+10 ID2                   22              22             22
+11 ID3                    0               0              0
+12 ID4                   22              22             22
+
+ammod_taxonomy_presence filtered by Truth Calendar:
+  Before: 2109 | After: 2023 | Removed: 86
+  Removed: AMMOD4 jammed-bottle period (Aug 28-Sep 3) + contaminated sample R2_4_06 (AMMOD4, Sep 10).
+
+=== LOADING AMMOD BIOMASS DATA ===
+indexing AMMOD_24h_live_mass_For_Statistics.csv [===============================] 221.55MB/s, eta:  0s                                                                                                      Raw columns: Date, Device, Device_type, Site, Ambient, DevicexAmbien, Dry_mass_g, Live_mass 
+AMMOD biomass loaded: 48 daily measurements
+Date range: 2023-08-23 to 2023-09-03 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+=== AMMOD DATA QUALITY ASSESSMENT ===
+
+Completeness by device:
+# A tibble: 4 × 6
+  Device Site  Ambient total_days days_with_biomass days_missing
+  <chr>  <chr> <chr>        <int>             <int>        <int>
+1 AMMOD1 Site1 Maize           12                12            0
+2 AMMOD2 Site2 Maize           12                12            0
+3 AMMOD3 Site3 Meadow          12                 8            4
+4 AMMOD4 Site4 Meadow          12                 0           12
+
+DEVICES WITH INCOMPLETE DATA:
+
+AMMOD3 (Site3, Meadow):
+  Days available: 8 | Days missing: 4
+  Status: Processing method changed in cursu (ATL) from day 9.
+  Impact: Site3 for H2 has reduced matching days (n=8).
+  Note:   OTU data available for H1 qualitative analysis.
+
+AMMOD4 (Site4, Meadow):
+  Days available: 0 | Days missing: 12
+  Status: Mechanical failure — rotation jammed (Aug 28-Sep 3).
+  Missing dates: 2023-08-23 to 2023-09-03
+  All biomass unavailable (ATL Batch 1). Excluded from H2.
+
+
+Summary for statistical analyses:
+# A tibble: 3 × 5
+  Site  Device Ambient n_days mean_biomass
+  <chr> <chr>  <chr>    <int>        <dbl>
+1 Site1 AMMOD1 Maize       12        1946.
+2 Site2 AMMOD2 Maize       12        2085.
+3 Site3 AMMOD3 Meadow       8        3349.
+
+Total valid measurements: 32 
+  Site1 (Maize):  n = 12 
+  Site2 (Maize):  n = 12 
+  Site3 (Meadow): n = 8 
+  Site4 (Meadow): n = 0 
+
+=== AGGREGATING E-TRAPS TO DAILY BIOMASS ===
+E-traps daily aggregation complete
+
+=== ENFORCING DATA COMPLETENESS (E-TRAPS) ===
+Full grid: 7 devices x 22 days
+Zero-capture days filled (abundance = 0, biomass_mg = 0).
+mean_body_length/width left as NA on zero-capture days.
+
+  ID2: 22 days (expected 22)
+  ID4: 22 days (expected 22)
+  FAIRD2: 22 days (expected 22)
+  FAIRD3: 22 days (expected 22)
+  FAIRD4: 22 days (expected 22)
+  ID1: 22 days (expected 22)
+  FAIRD1: 22 days (expected 22)
+
+=== CREATING PRESENCE/ABSENCE MATRICES ===
+E-traps presence records: 271 
+AMMOD presence records: 2023 
+
+=== CREATING ANALYSIS-READY DATASETS ===
+FAIRD-AMMOD overlapping date range:
+  Start: 2023-08-23 
+  End: 2023-09-03 
+  Days: 12 
+
+=== EXPORTING CLEANED DATASETS ===
+data_list saved to: data_cleaned.RData
+
+=== DATA SUMMARY ===
+# A tibble: 5 × 3
+  Dataset        N_rows N_devices
+  <chr>           <int>     <int>
+1 FAIRD            1128         4
+2 ID               2370         3
+3 E-traps Total    3498         7
+4 AMMOD Taxonomy   2023         4
+5 AMMOD Biomass      32         3
+
+--- Taxonomic richness (#N/C excluded from all counts) ---
+E-traps (filtered): Orders = 10 | Families = 47 | Genera = 54 
+AMMOD:   Orders = 15 | Families = 118 | Genera = 341 
+FAIRD:   Orders = 10 | Families = 45 | Genera = 53 
+ID:   Orders = 5 | Families = 8 | Genera = 4 
+
+--- Site availability ---
+# A tibble: 10 × 4
+   Site  Device_type n_days Dataset      
+   <chr> <chr>        <int> <chr>        
+ 1 Site1 AMMOD           12 AMMOD Biomass
+ 2 Site1 FAIRD           22 E-traps      
+ 3 Site1 ID              22 E-traps      
+ 4 Site2 AMMOD           12 AMMOD Biomass
+ 5 Site2 FAIRD           22 E-traps      
+ 6 Site2 ID              22 E-traps      
+ 7 Site3 AMMOD            8 AMMOD Biomass
+ 8 Site3 FAIRD           22 E-traps      
+ 9 Site4 FAIRD           22 E-traps      
+10 Site4 ID              22 E-traps      
+
+=== DATA LOADING COMPLETE ===
+Access datasets via: data_list$faird, data_list$etraps_daily, etc.
+=== SECTION 0: SHARED TEMPORAL SETUP ===
+
+3-day windows defined:
+# A tibble: 8 × 3
+  Window_ID Window_Label         n_days
+      <int> <chr>                 <int>
+1         1 W1 (Aug 23-Aug 25)        3
+2         2 W2 (Aug 26-Aug 28)        3
+3         3 W3 (Aug 29-Aug 31)        3
+4         4 W4 (Sept 01-Sept 03)      3
+5         5 W5 (Sept 04-Sept 06)      3
+6         6 W6 (Sept 07-Sept 09)      3
+7         7 W7 (Sept 10-Sept 12)      3
+8        NA WNA (NA-NA)               1
+
+=== SECTION 1: FAIRD INTRA-HABITAT — MORISITA-HORN (§3.2.2.1) ===
+
+FAIRD individuals loaded: 1128 
+Devices: FAIRD1, FAIRD2, FAIRD3, FAIRD4 
+Date range: 2023-08-23 to 2023-09-13 
+
+Taxonomic coverage (n = 1128 individuals):
+  Order:       1102 (97.7%)
+  Superfamily: 768 (68.1%)
+  Genus:       490 (43.4%)
+
+--- 1.3 Daily Morisita-Horn ---
+
+  FAIRD1 <-> FAIRD2 (Maize)
+  FAIRD3 <-> FAIRD4 (Meadow)
+
+Daily MH: 132 rows | Valid: 100
+
+--- 1.4 Windowed MH (>= 3 individuals per device) ---
+
+  FAIRD1 <-> FAIRD2 (Maize)
+  FAIRD3 <-> FAIRD4 (Meadow)
+
+Windowed MH: 42 rows | Valid: 37 | Filtered: 5
+
+Filter impact by pair and level:
+# A tibble: 6 × 7
+  Pair             Habitat Tax_Level   n_windows n_valid n_filtered pct_retained
+  <chr>            <chr>   <chr>           <int>   <int>      <int>        <dbl>
+1 FAIRD1 vs FAIRD2 Maize   Order               7       6          1         85.7
+2 FAIRD3 vs FAIRD4 Meadow  Order               7       7          0        100  
+3 FAIRD1 vs FAIRD2 Maize   Superfamily         7       5          2         71.4
+4 FAIRD3 vs FAIRD4 Meadow  Superfamily         7       7          0        100  
+5 FAIRD1 vs FAIRD2 Maize   Genus               7       5          2         71.4
+6 FAIRD3 vs FAIRD4 Meadow  Genus               7       7          0        100  
+
+--- 1.5 Daily summary (unfiltered) ---
+
+# A tibble: 6 × 9
+  Pair             Habitat Tax_Level   n_days mean_MH sd_MH median_MH min_MH max_MH
+  <chr>            <chr>   <chr>        <int>   <dbl> <dbl>     <dbl>  <dbl>  <dbl>
+1 FAIRD1 vs FAIRD2 Maize   Order           15    87.7  27        98.8    0      100
+2 FAIRD3 vs FAIRD4 Meadow  Order           22    93.8   7        96.1   77.6    100
+3 FAIRD1 vs FAIRD2 Maize   Superfamily     12    78.7  37.2      95.3    0      100
+4 FAIRD3 vs FAIRD4 Meadow  Superfamily     22    61.5  33.7      70.7    0      100
+5 FAIRD1 vs FAIRD2 Maize   Genus           11    71.5  37.6      84.5    0      100
+6 FAIRD3 vs FAIRD4 Meadow  Genus           18    51    35.5      50.3    0      100
+
+--- Windowed summary (filtered) ---
+
+# A tibble: 6 × 11
+  Pair             Habitat Tax_Level   n_windows mean_MH sd_MH median_MH min_MH max_MH mean_indiv_A
+  <chr>            <chr>   <chr>           <int>   <dbl> <dbl>     <dbl>  <dbl>  <dbl>        <dbl>
+1 FAIRD1 vs FAIRD2 Maize   Order               6    91.1  17.3      98.9   56.1   99.9         42  
+2 FAIRD3 vs FAIRD4 Meadow  Order               7    98.5   1.9      99.2   94.4   99.9         38.9
+3 FAIRD1 vs FAIRD2 Maize   Superfamily         5    88.6  17.3      95.2   58.1   99.9         36.6
+4 FAIRD3 vs FAIRD4 Meadow  Superfamily         7    82.9  13.6      79     65.7   99.1         26  
+5 FAIRD1 vs FAIRD2 Maize   Genus               5    83.7  23.5      92.2   42.9   99.8         24.6
+6 FAIRD3 vs FAIRD4 Meadow  Genus               7    63.8  23.4      66.6   28.8   94.6         14.4
+  mean_indiv_B
+         <dbl>
+1         30.7
+2         53.9
+3         19.2
+4         39.6
+5         13.6
+6         25.9
+
+--- 1.6 Temporal trend (windowed, Superfamily) ---
+
+Overall: slope = -0.0619/window (-6.19 pp/win) | R2 = 0.653 | p = 0.0015 | n = 12
+
+  FAIRD1 vs FAIRD2: slope = -0.0843 (-8.43 pp/win) | R2 = 0.595 | p = 0.1266 | n = 5
+  FAIRD3 vs FAIRD4: slope = -0.0544 (-5.44 pp/win) | R2 = 0.746 | p = 0.0122 | n = 7
+
+--- 1.7 Habitat comparison (windowed, Superfamily) ---
+
+Levene p = 0.7971 -> Student's t-test
+Maize:  88.6% +/- 17.3% (n = 5 windows)
+Meadow: 82.9% +/- 13.6% (n = 7 windows)
+t = 0.641 | df = 10.0 | p = 0.5357
+Cohen's d = 0.376 (small)
+
+--- 1.8 Figure 12 ---
+[OK] outputs/figures/Fig12_H1_quali_FAIRD_intra_MH_windowed_Superfamily.png
+
+--- 1.9 Figure 13 ---
+[OK] outputs/figures/Fig13_H1_quali_FAIRD_intra_MH_windowed_by_level.png
+
+=== SECTION 2: AMMOD INTRA-HABITAT — IZSAK-PRICE (§3.2.2.1) ===
+
+AMMOD OTUs loaded: 2023 
+  With Superfamily: 2023 (100.0%)
+  With Genus:       2023 (100.0%)
+  With Species:     2023 (100.0%)
+
+Per-device coverage:
+# A tibble: 4 × 5
+  Device n_otus  n_sf pct_sf n_days
+  <chr>   <int> <int>  <dbl>  <int>
+1 AMMOD1    441   441    100     21
+2 AMMOD2    432   432    100     21
+3 AMMOD3    709   709    100     21
+4 AMMOD4    441   441    100     13
+
+Note: AMMOD4 reduced to 13 valid taxo days (mechanical failure Aug 28-Sep 3).
+
+--- 2.2 Building taxonomic distance matrices ---
+
+Superfamily matrix: 76 x 76 | max dist = 100.0000
+Genus matrix:       341 x 341 | max dist = 100.0000
+Species matrix:     417 x 417 | max dist = 100.0000
+
+--- 2.4 Daily Izsak-Price (Species / Genus / Superfamily) ---
+
+  AMMOD1 <-> AMMOD2 (Maize)
+  AMMOD3 <-> AMMOD4 (Meadow)
+
+Daily IP: 126 rows | Valid: 102
+
+--- 2.5 Windowed IP (Superfamily, >= 3 OTUs per device) ---
+
+  AMMOD1 <-> AMMOD2 (Maize)
+  AMMOD3 <-> AMMOD4 (Meadow)
+
+Windowed IP: 14 rows | Valid: 12 | Filtered: 2
+
+Filter impact:
+# A tibble: 2 × 6
+  Pair             Habitat n_windows n_valid n_filtered pct_retained
+  <chr>            <chr>       <int>   <int>      <int>        <dbl>
+1 AMMOD1 vs AMMOD2 Maize           7       7          0        100  
+2 AMMOD3 vs AMMOD4 Meadow          7       5          2         71.4
+
+--- 2.6 Daily summary (all levels) ---
+
+# A tibble: 6 × 12
+  Pair             Habitat Tax_Level   n_days mean_DS sd_DS median_DS min_DS max_DS mean_taxa_A
+  <chr>            <chr>   <chr>        <int>   <dbl> <dbl>     <dbl>  <dbl>  <dbl>       <dbl>
+1 AMMOD1 vs AMMOD2 Maize   Species         21    74.1   6.8      75.8   55     83.6        21  
+2 AMMOD1 vs AMMOD2 Maize   Genus           21    76.5   6.8      78.5   57     85.1        21  
+3 AMMOD1 vs AMMOD2 Maize   Superfamily     21    84.3   5.8      85.2   73.8   91.8        12.3
+4 AMMOD3 vs AMMOD4 Meadow  Species         13    78.8   3.5      79.6   70     83.3        38.4
+5 AMMOD3 vs AMMOD4 Meadow  Genus           13    80.9   3.8      81.7   73.2   85.7        38.5
+6 AMMOD3 vs AMMOD4 Meadow  Superfamily     13    87.1   3.6      86.2   80.1   94.3        21  
+  mean_taxa_B mean_shared
+        <dbl>       <dbl>
+1        20.5         7.1
+2        20.6         8.3
+3        12           7.4
+4        33.9        14.1
+5        33.9        16.7
+6        17.9        13.3
+
+--- Windowed summary (Superfamily) ---
+
+# A tibble: 2 × 11
+  Pair             Habitat n_windows mean_DS sd_DS median_DS min_DS max_DS mean_taxa_A mean_taxa_B
+  <chr>            <chr>       <int>   <dbl> <dbl>     <dbl>  <dbl>  <dbl>       <dbl>       <dbl>
+1 AMMOD1 vs AMMOD2 Maize           7    87.9   5.3      89     80     94.5        21.1        19.7
+2 AMMOD3 vs AMMOD4 Meadow          5    87.8   4.2      87.4   82.5   93.5        31.8        25.8
+  mean_shared
+        <dbl>
+1        14.4
+2        19.8
+
+--- 2.7 Figure 14 ---
+[OK] outputs/figures/Fig14_H1_quali_AMMOD_intra_IP_daily_Species.png
+
+--- 2.8 Figure 15 ---
+[OK] outputs/figures/Fig15_H1_quali_AMMOD_intra_IP_windowed_Superfamily.png
+
+=== SECTION 3: FAIRD INTER-HABITAT — MORISITA-HORN (§3.2.2.2) ===
+
+Processing: Maize_Pool vs Meadow_Pool | Superfamily | 3-day windows
+
+Windows: 7 | Valid: 7 | Filtered: 0
+
+--- FAIRD Inter-Habitat Summary (MH, %) ---
+
+# A tibble: 1 × 8
+  n_windows mean_MH sd_MH median_MH min_MH max_MH mean_indiv_Maize mean_indiv_Meadow
+      <int>   <dbl> <dbl>     <dbl>  <dbl>  <dbl>            <dbl>             <dbl>
+1         7    86.1  12.1      88.2   61.5   97.1             42.9              65.6
+
+=== SECTION 4: AMMOD INTER-HABITAT — IZSAK-PRICE (§3.2.2.2) ===
+
+--- 4.1 Daily IP (pooled, all levels) ---
+
+Processing: Maize_Pool (AMMOD1+2) vs Meadow_Pool (AMMOD3+4)
+
+Daily inter-habitat IP: 63 rows | Valid: 63
+
+--- Inter-Habitat Daily Summary ---
+
+# A tibble: 3 × 8
+  Tax_Level   n_days mean_DS sd_DS median_DS mean_taxa_A mean_taxa_B mean_shared
+  <chr>        <int>   <dbl> <dbl>     <dbl>       <dbl>       <dbl>       <dbl>
+1 Species         21    75     5        75.6        34.3        45.9        12.7
+2 Genus           21    77.1   4.8      77.3        33.2        44.4        14.5
+3 Superfamily     21    83.6   5.2      84          16.9        21.9        11.4
+
+--- 4.2 Windowed IP (Superfamily, pooled, >= 3 OTUs) ---
+
+Windowed inter-habitat IP: 7 rows | Valid: 7 | Filtered: 0
+
+--- AMMOD Inter-Habitat Summary (IP, %) ---
+
+# A tibble: 1 × 9
+  n_windows mean_DS sd_DS median_DS min_DS max_DS mean_taxa_Maize mean_taxa_Meadow mean_shared
+      <int>   <dbl> <dbl>     <dbl>  <dbl>  <dbl>           <dbl>            <dbl>       <dbl>
+1         7    86.6   2.3      85.9   83.7   89.9            26.4             34.9        19.7
+
+=== SECTION 5: INTRA vs INTER-HABITAT STATISTICAL TESTS ===
+
+--- 5.1 FAIRD: Intra vs Inter-Habitat (MH, windowed) ---
+
+FAIRD Intra: n=12 | mean=85.2% | median=93.1%
+FAIRD Inter: n=7 | mean=86.1% | median=88.2%
+Wilcoxon W = 45.0 | p = 0.8327 ns
+Cohen's d = -0.064 (negligible)
+
+--- 5.2 AMMOD: Intra vs Inter-Habitat (IP, windowed) ---
+
+AMMOD Intra: n=12 | mean=87.9% | median=88.3%
+AMMOD Inter: n=7 | mean=86.6% | median=85.9%
+Wilcoxon W = 52.0 | p = 0.4220 ns
+Cohen's d = 0.322 (small)
+
+--- 5.3 FAIRD: Intra-Maize vs Intra-Meadow (MH, windowed) ---
+
+FAIRD1 vs FAIRD2 (Maize):  n=5 | mean=88.6% | median=95.2%
+FAIRD3 vs FAIRD4 (Meadow): n=7 | mean=82.9% | median=79.0%
+Wilcoxon W = 22.0 | p = 0.5160 ns
+Cohen's d = 0.376 (small)
+
+--- 5.4 AMMOD: Intra-Maize vs Intra-Meadow (IP, windowed) ---
+
+AMMOD1 vs AMMOD2 (Maize):  n=7 | mean=87.9% | median=89.0%
+AMMOD3 vs AMMOD4 (Meadow): n=5 | mean=87.8% | median=87.4%
+Wilcoxon W = 18.0 | p = 1.0000 ns
+Cohen's d = 0.016 (negligible)
+
+=== SECTION 6: CONSOLIDATED TABLES ===
+
+--- Table 11: Windowed Superfamily similarity (all pairs, all levels) ---
+
+# A tibble: 6 × 11
+  System Level         Pair                      Habitat       Metric        n_windows mean_sim sd_sim
+  <chr>  <chr>         <chr>                     <chr>         <chr>             <int>    <dbl>  <dbl>
+1 AMMOD  Inter-Habitat Maize_Pool vs Meadow_Pool Inter-Habitat Izsak-Price           7     86.6    2.3
+2 AMMOD  Intra-Habitat AMMOD1 vs AMMOD2          Maize         Izsak-Price           7     87.9    5.3
+3 AMMOD  Intra-Habitat AMMOD3 vs AMMOD4          Meadow        Izsak-Price           5     87.8    4.2
+4 FAIRD  Inter-Habitat Maize_Pool vs Meadow_Pool Inter-Habitat Morisita-Horn         7     86.1   12.1
+5 FAIRD  Intra-Habitat FAIRD1 vs FAIRD2          Maize         Morisita-Horn         5     88.6   17.3
+6 FAIRD  Intra-Habitat FAIRD3 vs FAIRD4          Meadow        Morisita-Horn         7     82.9   13.6
+  median_sim min_sim max_sim
+       <dbl>   <dbl>   <dbl>
+1       85.9    83.7    89.9
+2       89      80      94.5
+3       87.4    82.5    93.5
+4       88.2    61.5    97.1
+5       95.2    58.1    99.9
+6       79      65.7    99.1
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    
+[OK] outputs/tables/Table11_H1_quali_taxonomic_similarity.csv
+
+--- Table 12: AMMOD daily IP all levels (intra + inter) ---
+
+# A tibble: 9 × 13
+  Scope         Pair                      Habitat       Tax_Level   n_days mean_DS sd_DS median_DS
+  <chr>         <chr>                     <chr>         <chr>        <int>   <dbl> <dbl>     <dbl>
+1 Inter-Habitat Maize_Pool vs Meadow_Pool Inter-Habitat Species         21    75     5        75.6
+2 Inter-Habitat Maize_Pool vs Meadow_Pool Inter-Habitat Genus           21    77.1   4.8      77.3
+3 Inter-Habitat Maize_Pool vs Meadow_Pool Inter-Habitat Superfamily     21    83.6   5.2      84  
+4 Intra-Habitat AMMOD1 vs AMMOD2          Maize         Species         21    74.1   6.8      75.8
+5 Intra-Habitat AMMOD1 vs AMMOD2          Maize         Genus           21    76.5   6.8      78.5
+6 Intra-Habitat AMMOD1 vs AMMOD2          Maize         Superfamily     21    84.3   5.8      85.2
+7 Intra-Habitat AMMOD3 vs AMMOD4          Meadow        Species         13    78.8   3.5      79.6
+8 Intra-Habitat AMMOD3 vs AMMOD4          Meadow        Genus           13    80.9   3.8      81.7
+9 Intra-Habitat AMMOD3 vs AMMOD4          Meadow        Superfamily     13    87.1   3.6      86.2
+  min_DS max_DS mean_taxa_A mean_taxa_B mean_shared
+   <dbl>  <dbl>       <dbl>       <dbl>       <dbl>
+1   65     83.5        34.3        45.9        12.7
+2   67.3   85.8        33.2        44.4        14.5
+3   68.9   94.6        16.9        21.9        11.4
+4   55     83.6        21          20.5         7.1
+5   57     85.1        21          20.6         8.3
+6   73.8   91.8        12.3        12           7.4
+7   70     83.3        38.4        33.9        14.1
+8   73.2   85.7        38.5        33.9        16.7
+9   80.1   94.3        21          17.9        13.3
+wrote 2.15GB in  0s, 2.15GB/s                                                                                                    
+[OK] outputs/tables/Table12_H1_quali_AMMOD_IP_all_levels.csv
+
+==============================================================================
+Script completed: 2026-07-22 11:37:45 
+Outputs:
+  Fig 12 — FAIRD intra-habitat MH windowed Superfamily
+  Fig 13 — FAIRD intra-habitat MH windowed by level
+  Fig 14 — AMMOD intra-habitat IP daily Species
+  Fig 15 — AMMOD intra-habitat IP windowed Superfamily
+  Table 11 — outputs/tables/Table11_H1_quali_taxonomic_similarity.csv
+  Table 12 — outputs/tables/Table12_H1_quali_AMMOD_IP_all_levels.csv
+  Console  — outputs/console/H1_quali_consistency_output.txt
+==============================================================================

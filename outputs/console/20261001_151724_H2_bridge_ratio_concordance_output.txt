@@ -1,0 +1,184 @@
+==============================================================================
+H2 BRIDGE: AMMOD/FAIRD BIOMASS RATIO vs TAXONOMIC CONCORDANCE (EXPLORATORY)
+Site-day paired units | within-site centring | within-site permutation tests
+==============================================================================
+Script started: 2026-10-01 15:17:24 
+
+=== 1. SITE-DAY PAIRING ===
+
+Paired site-days: 32
+# A tibble: 3 × 4
+  Site  n_days from       to        
+  <chr>  <int> <date>     <date>    
+1 Site1     12 2023-08-23 2023-09-03
+2 Site2     12 2023-08-23 2023-09-03
+3 Site3      8 2023-08-23 2023-08-30
+
+Window definition:
+# A tibble: 4 × 3
+  Window from       to        
+   <int> <date>     <date>    
+1      1 2023-08-23 2023-08-25
+2      2 2023-08-26 2023-08-28
+3      3 2023-08-29 2023-08-31
+4      4 2023-09-01 2023-09-03
+
+=== 2. TAXONOMY ===
+
+Superfamilies in distance matrix: 78
+
+==============================================================================
+RESOLUTION: 3-day windows
+==============================================================================
+
+All units (included = ratio defined and Delta S computable):
+# A tibble: 11 × 12
+   Site   Unit first_date n_days AMMOD_mg FAIRD_mg n_FAIRD S_FAIRD S_AMMOD DS_pct ratio
+   <chr> <int> <date>      <int>    <dbl>    <dbl>   <int>   <int>   <int>  <dbl> <dbl>
+ 1 Site1     1 2023-08-23      3     8596     233.      20       4      26   65.6  36.9
+ 2 Site1     2 2023-08-26      3     5832    1464.     100       5      15   62.8   4  
+ 3 Site1     3 2023-08-29      3     3228     498.      26       3      20   67     6.5
+ 4 Site1     4 2023-09-01      3     5692     521.      30       4      27   67.6  10.9
+ 5 Site2     1 2023-08-23      3    10000     352.      20       3      22   60.2  28.4
+ 6 Site2     2 2023-08-26      3     9280     976.      62       3      17   59.6   9.5
+ 7 Site2     3 2023-08-29      3     1996     178.       6       3      15   66.2  11.2
+ 8 Site2     4 2023-09-01      3     3744     157.       5       2      28   58.7  23.9
+ 9 Site3     1 2023-08-23      3    16092     778.      55      10      36   74.7  20.7
+10 Site3     2 2023-08-26      3     6168    1033.      43       5      29   66     6  
+11 Site3     3 2023-08-29      2     4532     406.      17       7      17   81.7  11.2
+   included
+   <lgl>   
+ 1 TRUE    
+ 2 TRUE    
+ 3 TRUE    
+ 4 TRUE    
+ 5 TRUE    
+ 6 TRUE    
+ 7 TRUE    
+ 8 TRUE    
+ 9 TRUE    
+10 TRUE    
+11 TRUE    
+
+Included units used in within-site tests: 11 (sites: Site1, Site2, Site3)
+# A tibble: 3 × 2
+  Site  n_units
+  <chr>   <int>
+1 Site1       4
+2 Site2       4
+3 Site3       3
+
+Within-site associations (Pearson r on site-centred values):
+# A tibble: 3 × 6
+  Resolution    Association                    n r_within p_perm Method                   
+  <chr>         <chr>                      <int>    <dbl>  <dbl> <chr>                    
+1 3-day windows log(ratio) vs Delta S         11    0.186  0.596 exact (3456 permutations)
+2 3-day windows log(ratio) vs log(n FAIRD)    11   -0.398  0.228 exact (3456 permutations)
+3 3-day windows Delta S vs log(n FAIRD)       11   -0.448  0.147 exact (3456 permutations)
+
+==============================================================================
+RESOLUTION: single days
+==============================================================================
+
+All units (included = ratio defined and Delta S computable):
+# A tibble: 32 × 12
+   Site  Unit       first_date n_days AMMOD_mg FAIRD_mg n_FAIRD S_FAIRD S_AMMOD DS_pct ratio
+   <chr> <date>     <date>      <int>    <dbl>    <dbl>   <int>   <int>   <int>  <dbl> <dbl>
+ 1 Site1 2023-08-23 2023-08-23      1     2488     63.9       7       2      20   56.4  38.9
+ 2 Site1 2023-08-24 2023-08-24      1     2276    115.        6       3      18   68.1  19.9
+ 3 Site1 2023-08-25 2023-08-25      1     3832     54.3       7       2      14   66    70.5
+ 4 Site1 2023-08-26 2023-08-26      1     3584    996.       65       5      13   67     3.6
+ 5 Site1 2023-08-27 2023-08-27      1     1636    440.       33       2       7   70.3   3.7
+ 6 Site1 2023-08-28 2023-08-28      1      612     29.2       2       1       7   NA    20.9
+ 7 Site1 2023-08-29 2023-08-29      1      496      0         0       0       6   NA    NA  
+ 8 Site1 2023-08-30 2023-08-30      1     1240    297.       14       3      15   72.4   4.2
+ 9 Site1 2023-08-31 2023-08-31      1     1492    201.       12       2      12   69.8   7.4
+10 Site1 2023-09-01 2023-09-01      1      896    306.       18       4      12   63.5   2.9
+11 Site1 2023-09-02 2023-09-02      1     2748    179.        9       3      16   77.9  15.4
+12 Site1 2023-09-03 2023-09-03      1     2048     35.5       3       2      21   65.3  57.7
+13 Site2 2023-08-23 2023-08-23      1     3840     55.4       7       1      17   58.5  69.3
+14 Site2 2023-08-24 2023-08-24      1     2372     52         3       2      15   68.7  45.6
+15 Site2 2023-08-25 2023-08-25      1     3788    244.       10       2      10   63.7  15.5
+16 Site2 2023-08-26 2023-08-26      1     7300    595.       35       2      11   58.8  12.3
+17 Site2 2023-08-27 2023-08-27      1     1500    337.       25       2       9   70.4   4.4
+18 Site2 2023-08-28 2023-08-28      1      480     43.6       2       1       7   NA    11  
+19 Site2 2023-08-29 2023-08-29      1      464      8.4       0       0       7   NA    55.2
+20 Site2 2023-08-30 2023-08-30      1      892    115.        5       3       8   73.1   7.7
+21 Site2 2023-08-31 2023-08-31      1      640     54.2       1       1      11   NA    11.8
+22 Site2 2023-09-01 2023-09-01      1     1032     50.4       0       0      17   NA    20.5
+23 Site2 2023-09-02 2023-09-02      1     1196     75         4       2      18   69.1  15.9
+24 Site2 2023-09-03 2023-09-03      1     1516     31.4       1       1      16   NA    48.3
+25 Site3 2023-08-23 2023-08-23      1     4128    221.       23       5      21   69.4  18.7
+26 Site3 2023-08-24 2023-08-24      1     7192    155.       13       5      21   67.3  46.4
+27 Site3 2023-08-25 2023-08-25      1     4772    402.       19       6      18   71.9  11.9
+28 Site3 2023-08-26 2023-08-26      1     2736    670.       27       4      22   71     4.1
+29 Site3 2023-08-27 2023-08-27      1     1532    319        14       3      15   70.8   4.8
+30 Site3 2023-08-28 2023-08-28      1     1900     43.6       2       1      12   NA    43.6
+31 Site3 2023-08-29 2023-08-29      1     1284    128.        6       3       9   71.1  10  
+32 Site3 2023-08-30 2023-08-30      1     3248    278.       11       6      15   82.3  11.7
+   included
+   <lgl>   
+ 1 TRUE    
+ 2 TRUE    
+ 3 TRUE    
+ 4 TRUE    
+ 5 TRUE    
+ 6 FALSE   
+ 7 FALSE   
+ 8 TRUE    
+ 9 TRUE    
+10 TRUE    
+11 TRUE    
+12 TRUE    
+13 TRUE    
+14 TRUE    
+15 TRUE    
+16 TRUE    
+17 TRUE    
+18 FALSE   
+19 FALSE   
+20 TRUE    
+21 FALSE   
+22 FALSE   
+23 TRUE    
+24 FALSE   
+25 TRUE    
+26 TRUE    
+27 TRUE    
+28 TRUE    
+29 TRUE    
+30 FALSE   
+31 TRUE    
+32 TRUE    
+
+Included units used in within-site tests: 24 (sites: Site1, Site2, Site3)
+# A tibble: 3 × 2
+  Site  n_units
+  <chr>   <int>
+1 Site1      10
+2 Site2       7
+3 Site3       7
+
+Within-site associations (Pearson r on site-centred values):
+# A tibble: 3 × 6
+  Resolution  Association                    n r_within p_perm Method                         
+  <chr>       <chr>                      <int>    <dbl>  <dbl> <chr>                          
+1 single days log(ratio) vs Delta S         24   -0.35  0.116  Monte Carlo (9999 permutations)
+2 single days log(ratio) vs log(n FAIRD)    24   -0.635 0.0025 Monte Carlo (9999 permutations)
+3 single days Delta S vs log(n FAIRD)       24   -0.095 0.676  Monte Carlo (9999 permutations)
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             
+[OK] Saved: outputs/tables/H2_bridge_ratio_concordance_tests.csv
+
+HOW TO READ THIS
+- Row 1 is the bridge question. Rows 2 and 3 check the shared driver: if
+  both ratio and Delta S track FAIRD sample size, an association in row 1
+  cannot be read as concordance driving the ratio.
+- The expected sign under the bridge hypothesis is negative (lower
+  concordance, higher AMMOD/FAIRD ratio). The sampling artefact predicts
+  the same sign, which is why rows 2 and 3 are needed.
+[OK] Saved: outputs/figures/H2_bridge_ratio_concordance_windows.png
+[OK] Saved: outputs/figures/H2_bridge_ratio_concordance_days.png
+
+==============================================================================
+Script completed: 2026-10-01 15:17:29 
+==============================================================================

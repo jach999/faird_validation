@@ -1,0 +1,138 @@
+==============================================================================
+SECTION 8: REGISTRY DIAGNOSTICS
+Run: 2026-10-08 14:45:42
+==============================================================================
+
+--- 8A: Durbin-Watson of the pooled OLS by row order ---
+OLS coefficients and R2 do not depend on row order; DW does.
+Targets: Maize DW 1.385 (p = 0.041, PC V16); Overall DW 0.917 (p < 0.001, V5, PC V16)
+
+# A tibble: 4 × 6
+  Level                      Order                             n    R2 DW_stat     DW_p
+  <chr>                      <chr>                         <int> <dbl>   <dbl>    <dbl>
+1 Maize pooled (Sites 1+2)   Site then Date (script order)    24 0.311   1.84  0.299   
+2 Maize pooled (Sites 1+2)   Date then Site                   24 0.311   1.38  0.0409  
+3 Overall pooled (Sites 1-3) Site then Date (script order)    32 0.321   1.86  0.306   
+4 Overall pooled (Sites 1-3) Date then Site                   32 0.321   0.917 0.000219
+
+--- 8B: Kendall tau variants ---
+Targets: site tau 0.152 / 0.455 / 0.071 (PC V16, Section 11 table);
+         Maize tau 0.359 with p = 0.011 (V5) vs p = 0.0193 (script)
+
+# A tibble: 15 × 6
+   Level        Variant                                                  n_pairs ties     tau
+   <chr>        <chr>                                                      <int> <lgl>  <dbl>
+ 1 Site1        raw daily changes (script, V5)                                11 FALSE  0.2  
+ 2 Site1        log daily changes                                             11 FALSE  0.345
+ 3 Site1        absolute log values                                           12 FALSE  0.152
+ 4 Site2        raw daily changes (script, V5)                                11 FALSE  0.673
+ 5 Site2        log daily changes                                             11 FALSE  0.455
+ 6 Site2        absolute log values                                           12 FALSE  0.455
+ 7 Site3        raw daily changes (script, V5)                                 7 FALSE -0.238
+ 8 Site3        log daily changes                                              7 FALSE  0.143
+ 9 Site3        absolute log values                                            8 FALSE  0.071
+10 Maize pooled raw changes, normal approximation (script)                    22 FALSE  0.359
+11 Maize pooled raw changes, normal approximation, continuity correction      22 FALSE  0.359
+12 Maize pooled raw changes, exact                                            22 FALSE  0.359
+13 Maize pooled raw changes, one-sided (greater)                              22 FALSE  0.359
+14 Maize pooled log changes                                                   22 FALSE  0.342
+15 Maize pooled absolute log values                                           24 FALSE  0.362
+         p
+     <dbl>
+ 1 0.392  
+ 2 0.139  
+ 3 0.493  
+ 4 0.00397
+ 5 0.0516 
+ 6 0.0397 
+ 7 0.453  
+ 8 0.652  
+ 9 0.805  
+10 0.0193 
+11 0.0208 
+12 0.0194 
+13 0.00963
+14 0.0259 
+15 0.0131 
+Note: with ties = TRUE an exact p is not available and R falls back to the
+normal approximation.
+
+--- 8C: CCF lag tables, raw (script) and log10(x+1) series ---
+acf_12: script definition, acf(cbind(z_faird, z_ammod))$acf[, 1, 2], lags >= 0.
+ccf:    stats::ccf(faird, ammod); lag k = cor(FAIRD[t+k], AMMOD[t]),
+        so k < 0 means FAIRD earlier than AMMOD.
+Targets: V5 lag +1 0.548 / 0.622 / 0.575 (sites), 0.589 (Maize summed);
+         PC V16 lag 0 0.382 / 0.696 / -0.010, lag 1 0.621 / 0.658 / 0.487
+
+# A tibble: 64 × 7
+   Series       Transform        n CI_bound   lag    ccf acf_12
+   <chr>        <chr>        <int>    <dbl> <int>  <dbl>  <dbl>
+ 1 Site1        raw (script)    12    0.566    -4 -0.048 NA    
+ 2 Site1        raw (script)    12    0.566    -3 -0.266 NA    
+ 3 Site1        raw (script)    12    0.566    -2 -0.486 NA    
+ 4 Site1        raw (script)    12    0.566    -1 -0.171 NA    
+ 5 Site1        raw (script)    12    0.566     0  0.347  0.347
+ 6 Site1        raw (script)    12    0.566     1  0.548  0.548
+ 7 Site1        raw (script)    12    0.566     2  0.126  0.126
+ 8 Site1        raw (script)    12    0.566     3 -0.072 -0.072
+ 9 Site1        raw (script)    12    0.566     4 -0.047 -0.047
+10 Site1        log10(x+1)      12    0.566    -4 -0.133 NA    
+11 Site1        log10(x+1)      12    0.566    -3  0.05  NA    
+12 Site1        log10(x+1)      12    0.566    -2 -0.278 NA    
+13 Site1        log10(x+1)      12    0.566    -1  0.073 NA    
+14 Site1        log10(x+1)      12    0.566     0  0.531  0.531
+15 Site1        log10(x+1)      12    0.566     1  0.389  0.389
+16 Site1        log10(x+1)      12    0.566     2 -0.067 -0.067
+17 Site1        log10(x+1)      12    0.566     3 -0.409 -0.409
+18 Site1        log10(x+1)      12    0.566     4 -0.338 -0.338
+19 Site2        raw (script)    12    0.566    -4 -0.153 NA    
+20 Site2        raw (script)    12    0.566    -3 -0.309 NA    
+21 Site2        raw (script)    12    0.566    -2 -0.328 NA    
+22 Site2        raw (script)    12    0.566    -1  0.089 NA    
+23 Site2        raw (script)    12    0.566     0  0.781  0.781
+24 Site2        raw (script)    12    0.566     1  0.622  0.622
+25 Site2        raw (script)    12    0.566     2  0.188  0.188
+26 Site2        raw (script)    12    0.566     3  0.141  0.141
+27 Site2        raw (script)    12    0.566     4  0.104  0.104
+28 Site2        log10(x+1)      12    0.566    -4 -0.23  NA    
+29 Site2        log10(x+1)      12    0.566    -3 -0.35  NA    
+30 Site2        log10(x+1)      12    0.566    -2 -0.271 NA    
+31 Site2        log10(x+1)      12    0.566    -1  0.121 NA    
+32 Site2        log10(x+1)      12    0.566     0  0.667  0.667
+33 Site2        log10(x+1)      12    0.566     1  0.658  0.658
+34 Site2        log10(x+1)      12    0.566     2  0.282  0.282
+35 Site2        log10(x+1)      12    0.566     3  0.032  0.032
+36 Site2        log10(x+1)      12    0.566     4  0.063  0.063
+37 Site3        raw (script)     8    0.693    -2 -0.319 NA    
+38 Site3        raw (script)     8    0.693    -1 -0.274 NA    
+39 Site3        raw (script)     8    0.693     0 -0.002 -0.002
+40 Site3        raw (script)     8    0.693     1  0.575  0.575
+41 Site3        raw (script)     8    0.693     2  0.769  0.769
+42 Site3        log10(x+1)       8    0.693    -2 -0.391 NA    
+43 Site3        log10(x+1)       8    0.693    -1  0.048 NA    
+44 Site3        log10(x+1)       8    0.693     0  0.241  0.241
+45 Site3        log10(x+1)       8    0.693     1  0.587  0.587
+46 Site3        log10(x+1)       8    0.693     2  0.514  0.514
+47 Maize summed raw (script)    12    0.566    -4 -0.104 NA    
+48 Maize summed raw (script)    12    0.566    -3 -0.317 NA    
+49 Maize summed raw (script)    12    0.566    -2 -0.415 NA    
+50 Maize summed raw (script)    12    0.566    -1 -0.131 NA    
+51 Maize summed raw (script)    12    0.566     0  0.657  0.657
+52 Maize summed raw (script)    12    0.566     1  0.589  0.589
+53 Maize summed raw (script)    12    0.566     2  0.102  0.102
+54 Maize summed raw (script)    12    0.566     3  0.046  0.046
+55 Maize summed raw (script)    12    0.566     4  0.059  0.059
+56 Maize summed log10(x+1)      12    0.566    -4 -0.166 NA    
+57 Maize summed log10(x+1)      12    0.566    -3 -0.185 NA    
+58 Maize summed log10(x+1)      12    0.566    -2 -0.291 NA    
+59 Maize summed log10(x+1)      12    0.566    -1  0.076 NA    
+60 Maize summed log10(x+1)      12    0.566     0  0.597  0.597
+61 Maize summed log10(x+1)      12    0.566     1  0.486  0.486
+62 Maize summed log10(x+1)      12    0.566     2  0.019  0.019
+63 Maize summed log10(x+1)      12    0.566     3 -0.308 -0.308
+64 Maize summed log10(x+1)      12    0.566     4 -0.159 -0.159
+
+==============================================================================
+SECTION 8 COMPLETE
+==============================================================================
+

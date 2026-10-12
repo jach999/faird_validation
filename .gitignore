@@ -53,7 +53,15 @@ desktop.ini
 
 # Generated data (keep source CSVs in source_tables/)
 data_cleaned.RData
-outputs/
+# Outputs: console logs (.txt) and tables (.csv) tracked; figures ignored
+outputs/**
+!outputs/**/
+!outputs/**/*.txt
+!outputs/**/*.csv
+R/outputs/**
+!R/outputs/**/
+!R/outputs/**/*.txt
+!R/outputs/**/*.csv
 
 # Old/backup folders (tracked selectively if needed)
 # Old/backup folders: root ignored entirely; in R/old only R scripts and notes are tracked
@@ -62,3 +70,5 @@ R/old/**
 !R/old/**/
 !R/old/**/*.R
 !R/old/**/*.md
+R/old/outputs/
+older/

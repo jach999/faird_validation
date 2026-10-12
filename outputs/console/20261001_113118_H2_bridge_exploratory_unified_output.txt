@@ -1,0 +1,178 @@
+==============================================================================
+H2 BRIDGE: BIOMASS RATIO VS TAXONOMIC SIMILARITY (EXPLORATORY)
+Hierarchical evaluation: Site, Habitat, and Overall Levels
+==============================================================================
+
+
+=== LOADING E-TRAPS DATA ===
+indexing FAIRD_For_Statistics.csv [========--------------------------------] 1.56GB/s, eta:  0sindexing FAIRD_For_Statistics.csv [=======================================] 23.96MB/s, eta:  0s                                                                                               FAIRD loaded: 1128 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: FAIRD1, FAIRD2, FAIRD3, FAIRD4 
+indexing ID_For_Statistics.csv [===========================================] 2.15GB/s, eta:  0s                                                                                               ID loaded: 2370 individuals
+Date range: 2023-08-23 to 2023-09-13 
+Devices: ID1, ID2, ID4 
+ID3 has no data (device failure as expected)
+
+Total e-traps individuals: 3498 
+
+=== LOADING AMMOD TAXONOMIC DATA ===
+indexing AMMOD_24h_OTUs_For_Statistics.csv [===============================] 2.15GB/s, eta:  0s                                                                                               AMMOD taxonomy loaded: 2338 OTUs
+Date range: 2023-08-23 to 2023-09-16 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+IMPORTANT: AMMOD taxonomy is QUALITATIVE (presence/absence)
+  'Count' = DNA sequence reads, NOT individual insect counts.
+  Use ONLY for presence/absence analyses.
+Converted to presence/absence format
+
+=== BUILDING TRUTH CALENDAR ===
+Truth Calendar built for 12 devices over 22 days.
+# A tibble: 12 × 5
+   Device Field_Days_Effort Valid_Taxo_Days Valid_Bio_Days Operational_ID_Days
+   <chr>              <int>           <int>          <int>               <int>
+ 1 AMMOD1                21              21             12                  21
+ 2 AMMOD2                21              21             12                  21
+ 3 AMMOD3                21              21              8                  21
+ 4 AMMOD4                14              13              0                  14
+ 5 FAIRD1                22              22             22                  22
+ 6 FAIRD2                22              22             22                  22
+ 7 FAIRD3                22              22             22                  22
+ 8 FAIRD4                22              22             22                  22
+ 9 ID1                   22              22             22                  17
+10 ID2                   22              22             22                  17
+11 ID3                    0               0              0                   0
+12 ID4                   22              22             22                  17
+
+Field_Valid_Operational_ID: 15 additional device-days marked FALSE
+  (ID1/ID2/ID4 battery window Aug 28-Sep 1; expected 15). This column is not used by any analysis yet.
+
+ammod_taxonomy_presence filtered by Truth Calendar:
+  Before: 2109 | After: 2023 | Removed: 86
+  Removed: AMMOD4 jammed-bottle period (Aug 28-Sep 3) + contaminated sample R2_4_06 (AMMOD4, Sep 10).
+
+=== LOADING AMMOD BIOMASS DATA ===
+indexing AMMOD_24h_live_mass_For_Statistics.csv [========================] 296.87MB/s, eta:  0s                                                                                               Raw columns: Date, Device, Device_type, Site, Ambient, DevicexAmbien, Dry_mass_g, Live_mass 
+AMMOD biomass loaded: 48 daily measurements
+Date range: 2023-08-23 to 2023-09-03 
+Devices: AMMOD1, AMMOD2, AMMOD3, AMMOD4 
+
+=== AMMOD DATA QUALITY ASSESSMENT ===
+
+Completeness by device:
+# A tibble: 4 × 6
+  Device Site  Ambient total_days days_with_biomass days_missing
+  <chr>  <chr> <chr>        <int>             <int>        <int>
+1 AMMOD1 Site1 Maize           12                12            0
+2 AMMOD2 Site2 Maize           12                12            0
+3 AMMOD3 Site3 Meadow          12                 8            4
+4 AMMOD4 Site4 Meadow          12                 0           12
+
+DEVICES WITH INCOMPLETE DATA:
+
+AMMOD3 (Site3, Meadow):
+  Days available: 8 | Days missing: 4
+  Status: Processing method changed in cursu (ATL) from day 9.
+  Impact: Site3 for H2 has reduced matching days (n=8).
+  Note:   OTU data available for H1 qualitative analysis.
+
+AMMOD4 (Site4, Meadow):
+  Days available: 0 | Days missing: 12
+  Status: Mechanical failure — rotation jammed (Aug 28-Sep 3).
+  Missing dates: 2023-08-23 to 2023-09-03
+  All biomass unavailable (ATL Batch 1). Excluded from H2.
+
+
+Summary for statistical analyses:
+# A tibble: 3 × 5
+  Site  Device Ambient n_days mean_biomass
+  <chr> <chr>  <chr>    <int>        <dbl>
+1 Site1 AMMOD1 Maize       12        1946.
+2 Site2 AMMOD2 Maize       12        2085.
+3 Site3 AMMOD3 Meadow       8        3349.
+
+Total valid measurements: 32 
+  Site1 (Maize):  n = 12 
+  Site2 (Maize):  n = 12 
+  Site3 (Meadow): n = 8 
+  Site4 (Meadow): n = 0 
+
+=== AGGREGATING E-TRAPS TO DAILY BIOMASS ===
+E-traps daily aggregation complete
+
+=== ENFORCING DATA COMPLETENESS (E-TRAPS) ===
+Full grid: 7 devices x 22 days
+Zero-capture days filled (abundance = 0, biomass_mg = 0).
+mean_body_length/width left as NA on zero-capture days.
+
+  ID2: 22 days (expected 22)
+  ID4: 22 days (expected 22)
+  FAIRD2: 22 days (expected 22)
+  FAIRD3: 22 days (expected 22)
+  FAIRD4: 22 days (expected 22)
+  ID1: 22 days (expected 22)
+  FAIRD1: 22 days (expected 22)
+
+=== CREATING PRESENCE/ABSENCE MATRICES ===
+E-traps presence records: 271 
+AMMOD presence records: 2023 
+
+=== CREATING ANALYSIS-READY DATASETS ===
+FAIRD-AMMOD overlapping date range:
+  Start: 2023-08-23 
+  End: 2023-09-03 
+  Days: 12 
+
+=== EXPORTING CLEANED DATASETS ===
+data_list saved to: data_cleaned.RData
+
+=== DATA SUMMARY ===
+# A tibble: 5 × 3
+  Dataset        N_rows N_devices
+  <chr>           <int>     <int>
+1 FAIRD            1128         4
+2 ID               2370         3
+3 E-traps Total    3498         7
+4 AMMOD Taxonomy   2023         4
+5 AMMOD Biomass      32         3
+
+--- Taxonomic richness (#N/C excluded from all counts) ---
+E-traps (filtered): Orders = 10 | Families = 47 | Genera = 54 
+AMMOD:   Orders = 15 | Families = 118 | Genera = 341 
+FAIRD:   Orders = 10 | Families = 45 | Genera = 53 
+ID:   Orders = 5 | Families = 8 | Genera = 4 
+
+--- Site availability ---
+# A tibble: 10 × 4
+   Site  Device_type n_days Dataset      
+   <chr> <chr>        <int> <chr>        
+ 1 Site1 AMMOD           12 AMMOD Biomass
+ 2 Site1 FAIRD           22 E-traps      
+ 3 Site1 ID              22 E-traps      
+ 4 Site2 AMMOD           12 AMMOD Biomass
+ 5 Site2 FAIRD           22 E-traps      
+ 6 Site2 ID              22 E-traps      
+ 7 Site3 AMMOD            8 AMMOD Biomass
+ 8 Site3 FAIRD           22 E-traps      
+ 9 Site4 FAIRD           22 E-traps      
+10 Site4 ID              22 E-traps      
+
+=== DATA LOADING COMPLETE ===
+Access datasets via: data_list$faird, data_list$etraps_daily, etc.
+Preparing raw datasets...
+Running computations for Site, Habitat, and Overall levels...
+
+--- SITE LEVEL ---
+n = 11 | rho = -0.227 | p = 0.5031
+
+--- HABITAT LEVEL ---
+n = 7 | rho = -0.321 | p = 0.4976
+
+--- OVERALL LEVEL ---
+n = 4 | rho = 0.400 | p = 0.7500
+
+Generating unified plot...
+[OK] Saved plot to: outputs/figures/H2_bridge_unified_exploratory.png
+
+==============================================================================
+Script completed: 2026-10-01 11:31:22 
+==============================================================================

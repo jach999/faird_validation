@@ -1,0 +1,1114 @@
+==============================================================================
+SCHERBER TEMPORAL BIOMASS ANALYSIS (production version)
+Primary: bs(Date,3) * Device_type + Block + (1|Site/Device) + AR1
+Block is a FIXED term (2 levels); Block-random kept as robustness check.
+Pair models AMMOD-FAIRD, AMMOD-ID, FAIRD-ID (3-df interaction) in Section 2e.
+==============================================================================
+Script started: 2026-10-02 00:06:13 
+
+=== OPTIONAL PACKAGE AVAILABILITY ===
+
+  mixedup : available
+  sjPlot  : available
+  ape     : available
+
+To enable skipped steps, install once, separately, e.g.:
+  install.packages(c("sjPlot", "ape"))
+  remotes::install_github("m-clark/mixedup")
+
+=== DATA PREPARATION ===
+
+Combined dataset: 186 observations
+Overlap period (2023-08-23 to 2023-09-03): 116 observations
+Distinct days: 12
+Blocks: BLOCK1 = Site1+Site2 (Maize), BLOCK2 = Site3+Site4 (Meadow)
+Block levels: 2 | Site levels: 4 | Device levels: 10
+
+Observations per Device_type (overlap period):
+# A tibble: 3 × 4
+  Device_type     n n_devices mean_biomass
+  <fct>       <int>     <int>        <dbl>
+1 AMMOD          32         3        2349.
+2 FAIRD          48         4         222.
+3 ID             36         3         448.
+
+Observations per Device (overlap period):
+# A tibble: 10 × 5
+   Block  Device_type Device Site      n
+   <fct>  <fct>       <fct>  <fct> <int>
+ 1 BLOCK1 AMMOD       AMMOD1 Site1    12
+ 2 BLOCK1 AMMOD       AMMOD2 Site2    12
+ 3 BLOCK1 FAIRD       FAIRD1 Site1    12
+ 4 BLOCK1 FAIRD       FAIRD2 Site2    12
+ 5 BLOCK1 ID          ID1    Site1    12
+ 6 BLOCK1 ID          ID2    Site2    12
+ 7 BLOCK2 AMMOD       AMMOD3 Site3     8
+ 8 BLOCK2 FAIRD       FAIRD3 Site3    12
+ 9 BLOCK2 FAIRD       FAIRD4 Site4    12
+10 BLOCK2 ID          ID4    Site4    12
+
+=== MODEL FITTING ===
+
+--- Model B1 (PRIMARY): Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Model B0: Block fixed + (1|Site/Device), no AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Model B_ranef (robustness check): Block RANDOM + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Model B_simple (fallback): (1|Site/Device), no Block, no AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Model BX (cross-check): nlme::lme, Gaussian, random slope + corAR1 ---
+Formula: Biomass_mg ~ bs(Date.num,3) * Device_type + Block, random = ~Date.num | Site/Device, correlation = corAR1()
+  [OK] BX converged.
+
+--- BX summary ---
+Linear mixed-effects model fit by REML
+  Data: bio_overlap 
+       AIC      BIC   logLik
+  1717.884 1773.213 -837.942
+
+Random effects:
+ Formula: ~Date.num | Site
+ Structure: General positive-definite, Log-Cholesky parametrization
+            StdDev       Corr  
+(Intercept) 7.7644355100 (Intr)
+Date.num    0.0001844345 -0.035
+
+ Formula: ~Date.num | Device %in% Site
+ Structure: General positive-definite, Log-Cholesky parametrization
+            StdDev       Corr  
+(Intercept) 1.804132e+00 (Intr)
+Date.num    7.710943e-08 0     
+Residual    8.039056e+02       
+
+Correlation Structure: AR(1)
+ Formula: ~1 | Site/Device 
+ Parameter estimate(s):
+      Phi 
+0.2417799 
+Fixed effects:  Biomass_mg ~ bs(Date.num, 3) * Device_type + Block 
+                                      Value Std.Error DF   t-value p-value
+(Intercept)                        3722.690  444.5219 97  8.374593  0.0000
+bs(Date.num, 3)1                    696.903 1345.6777 97  0.517882  0.6057
+bs(Date.num, 3)2                  -5710.682 1110.6825 97 -5.141597  0.0000
+bs(Date.num, 3)3                  -1470.555  716.9647 97 -2.051085  0.0430
+Device_typeFAIRD                  -3719.476  582.4749  4 -6.385642  0.0031
+Device_typeID                     -3418.688  621.3347  4 -5.502168  0.0053
+BlockBLOCK2                         240.602  198.3310  2  1.213132  0.3489
+bs(Date.num, 3)1:Device_typeFAIRD   -34.986 1756.6088 97 -0.019917  0.9842
+bs(Date.num, 3)2:Device_typeFAIRD  5480.292 1416.7054 97  3.868336  0.0002
+bs(Date.num, 3)3:Device_typeFAIRD  1470.650  906.2443 97  1.622796  0.1079
+bs(Date.num, 3)1:Device_typeID     -721.488 1873.6639 97 -0.385068  0.7010
+bs(Date.num, 3)2:Device_typeID     5636.516 1504.9476 97  3.745324  0.0003
+bs(Date.num, 3)3:Device_typeID     1782.811  961.0890 97  1.854990  0.0666
+ Correlation: 
+                                  (Intr) bs(D.,3)1 bs(D.,3)2 bs(D.,3)3 D_FAIR Dvc_ID BBLOCK
+bs(Date.num, 3)1                  -0.708                                                   
+bs(Date.num, 3)2                  -0.131 -0.428                                            
+bs(Date.num, 3)3                  -0.670  0.606    -0.274                                  
+Device_typeFAIRD                  -0.739  0.544     0.098     0.495                        
+Device_typeID                     -0.700  0.509     0.093     0.469     0.535              
+BlockBLOCK2                       -0.141 -0.020     0.008     0.098    -0.063 -0.006       
+bs(Date.num, 3)1:Device_typeFAIRD  0.542 -0.766     0.328    -0.464    -0.719 -0.390  0.015
+bs(Date.num, 3)2:Device_typeFAIRD  0.103  0.336    -0.784     0.215    -0.149 -0.073 -0.007
+bs(Date.num, 3)3:Device_typeFAIRD  0.530 -0.480     0.217    -0.791    -0.682 -0.371 -0.078
+bs(Date.num, 3)1:Device_typeID     0.508 -0.718     0.307    -0.435    -0.390 -0.720  0.014
+bs(Date.num, 3)2:Device_typeID     0.097  0.316    -0.738     0.202    -0.073 -0.153 -0.006
+bs(Date.num, 3)3:Device_typeID     0.500 -0.452     0.205    -0.746    -0.369 -0.693 -0.073
+                                  b(D.,3)1:D_F b(D.,3)2:D_F b(D.,3)3:D_F b(D.,3)1:D_I
+bs(Date.num, 3)1                                                                     
+bs(Date.num, 3)2                                                                     
+bs(Date.num, 3)3                                                                     
+Device_typeFAIRD                                                                     
+Device_typeID                                                                        
+BlockBLOCK2                                                                          
+bs(Date.num, 3)1:Device_typeFAIRD                                                    
+bs(Date.num, 3)2:Device_typeFAIRD -0.406                                             
+bs(Date.num, 3)3:Device_typeFAIRD  0.621       -0.246                                
+bs(Date.num, 3)1:Device_typeID     0.550       -0.241        0.345                   
+bs(Date.num, 3)2:Device_typeID    -0.242        0.579       -0.160       -0.402      
+bs(Date.num, 3)3:Device_typeID     0.347       -0.160        0.590        0.624      
+                                  b(D.,3)2:D_I
+bs(Date.num, 3)1                              
+bs(Date.num, 3)2                              
+bs(Date.num, 3)3                              
+Device_typeFAIRD                              
+Device_typeID                                 
+BlockBLOCK2                                   
+bs(Date.num, 3)1:Device_typeFAIRD             
+bs(Date.num, 3)2:Device_typeFAIRD             
+bs(Date.num, 3)3:Device_typeFAIRD             
+bs(Date.num, 3)1:Device_typeID                
+bs(Date.num, 3)2:Device_typeID                
+bs(Date.num, 3)3:Device_typeID    -0.240      
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-1.83321714 -0.30906333 -0.08639453  0.14590983  5.26442899 
+
+Number of Observations: 116
+Number of Groups: 
+            Site Device %in% Site 
+               4               10 
+
+--- BX Type II ANOVA (car::Anova) ---
+Analysis of Deviance Table (Type II tests)
+
+Response: Biomass_mg
+                              Chisq Df Pr(>Chisq)    
+bs(Date.num, 3)             11.4655  3   0.009458 ** 
+Device_type                 98.8244  2  < 2.2e-16 ***
+Block                        1.4717  1   0.225079    
+bs(Date.num, 3):Device_type 28.9936  6  6.101e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- BX random effects (BLUPs via coef) ---
+             (Intercept) bs(Date.num, 3)1 bs(Date.num, 3)2 bs(Date.num, 3)3 Device_typeFAIRD
+Site1/AMMOD1    3722.510         696.9026        -5710.682        -1470.555        -3719.476
+Site1/FAIRD1    3722.525         696.9026        -5710.682        -1470.555        -3719.476
+Site1/ID1       3722.517         696.9026        -5710.682        -1470.555        -3719.476
+Site2/AMMOD2    3722.855         696.9026        -5710.682        -1470.555        -3719.476
+Site2/FAIRD2    3722.861         696.9026        -5710.682        -1470.555        -3719.476
+Site2/ID2       3722.871         696.9026        -5710.682        -1470.555        -3719.476
+Site3/AMMOD3    3722.880         696.9026        -5710.682        -1470.555        -3719.476
+Site3/FAIRD3    3722.861         696.9026        -5710.682        -1470.555        -3719.476
+Site4/FAIRD4    3722.513         696.9026        -5710.682        -1470.555        -3719.476
+Site4/ID4       3722.507         696.9026        -5710.682        -1470.555        -3719.476
+             Device_typeID BlockBLOCK2 bs(Date.num, 3)1:Device_typeFAIRD
+Site1/AMMOD1     -3418.688    240.6017                         -34.98612
+Site1/FAIRD1     -3418.688    240.6017                         -34.98612
+Site1/ID1        -3418.688    240.6017                         -34.98612
+Site2/AMMOD2     -3418.688    240.6017                         -34.98612
+Site2/FAIRD2     -3418.688    240.6017                         -34.98612
+Site2/ID2        -3418.688    240.6017                         -34.98612
+Site3/AMMOD3     -3418.688    240.6017                         -34.98612
+Site3/FAIRD3     -3418.688    240.6017                         -34.98612
+Site4/FAIRD4     -3418.688    240.6017                         -34.98612
+Site4/ID4        -3418.688    240.6017                         -34.98612
+             bs(Date.num, 3)2:Device_typeFAIRD bs(Date.num, 3)3:Device_typeFAIRD
+Site1/AMMOD1                          5480.292                           1470.65
+Site1/FAIRD1                          5480.292                           1470.65
+Site1/ID1                             5480.292                           1470.65
+Site2/AMMOD2                          5480.292                           1470.65
+Site2/FAIRD2                          5480.292                           1470.65
+Site2/ID2                             5480.292                           1470.65
+Site3/AMMOD3                          5480.292                           1470.65
+Site3/FAIRD3                          5480.292                           1470.65
+Site4/FAIRD4                          5480.292                           1470.65
+Site4/ID4                             5480.292                           1470.65
+             bs(Date.num, 3)1:Device_typeID bs(Date.num, 3)2:Device_typeID
+Site1/AMMOD1                      -721.4879                       5636.516
+Site1/FAIRD1                      -721.4879                       5636.516
+Site1/ID1                         -721.4879                       5636.516
+Site2/AMMOD2                      -721.4879                       5636.516
+Site2/FAIRD2                      -721.4879                       5636.516
+Site2/ID2                         -721.4879                       5636.516
+Site3/AMMOD3                      -721.4879                       5636.516
+Site3/FAIRD3                      -721.4879                       5636.516
+Site4/FAIRD4                      -721.4879                       5636.516
+Site4/ID4                         -721.4879                       5636.516
+             bs(Date.num, 3)3:Device_typeID      Date.num
+Site1/AMMOD1                       1782.811 -1.761588e-06
+Site1/FAIRD1                       1782.811 -1.761587e-06
+Site1/ID1                          1782.811 -1.761587e-06
+Site2/AMMOD2                       1782.811  1.762122e-06
+Site2/FAIRD2                       1782.811  1.762122e-06
+Site2/ID2                          1782.811  1.762123e-06
+Site3/AMMOD3                       1782.811  1.823150e-06
+Site3/FAIRD3                       1782.811  1.823150e-06
+Site4/FAIRD4                       1782.811 -1.823685e-06
+Site4/ID4                          1782.811 -1.823685e-06
+  [OK] Saved variance-components plot: outputs/figures/Scherber_BX_varcomp.png
+
+
+--- AIC comparison (VALID glmmTMB fits only) ---
+    Model df      AIC     dAIC
+       B1 19 1656.078 0.000000
+ B_simple 16 1657.389 1.310980
+       B0 17 1657.686 1.608699
+  B_ranef 19 1658.744 2.665859
+
+  NOTE: B_ranef is NOT AIC-comparable with the Block-fixed models as a
+  selection criterion (a factor treated as fixed vs random is not nested
+  in the usual sense). It is listed for reference only.
+
+=== PLOT-MODEL SELECTION ===
+
+
+------------------------------------------------------------------------
+CONVERGENCE SUMMARY (tmb_is_valid: pdHess + finite AIC)
+  B1  (PRIMARY: Block fixed + AR1)   : VALID
+  B0  (Block fixed, no AR1)          : VALID
+  B_ranef (Block random, check)      : VALID
+  B_simple (fallback)                : VALID
+  BX  (nlme cross-check)             : converged
+  --> Model feeding the figures      : B1 (Block fixed, Site/Device, AR1)
+------------------------------------------------------------------------
+
+--- Type III ANOVA (plotting model) ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                               Chisq Df Pr(>Chisq)    
+(Intercept)                 643.1610  1  < 2.2e-16 ***
+bs(Date.num, 3)              16.2159  3   0.001024 ** 
+Device_type                  47.0122  2  6.186e-11 ***
+Block                         2.9734  1   0.084645 .  
+bs(Date.num, 3):Device_type  17.9551  6   0.006345 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+  Date x Device_type interaction: p = 0.0063 -> Trajectories NOT parallel
+
+--- Fixed-effect coefficients (plotting model) ---
+                      (Intercept)                  bs(Date.num, 3)1 
+                        8.1304539                         0.2493579 
+                 bs(Date.num, 3)2                  bs(Date.num, 3)3 
+                       -2.8747339                        -0.4034240 
+                 Device_typeFAIRD                     Device_typeID 
+                       -3.5125533                        -2.3272028 
+                      BlockBLOCK2 bs(Date.num, 3)1:Device_typeFAIRD 
+                        0.2929972                         2.3951138 
+bs(Date.num, 3)2:Device_typeFAIRD bs(Date.num, 3)3:Device_typeFAIRD 
+                        2.1076844                         0.3595639 
+   bs(Date.num, 3)1:Device_typeID    bs(Date.num, 3)2:Device_typeID 
+                       -0.4520500                         2.0749802 
+   bs(Date.num, 3)3:Device_typeID 
+                        1.0593743 
+
+--- Variance components (mixedup::extract_vc) ---
+# A tibble: 3 × 6
+  group       variance    sd sd_2.5 sd_97.5 var_prop
+  <chr>          <dbl> <dbl>  <dbl>   <dbl>    <dbl>
+1 Device:Site     0    0.005   0    Inf        0    
+2 Site            0    0       0    Inf        0    
+3 Device          0.27 0.519   0.32   0.844    0.083
+  [OK] Saved random-effects plot: outputs/figures/Scherber_plotmodel_RE.png
+
+--- ROBUSTNESS: Block fixed vs Block random ---
+          Specification p_interaction Block_variance
+ Block FIXED (reported)   0.006345453             NA
+   Block RANDOM (check)   0.005193364   0.0003328252
+
+  Interpretation: a Block variance at or near zero confirms that the
+  2-level random effect is a singular fit, and that the fixed
+  specification is the better-calibrated one to report.
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] Saved: outputs/tables/Scherber_biomass_block_robustness.csv
+
+
+=== PAIR MODELS: AMMOD-FAIRD, AMMOD-ID, FAIRD-ID ===
+
+
+>>> PAIR AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK
+  72 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 AMMOD       AMMOD1 Site1    12
+2 BLOCK1 AMMOD       AMMOD2 Site2    12
+3 BLOCK1 FAIRD       FAIRD1 Site1    12
+4 BLOCK1 FAIRD       FAIRD2 Site2    12
+5 BLOCK2 AMMOD       AMMOD3 Site3     8
+6 BLOCK2 FAIRD       FAIRD3 Site3     8
+7 BLOCK2 FAIRD       FAIRD4 Site4     8
+
+##### AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK #####
+
+--- AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                               Chisq Df Pr(>Chisq)    
+(Intercept)                 941.9317  1  < 2.2e-16 ***
+bs(Date.num, 3)              23.6467  3  2.960e-05 ***
+Device_type                  64.5555  1  9.385e-16 ***
+Block                         6.4785  1   0.010919 *  
+bs(Date.num, 3):Device_type  12.2040  3   0.006716 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK, level 'AR1' ---
+       Model df   logLik     AIC  Chisq Chi_df          p
+    additive 12 -518.568 1061.14     NA     NA         NA
+ interaction 15 -513.170 1056.34 10.796      3 0.01288195
+  Same level: Wald p = 0.0067 | LRT p = 0.0129
+
+--- Fixed-effect coefficients, AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK ---
+                      (Intercept)                  bs(Date.num, 3)1 
+                        8.0798413                         0.2430311 
+                 bs(Date.num, 3)2                  bs(Date.num, 3)3 
+                       -2.8730055                        -0.3343932 
+                 Device_typeFAIRD                       BlockBLOCK2 
+                       -3.5923668                         0.4590249 
+bs(Date.num, 3)1:Device_typeFAIRD bs(Date.num, 3)2:Device_typeFAIRD 
+                        2.6982049                         1.8390397 
+bs(Date.num, 3)3:Device_typeFAIRD 
+                        0.3981365 
+
+--- Variance components, AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     2.8682e-05            
+ Site        (Intercept)     8.3937e-06            
+ Device      times2023-08-23 4.1443e-01 0.156 (ar1)
+
+
+>>> PAIR AMMOD-FAIRD | A_12d | full | PAIRED_SITE
+  64 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 6 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 AMMOD       AMMOD1 Site1    12
+2 BLOCK1 AMMOD       AMMOD2 Site2    12
+3 BLOCK1 FAIRD       FAIRD1 Site1    12
+4 BLOCK1 FAIRD       FAIRD2 Site2    12
+5 BLOCK2 AMMOD       AMMOD3 Site3     8
+6 BLOCK2 FAIRD       FAIRD3 Site3     8
+
+##### AMMOD-FAIRD | A_12d | full | PAIRED_SITE #####
+
+--- AMMOD-FAIRD | A_12d | full | PAIRED_SITE | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, AMMOD-FAIRD | A_12d | full | PAIRED_SITE ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                              Chisq Df Pr(>Chisq)    
+(Intercept)                 909.577  1  < 2.2e-16 ***
+bs(Date.num, 3)              22.793  3  4.461e-05 ***
+Device_type                  51.008  1  9.198e-13 ***
+Block                         4.718  1    0.02985 *  
+bs(Date.num, 3):Device_type  10.446  3    0.01513 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+  [INFO] LRT not possible at level 'AR1' (full: valid, additive: INVALID).
+  [INFO] LRT not possible at level 'noAR1' (full: INVALID, additive: valid).
+
+--- LRT: interaction vs additive, AMMOD-FAIRD | A_12d | full | PAIRED_SITE, level 'simple' ---
+  [NOTE] LRT computed at a LOWER cascade level than the reported Wald
+         test, because the additive model was not valid at that level.
+       Model df   logLik    AIC Chisq Chi_df          p
+    additive  9 -468.363 954.73    NA     NA         NA
+ interaction 12 -463.824 951.65 9.078      3 0.02827602
+  Same level: Wald p = 0.0208 | LRT p = 0.0283
+
+--- Fixed-effect coefficients, AMMOD-FAIRD | A_12d | full | PAIRED_SITE ---
+                      (Intercept)                  bs(Date.num, 3)1 
+                        8.0887080                         0.2555472 
+                 bs(Date.num, 3)2                  bs(Date.num, 3)3 
+                       -2.8675318                        -0.3452719 
+                 Device_typeFAIRD                       BlockBLOCK2 
+                       -3.6929784                         0.4291074 
+bs(Date.num, 3)1:Device_typeFAIRD bs(Date.num, 3)2:Device_typeFAIRD 
+                        2.7372991                         2.0624797 
+bs(Date.num, 3)3:Device_typeFAIRD 
+                        0.4723463 
+
+--- Variance components, AMMOD-FAIRD | A_12d | full | PAIRED_SITE ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     2.4137e-05            
+ Site        (Intercept)     1.6520e-12            
+ Device      times2023-08-23 4.1299e-01 0.167 (ar1)
+
+
+>>> PAIR AMMOD-FAIRD | A_12d | full | FULL
+  80 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 AMMOD       AMMOD1 Site1    12
+2 BLOCK1 AMMOD       AMMOD2 Site2    12
+3 BLOCK1 FAIRD       FAIRD1 Site1    12
+4 BLOCK1 FAIRD       FAIRD2 Site2    12
+5 BLOCK2 AMMOD       AMMOD3 Site3     8
+6 BLOCK2 FAIRD       FAIRD3 Site3    12
+7 BLOCK2 FAIRD       FAIRD4 Site4    12
+
+##### AMMOD-FAIRD | A_12d | full | FULL #####
+
+--- AMMOD-FAIRD | A_12d | full | FULL | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, AMMOD-FAIRD | A_12d | full | FULL ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                               Chisq Df Pr(>Chisq)    
+(Intercept)                 898.6184  1  < 2.2e-16 ***
+bs(Date.num, 3)              22.3574  3  5.496e-05 ***
+Device_type                  64.8531  1  8.070e-16 ***
+Block                         7.9632  1   0.004774 ** 
+bs(Date.num, 3):Device_type  13.5477  3   0.003590 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+  [INFO] LRT not possible at level 'AR1' (full: valid, additive: INVALID).
+
+--- LRT: interaction vs additive, AMMOD-FAIRD | A_12d | full | FULL, level 'noAR1' ---
+  [NOTE] LRT computed at a LOWER cascade level than the reported Wald
+         test, because the additive model was not valid at that level.
+       Model df   logLik     AIC  Chisq Chi_df           p
+    additive 10 -569.378 1158.76     NA     NA          NA
+ interaction 13 -562.927 1151.85 12.902      3 0.004852773
+  Same level: Wald p = 0.0030 | LRT p = 0.0049
+
+--- Fixed-effect coefficients, AMMOD-FAIRD | A_12d | full | FULL ---
+                      (Intercept)                  bs(Date.num, 3)1 
+                        8.0730938                         0.2055148 
+                 bs(Date.num, 3)2                  bs(Date.num, 3)3 
+                       -2.8607720                        -0.3341458 
+                 Device_typeFAIRD                       BlockBLOCK2 
+                       -3.5556786                         0.4830010 
+bs(Date.num, 3)1:Device_typeFAIRD bs(Date.num, 3)2:Device_typeFAIRD 
+                        2.4035812                         2.1315286 
+bs(Date.num, 3)3:Device_typeFAIRD 
+                        0.2766737 
+
+--- Variance components, AMMOD-FAIRD | A_12d | full | FULL ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     2.8163e-05            
+ Site        (Intercept)     2.7201e-06            
+ Device      times2023-08-23 4.3759e-01 0.173 (ar1)
+
+
+>>> PAIR AMMOD-ID | A_12d | full | PAIRED_BLOCK
+  64 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 6 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 AMMOD       AMMOD1 Site1    12
+2 BLOCK1 AMMOD       AMMOD2 Site2    12
+3 BLOCK1 ID          ID1    Site1    12
+4 BLOCK1 ID          ID2    Site2    12
+5 BLOCK2 AMMOD       AMMOD3 Site3     8
+6 BLOCK2 ID          ID4    Site4     8
+
+##### AMMOD-ID | A_12d | full | PAIRED_BLOCK #####
+
+--- AMMOD-ID | A_12d | full | PAIRED_BLOCK | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, AMMOD-ID | A_12d | full | PAIRED_BLOCK ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                               Chisq Df Pr(>Chisq)    
+(Intercept)                 704.2419  1  < 2.2e-16 ***
+bs(Date.num, 3)              16.5954  3  0.0008559 ***
+Device_type                  15.7881  1  7.085e-05 ***
+Block                         1.3108  1  0.2522585    
+bs(Date.num, 3):Device_type   8.6877  3  0.0337450 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, AMMOD-ID | A_12d | full | PAIRED_BLOCK, level 'AR1' ---
+       Model df   logLik    AIC Chisq Chi_df          p
+    additive 12 -477.742 979.48    NA     NA         NA
+ interaction 15 -474.401 978.80 6.683      3 0.08270023
+  Same level: Wald p = 0.0337 | LRT p = 0.0827
+
+--- Fixed-effect coefficients, AMMOD-ID | A_12d | full | PAIRED_BLOCK ---
+                   (Intercept)               bs(Date.num, 3)1               bs(Date.num, 3)2 
+                     8.1200363                      0.3687617                     -2.8486031 
+              bs(Date.num, 3)3                  Device_typeID                    BlockBLOCK2 
+                    -0.4060001                     -2.2124604                      0.2646449 
+bs(Date.num, 3)1:Device_typeID bs(Date.num, 3)2:Device_typeID bs(Date.num, 3)3:Device_typeID 
+                    -1.0118410                      2.7734183                      0.9801080 
+
+--- Variance components, AMMOD-ID | A_12d | full | PAIRED_BLOCK ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     1.1358e-04            
+ Site        (Intercept)     5.9522e-06            
+ Device      times2023-08-23 4.4349e-01 0.210 (ar1)
+
+
+>>> PAIR AMMOD-ID | A_12d | full | PAIRED_SITE
+  48 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 4 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 AMMOD       AMMOD1 Site1    12
+2 BLOCK1 AMMOD       AMMOD2 Site2    12
+3 BLOCK1 ID          ID1    Site1    12
+4 BLOCK1 ID          ID2    Site2    12
+  [NOTE] single Block level in these data -> Block left out of the model.
+
+##### AMMOD-ID | A_12d | full | PAIRED_SITE #####
+
+--- AMMOD-ID | A_12d | full | PAIRED_SITE | (1|Site/Device) + AR1, single Block ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, AMMOD-ID | A_12d | full | PAIRED_SITE ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                              Chisq Df Pr(>Chisq)    
+(Intercept)                 495.661  1  < 2.2e-16 ***
+bs(Date.num, 3)              14.785  3  0.0020102 ** 
+Device_type                  11.052  1  0.0008859 ***
+bs(Date.num, 3):Device_type  10.191  3  0.0170108 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, AMMOD-ID | A_12d | full | PAIRED_SITE, level 'AR1' ---
+       Model df   logLik    AIC Chisq Chi_df          p
+    additive 11 -357.324 736.65    NA     NA         NA
+ interaction 14 -353.398 734.80 7.852      3 0.04917045
+  Same level: Wald p = 0.0170 | LRT p = 0.0492
+
+--- Fixed-effect coefficients, AMMOD-ID | A_12d | full | PAIRED_SITE ---
+                   (Intercept)               bs(Date.num, 3)1               bs(Date.num, 3)2 
+                     8.0244784                      0.7749871                     -3.2103186 
+              bs(Date.num, 3)3                  Device_typeID bs(Date.num, 3)1:Device_typeID 
+                    -0.2636198                     -2.4253684                     -0.6815670 
+bs(Date.num, 3)2:Device_typeID bs(Date.num, 3)3:Device_typeID 
+                     3.9891733                      1.0396625 
+
+--- Variance components, AMMOD-ID | A_12d | full | PAIRED_SITE ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     9.9759e-05            
+ Site        (Intercept)     4.9403e-06            
+ Device      times2023-08-23 4.1387e-01 0.164 (ar1)
+
+
+>>> PAIR AMMOD-ID | A_12d | full | FULL
+  68 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 6 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 AMMOD       AMMOD1 Site1    12
+2 BLOCK1 AMMOD       AMMOD2 Site2    12
+3 BLOCK1 ID          ID1    Site1    12
+4 BLOCK1 ID          ID2    Site2    12
+5 BLOCK2 AMMOD       AMMOD3 Site3     8
+6 BLOCK2 ID          ID4    Site4    12
+
+##### AMMOD-ID | A_12d | full | FULL #####
+
+--- AMMOD-ID | A_12d | full | FULL | Block fixed + (1|Site/Device) + AR1 ---
+  [INVALID] fit returned but numerically degenerate (pdHess/AIC check failed).
+
+--- AMMOD-ID | A_12d | full | FULL | Block fixed + (1|Site/Device), no AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+  [WARNING] higher cascade levels invalid -> using 'noAR1'.
+
+--- Type III ANOVA, AMMOD-ID | A_12d | full | FULL ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                                Chisq Df Pr(>Chisq)    
+(Intercept)                 1003.1815  1  < 2.2e-16 ***
+bs(Date.num, 3)               24.6632  3  1.816e-05 ***
+Device_type                   16.0263  1  6.247e-05 ***
+Block                          0.8569  1   0.354596    
+bs(Date.num, 3):Device_type   11.3743  3   0.009865 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, AMMOD-ID | A_12d | full | FULL, level 'noAR1' ---
+       Model df   logLik     AIC  Chisq Chi_df          p
+    additive 10 -511.171 1042.34     NA     NA         NA
+ interaction 13 -505.634 1037.27 11.075      3 0.01132883
+  Same level: Wald p = 0.0099 | LRT p = 0.0113
+
+--- Fixed-effect coefficients, AMMOD-ID | A_12d | full | FULL ---
+                   (Intercept)               bs(Date.num, 3)1               bs(Date.num, 3)2 
+                     8.1634746                      0.6351005                     -2.9391342 
+              bs(Date.num, 3)3                  Device_typeID                    BlockBLOCK2 
+                    -0.3670627                     -2.1439200                      0.1919259 
+bs(Date.num, 3)1:Device_typeID bs(Date.num, 3)2:Device_typeID bs(Date.num, 3)3:Device_typeID 
+                    -1.2474675                      3.0211834                      0.7822183 
+
+--- Variance components, AMMOD-ID | A_12d | full | FULL ---
+
+Conditional model:
+ Groups      Name        Std.Dev.  
+ Device:Site (Intercept) 0.08886928
+ Site        (Intercept) 0.00011823
+
+
+>>> PAIR FAIRD-ID | A_12d | full | PAIRED_BLOCK
+  84 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 FAIRD       FAIRD1 Site1    12
+2 BLOCK1 FAIRD       FAIRD2 Site2    12
+3 BLOCK1 ID          ID1    Site1    12
+4 BLOCK1 ID          ID2    Site2    12
+5 BLOCK2 FAIRD       FAIRD3 Site3    12
+6 BLOCK2 FAIRD       FAIRD4 Site4    12
+7 BLOCK2 ID          ID4    Site4    12
+
+##### FAIRD-ID | A_12d | full | PAIRED_BLOCK #####
+
+--- FAIRD-ID | A_12d | full | PAIRED_BLOCK | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, FAIRD-ID | A_12d | full | PAIRED_BLOCK ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                              Chisq Df Pr(>Chisq)    
+(Intercept)                 88.2436  1    < 2e-16 ***
+bs(Date.num, 3)              7.8115  3    0.05007 .  
+Device_type                  2.9707  1    0.08479 .  
+Block                        1.1922  1    0.27488    
+bs(Date.num, 3):Device_type  8.8175  3    0.03182 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, FAIRD-ID | A_12d | full | PAIRED_BLOCK, level 'AR1' ---
+       Model df   logLik     AIC Chisq Chi_df          p
+    additive 12 -546.818 1117.64    NA     NA         NA
+ interaction 15 -542.734 1115.47 8.168      3 0.04266007
+  Same level: Wald p = 0.0318 | LRT p = 0.0427
+
+--- Fixed-effect coefficients, FAIRD-ID | A_12d | full | PAIRED_BLOCK ---
+                   (Intercept)               bs(Date.num, 3)1               bs(Date.num, 3)2 
+                    4.59140937                     2.47991113                    -0.76182133 
+              bs(Date.num, 3)3                  Device_typeID                    BlockBLOCK2 
+                   -0.07166268                     1.15641770                     0.26044428 
+bs(Date.num, 3)1:Device_typeID bs(Date.num, 3)2:Device_typeID bs(Date.num, 3)3:Device_typeID 
+                   -2.53688838                    -0.67282698                     0.81091473 
+
+--- Variance components, FAIRD-ID | A_12d | full | PAIRED_BLOCK ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     8.8860e-02            
+ Site        (Intercept)     3.2302e-05            
+ Device      times2023-08-23 7.5375e-01 0.019 (ar1)
+
+
+>>> PAIR FAIRD-ID | A_12d | full | PAIRED_SITE
+  72 observations, 12 days (2023-08-23 to 2023-09-03)
+  Observations per device:
+# A tibble: 6 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 FAIRD       FAIRD1 Site1    12
+2 BLOCK1 FAIRD       FAIRD2 Site2    12
+3 BLOCK1 ID          ID1    Site1    12
+4 BLOCK1 ID          ID2    Site2    12
+5 BLOCK2 FAIRD       FAIRD4 Site4    12
+6 BLOCK2 ID          ID4    Site4    12
+
+##### FAIRD-ID | A_12d | full | PAIRED_SITE #####
+
+--- FAIRD-ID | A_12d | full | PAIRED_SITE | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, FAIRD-ID | A_12d | full | PAIRED_SITE ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                              Chisq Df Pr(>Chisq)    
+(Intercept)                 54.9219  1  1.254e-13 ***
+bs(Date.num, 3)              5.2568  3    0.15393    
+Device_type                  2.9188  1    0.08755 .  
+Block                        1.0786  1    0.29902    
+bs(Date.num, 3):Device_type  6.9397  3    0.07385 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, FAIRD-ID | A_12d | full | PAIRED_SITE, level 'AR1' ---
+       Model df   logLik    AIC Chisq Chi_df          p
+    additive 12 -469.904 963.81    NA     NA         NA
+ interaction 15 -466.672 963.34 6.466      3 0.09103134
+  Same level: Wald p = 0.0738 | LRT p = 0.0910
+
+--- Fixed-effect coefficients, FAIRD-ID | A_12d | full | PAIRED_SITE ---
+                   (Intercept)               bs(Date.num, 3)1               bs(Date.num, 3)2 
+                     4.4237777                      2.7706585                     -0.5217490 
+              bs(Date.num, 3)3                  Device_typeID                    BlockBLOCK2 
+                     0.1542369                      1.3163058                      0.2931461 
+bs(Date.num, 3)1:Device_typeID bs(Date.num, 3)2:Device_typeID bs(Date.num, 3)3:Device_typeID 
+                    -2.8354699                     -0.8946604                      0.5800969 
+
+--- Variance components, FAIRD-ID | A_12d | full | PAIRED_SITE ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     1.2346e-01            
+ Site        (Intercept)     5.1783e-05            
+ Device      times2023-08-23 7.7634e-01 0.014 (ar1)
+
+[SKIP] FAIRD-ID, FULL: data identical to PAIRED_BLOCK, not refitted.
+
+Post hoc sensitivity: dates removed = 2023-08-23, 2023-08-24, 2023-08-25
+
+
+>>> PAIR AMMOD-FAIRD | A_12d | drop_first3 | PAIRED_BLOCK
+  51 observations, 9 days (2023-08-26 to 2023-09-03)
+  Observations per device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 AMMOD       AMMOD1 Site1     9
+2 BLOCK1 AMMOD       AMMOD2 Site2     9
+3 BLOCK1 FAIRD       FAIRD1 Site1     9
+4 BLOCK1 FAIRD       FAIRD2 Site2     9
+5 BLOCK2 AMMOD       AMMOD3 Site3     5
+6 BLOCK2 FAIRD       FAIRD3 Site3     5
+7 BLOCK2 FAIRD       FAIRD4 Site4     5
+
+##### AMMOD-FAIRD | A_12d | drop_first3 | PAIRED_BLOCK #####
+
+--- AMMOD-FAIRD | A_12d | drop_first3 | PAIRED_BLOCK | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, AMMOD-FAIRD | A_12d | drop_first3 | PAIRED_BLOCK ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                                Chisq Df Pr(>Chisq)    
+(Intercept)                 1137.2686  1  < 2.2e-16 ***
+bs(Date.num, 3)               27.5552  3  4.503e-06 ***
+Device_type                   22.5044  1  2.097e-06 ***
+Block                          5.8796  1    0.01532 *  
+bs(Date.num, 3):Device_type    8.1588  3    0.04284 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, AMMOD-FAIRD | A_12d | drop_first3 | PAIRED_BLOCK, level 'AR1' ---
+       Model df   logLik    AIC Chisq Chi_df          p
+    additive 12 -352.199 728.40    NA     NA         NA
+ interaction 15 -348.274 726.55 7.849      3 0.04922826
+  Same level: Wald p = 0.0428 | LRT p = 0.0492
+
+--- Fixed-effect coefficients, AMMOD-FAIRD | A_12d | drop_first3 | PAIRED_BLOCK ---
+                      (Intercept)                  bs(Date.num, 3)1 
+                        8.1549508                        -3.3280801 
+                 bs(Date.num, 3)2                  bs(Date.num, 3)3 
+                       -0.2381632                        -0.7356900 
+                 Device_typeFAIRD                       BlockBLOCK2 
+                       -1.6195231                         0.4882020 
+bs(Date.num, 3)1:Device_typeFAIRD bs(Date.num, 3)2:Device_typeFAIRD 
+                       -1.4552258                         1.1722429 
+bs(Date.num, 3)3:Device_typeFAIRD 
+                       -2.1251002 
+
+--- Variance components, AMMOD-FAIRD | A_12d | drop_first3 | PAIRED_BLOCK ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     0.00003746            
+ Site        (Intercept)     0.05840284            
+ Device      times2023-08-26 0.38348159 0.101 (ar1)
+
+Adverse window from the validity calendar (5 dates): 2023-08-28, 2023-08-29, 2023-08-30, 2023-08-31, 2023-09-01
+
+
+>>> PAIR FAIRD-ID | B_22d | full | PAIRED_BLOCK
+  154 observations, 22 days (2023-08-23 to 2023-09-13)
+  Observations per device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 FAIRD       FAIRD1 Site1    22
+2 BLOCK1 FAIRD       FAIRD2 Site2    22
+3 BLOCK1 ID          ID1    Site1    22
+4 BLOCK1 ID          ID2    Site2    22
+5 BLOCK2 FAIRD       FAIRD3 Site3    22
+6 BLOCK2 FAIRD       FAIRD4 Site4    22
+7 BLOCK2 ID          ID4    Site4    22
+
+##### FAIRD-ID | B_22d | full | PAIRED_BLOCK #####
+
+--- FAIRD-ID | B_22d | full | PAIRED_BLOCK | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, FAIRD-ID | B_22d | full | PAIRED_BLOCK ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                               Chisq Df Pr(>Chisq)    
+(Intercept)                 132.7638  1  < 2.2e-16 ***
+bs(Date.num, 3)              57.5172  3  1.993e-12 ***
+Device_type                   1.8717  1  0.1712819    
+Block                         5.7854  1  0.0161600 *  
+bs(Date.num, 3):Device_type  20.5226  3  0.0001323 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, FAIRD-ID | B_22d | full | PAIRED_BLOCK, level 'AR1' ---
+       Model df   logLik     AIC Chisq Chi_df           p
+    additive 12 -918.489 1860.98    NA     NA          NA
+ interaction 15 -910.054 1850.11 16.87      3 0.000751766
+  Same level: Wald p = 0.0001 | LRT p = 0.0008
+
+--- Fixed-effect coefficients, FAIRD-ID | B_22d | full | PAIRED_BLOCK ---
+                   (Intercept)               bs(Date.num, 3)1               bs(Date.num, 3)2 
+                     4.6074447                      2.3716294                     -3.7929783 
+              bs(Date.num, 3)3                  Device_typeID                    BlockBLOCK2 
+                    -1.3071308                      0.7622991                      0.5757013 
+bs(Date.num, 3)1:Device_typeID bs(Date.num, 3)2:Device_typeID bs(Date.num, 3)3:Device_typeID 
+                    -1.9341531                      2.8148307                      1.2793319 
+
+--- Variance components, FAIRD-ID | B_22d | full | PAIRED_BLOCK ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     2.0600e-01            
+ Site        (Intercept)     4.2804e-05            
+ Device      times2023-08-23 7.9969e-01 0.074 (ar1)
+
+
+>>> PAIR FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK
+  119 observations, 17 days (2023-08-23 to 2023-09-13)
+  Observations per device:
+# A tibble: 7 × 5
+  Block  Device_type Device Site      n
+  <fct>  <fct>       <fct>  <fct> <int>
+1 BLOCK1 FAIRD       FAIRD1 Site1    17
+2 BLOCK1 FAIRD       FAIRD2 Site2    17
+3 BLOCK1 ID          ID1    Site1    17
+4 BLOCK1 ID          ID2    Site2    17
+5 BLOCK2 FAIRD       FAIRD3 Site3    17
+6 BLOCK2 FAIRD       FAIRD4 Site4    17
+7 BLOCK2 ID          ID4    Site4    17
+
+##### FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK #####
+
+--- FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK | Block fixed + (1|Site/Device) + AR1 ---
+  [VALID] positive-definite Hessian, finite AIC.
+
+--- Type III ANOVA, FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK ---
+Analysis of Deviance Table (Type III Wald chisquare tests)
+
+Response: Biomass_mg
+                               Chisq Df Pr(>Chisq)    
+(Intercept)                 171.3257  1  < 2.2e-16 ***
+bs(Date.num, 3)             130.8779  3  < 2.2e-16 ***
+Device_type                   3.2017  1   0.073562 .  
+Block                         9.8035  1   0.001742 ** 
+bs(Date.num, 3):Device_type  32.5018  3  4.102e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+--- LRT: interaction vs additive, FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK, level 'AR1' ---
+       Model df   logLik     AIC  Chisq Chi_df            p
+    additive 12 -683.727 1391.45     NA     NA           NA
+ interaction 15 -672.258 1374.52 22.939      3 4.158248e-05
+  Same level: Wald p = 0.0000 | LRT p = 0.0000
+
+--- Fixed-effect coefficients, FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK ---
+                   (Intercept)               bs(Date.num, 3)1               bs(Date.num, 3)2 
+                     4.2780505                      4.6774305                     -4.8644024 
+              bs(Date.num, 3)3                  Device_typeID                    BlockBLOCK2 
+                    -0.8361154                      0.8031415                      0.7469575 
+bs(Date.num, 3)1:Device_typeID bs(Date.num, 3)2:Device_typeID bs(Date.num, 3)3:Device_typeID 
+                    -2.0820180                      3.0767880                      1.1605728 
+
+--- Variance components, FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK ---
+
+Conditional model:
+ Groups      Name            Std.Dev.   Corr       
+ Device:Site (Intercept)     2.4487e-01            
+ Site        (Intercept)     5.2781e-05            
+ Device      times2023-08-23 6.2314e-01 0.051 (ar1)
+
+------------------------------------------------------------------------
+DATE x DEVICE_TYPE INTERACTION: OMNIBUS AND PAIR MODELS
+------------------------------------------------------------------------
+            Pair Analysis          Window      Pairing                Role n_obs n_days
+ ALL (3 systems)    A_12d            full         FULL             omnibus   116     12
+     AMMOD-FAIRD    A_12d            full PAIRED_BLOCK             primary    72     12
+     AMMOD-FAIRD    A_12d            full  PAIRED_SITE         sensitivity    64     12
+     AMMOD-FAIRD    A_12d            full         FULL         sensitivity    80     12
+        AMMOD-ID    A_12d            full PAIRED_BLOCK             primary    64     12
+        AMMOD-ID    A_12d            full  PAIRED_SITE         sensitivity    48     12
+        AMMOD-ID    A_12d            full         FULL         sensitivity    68     12
+        FAIRD-ID    A_12d            full PAIRED_BLOCK             primary    84     12
+        FAIRD-ID    A_12d            full  PAIRED_SITE         sensitivity    72     12
+     AMMOD-FAIRD    A_12d     drop_first3 PAIRED_BLOCK sensitivity_posthoc    51      9
+        FAIRD-ID    B_22d            full PAIRED_BLOCK       complementary   154     22
+        FAIRD-ID    B_22d window_excluded PAIRED_BLOCK       complementary   119     17
+ n_devices                                 Model df_interaction p_interaction_Wald
+        10    B1 (Block fixed, Site/Device, AR1)              6             0.0063
+         7   Block fixed + (1|Site/Device) + AR1              3             0.0067
+         6   Block fixed + (1|Site/Device) + AR1              3             0.0151
+         7   Block fixed + (1|Site/Device) + AR1              3             0.0036
+         6   Block fixed + (1|Site/Device) + AR1              3             0.0337
+         4   (1|Site/Device) + AR1, single Block              3             0.0170
+         6 Block fixed + (1|Site/Device), no AR1              3             0.0099
+         7   Block fixed + (1|Site/Device) + AR1              3             0.0318
+         6   Block fixed + (1|Site/Device) + AR1              3             0.0738
+         7   Block fixed + (1|Site/Device) + AR1              3             0.0428
+         7   Block fixed + (1|Site/Device) + AR1              3             0.0001
+         7   Block fixed + (1|Site/Device) + AR1              3             0.0000
+ p_interaction_LRT LRT_level p_Wald_at_LRT_level p_LRT_Holm p_Wald_Holm
+                NA      <NA>                  NA         NA          NA
+            0.0129       AR1              0.0067     0.0386      0.0201
+            0.0283    simple              0.0208         NA          NA
+            0.0049     noAR1              0.0030         NA          NA
+            0.0827       AR1              0.0337     0.0853      0.0636
+            0.0492       AR1              0.0170         NA          NA
+            0.0113     noAR1              0.0099         NA          NA
+            0.0427       AR1              0.0318     0.0853      0.0636
+            0.0910       AR1              0.0738         NA          NA
+            0.0492       AR1              0.0428         NA          NA
+            0.0008       AR1              0.0001         NA          NA
+            0.0000       AR1              0.0000         NA          NA
+
+  NOTES:
+  - Primary family = the three A_12d PAIRED_BLOCK rows; Holm on the LRT is
+    the declared correction, Holm on Wald is reported alongside.
+  - Compare p_interaction_LRT with p_Wald_at_LRT_level (same cascade level).
+  - AMMOD-ID PAIRED_SITE is Maize only (Sites 1-2, Block not estimable).
+  - drop_first rows are a POST HOC sensitivity check, not a model choice.
+  - B_22d rows are complementary and outside the Holm family.
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] Saved: outputs/tables/Scherber_biomass_pairs.csv
+
+--- Daily ratio of device means per pair (PAIRED_BLOCK data) ---
+
+  AMMOD-FAIRD | A_12d | full | PAIRED_BLOCK: overall ratio AMMOD/FAIRD = 10.00, Spearman rho(ratio, date) = -0.08
+# A tibble: 12 × 4
+   Date       AMMOD FAIRD ratio
+   <date>     <dbl> <dbl> <dbl>
+ 1 2023-08-23 3485. 150.  23.3 
+ 2 2023-08-24 3947. 114.  34.7 
+ 3 2023-08-25 4131. 269.  15.4 
+ 4 2023-08-26 4540  765.   5.93
+ 5 2023-08-27 1556  454.   3.43
+ 6 2023-08-28  997.  61.3 16.3 
+ 7 2023-08-29  748   70.4 10.6 
+ 8 2023-08-30 1793. 234.   7.68
+ 9 2023-08-31 1066  128.   8.35
+10 2023-09-01  964  178.   5.4 
+11 2023-09-02 1972  127.  15.5 
+12 2023-09-03 1782   33.5 53.3 
+
+  AMMOD-ID | A_12d | full | PAIRED_BLOCK: overall ratio AMMOD/ID = 5.30, Spearman rho(ratio, date) = -0.77
+# A tibble: 12 × 4
+   Date       AMMOD    ID ratio
+   <date>     <dbl> <dbl> <dbl>
+ 1 2023-08-23 3485.  295. 11.8 
+ 2 2023-08-24 3947.  519.  7.6 
+ 3 2023-08-25 4131.  500.  8.26
+ 4 2023-08-26 4540   483.  9.4 
+ 5 2023-08-27 1556   169.  9.23
+ 6 2023-08-28  997.  159.  6.28
+ 7 2023-08-29  748     0  NA   
+ 8 2023-08-30 1793.  971.  1.85
+ 9 2023-08-31 1066  1010.  1.06
+10 2023-09-01  964   264.  3.66
+11 2023-09-02 1972   501.  3.94
+12 2023-09-03 1782   672.  2.65
+
+  FAIRD-ID | A_12d | full | PAIRED_BLOCK: overall ratio FAIRD/ID = 0.50, Spearman rho(ratio, date) = -0.38
+# A tibble: 12 × 4
+   Date       FAIRD    ID ratio
+   <date>     <dbl> <dbl> <dbl>
+ 1 2023-08-23 150.   295.  0.51
+ 2 2023-08-24 114.   519.  0.22
+ 3 2023-08-25 269.   500.  0.54
+ 4 2023-08-26 765.   483.  1.58
+ 5 2023-08-27 454.   169.  2.69
+ 6 2023-08-28  61.3  159.  0.39
+ 7 2023-08-29  70.4    0  NA   
+ 8 2023-08-30 234.   971.  0.24
+ 9 2023-08-31 120.   841.  0.14
+10 2023-09-01 210.   181.  1.16
+11 2023-09-02 155.   530.  0.29
+12 2023-09-03  68.0  731.  0.09
+
+  FAIRD-ID | B_22d | full | PAIRED_BLOCK: overall ratio FAIRD/ID = 0.39, Spearman rho(ratio, date) = -0.57
+# A tibble: 22 × 4
+   Date       FAIRD    ID ratio
+   <date>     <dbl> <dbl> <dbl>
+ 1 2023-08-23 150.   295.  0.51
+ 2 2023-08-24 114.   519.  0.22
+ 3 2023-08-25 269.   500.  0.54
+ 4 2023-08-26 765.   483.  1.58
+ 5 2023-08-27 454.   169.  2.69
+ 6 2023-08-28  61.3  159.  0.39
+ 7 2023-08-29  70.4    0  NA   
+ 8 2023-08-30 234.   971.  0.24
+ 9 2023-08-31 120.   841.  0.14
+10 2023-09-01 210.   181.  1.16
+11 2023-09-02 155.   530.  0.29
+12 2023-09-03  68.0  731.  0.09
+13 2023-09-04  57.8  162.  0.36
+14 2023-09-05  24.1  273.  0.09
+15 2023-09-06  32.2  129.  0.25
+16 2023-09-07  20.4  329.  0.06
+17 2023-09-08  18.0  191.  0.09
+18 2023-09-09  34.5  146.  0.24
+19 2023-09-10  50.0  184.  0.27
+20 2023-09-11  35.4  135.  0.26
+21 2023-09-12  43.9  308.  0.14
+22 2023-09-13  23.8  482.  0.05
+
+  FAIRD-ID | B_22d | window_excluded | PAIRED_BLOCK: overall ratio FAIRD/ID = 0.42, Spearman rho(ratio, date) = -0.57
+# A tibble: 17 × 4
+   Date       FAIRD    ID ratio
+   <date>     <dbl> <dbl> <dbl>
+ 1 2023-08-23 150.   295.  0.51
+ 2 2023-08-24 114.   519.  0.22
+ 3 2023-08-25 269.   500.  0.54
+ 4 2023-08-26 765.   483.  1.58
+ 5 2023-08-27 454.   169.  2.69
+ 6 2023-09-02 155.   530.  0.29
+ 7 2023-09-03  68.0  731.  0.09
+ 8 2023-09-04  57.8  162.  0.36
+ 9 2023-09-05  24.1  273.  0.09
+10 2023-09-06  32.2  129.  0.25
+11 2023-09-07  20.4  329.  0.06
+12 2023-09-08  18.0  191.  0.09
+13 2023-09-09  34.5  146.  0.24
+14 2023-09-10  50.0  184.  0.27
+15 2023-09-11  35.4  135.  0.26
+16 2023-09-12  43.9  308.  0.14
+17 2023-09-13  23.8  482.  0.05
+
+--- AMMOD/FAIRD biomass ratio over co-located site-days ---
+  Site-days used: 32
+  Overall ratio (sum AMMOD / sum FAIRD): 11.40
+  Scale factor used for the three-system dual-axis figure: 11
+
+
+=== GENERATING TEMPORAL PLOTS ===
+
+Three-system figures generated from: B1 (Block fixed, Site/Device, AR1)
+[OK] Saved: outputs/figures/Scherber_temporal_biomass_linear.png
+[OK] Saved: outputs/figures/Scherber_temporal_biomass_dualaxis.png
+[OK] Saved: outputs/figures/Scherber_temporal_biomass_pair_AMMOD_FAIRD_A_12d_full.png
+[OK] Saved: outputs/figures/Scherber_temporal_biomass_pair_AMMOD_ID_A_12d_full.png
+[OK] Saved: outputs/figures/Scherber_temporal_biomass_pair_FAIRD_ID_A_12d_full.png
+[OK] Saved: outputs/figures/Scherber_temporal_biomass_pair_FAIRD_ID_B_22d_full.png
+[OK] Saved: outputs/figures/Scherber_temporal_biomass_pair_FAIRD_ID_B_22d_window_excluded.png
+
+=== EXPORT ===
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] Saved: outputs/tables/Scherber_temporal_biomass_ANOVA_III.csv
+
+==============================================================================
+ANALYSIS COMPLETE
+Finished: 2026-10-02 00:06:47
+==============================================================================

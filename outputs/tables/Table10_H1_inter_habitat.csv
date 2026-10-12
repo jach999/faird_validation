@@ -1,0 +1,4 @@
+System,Pair,n,R² (log),Slope [95% CI],Concordance,Spearman ρ,Kendall τ,SW p,BP p,DW,Pseudo-R²
+FAIRD,Maize mean vs Meadow mean,22,0.719 ***,"0.60 [0.42, 0.77]",81.0%,0.795 ***,0.640 ***,0.204,0.085,1.52 (p=0.098),0.717
+AMMOD,AMMOD1 vs AMMOD3,8,0.472 ns,"0.53 [-0.03, 1.10]",57.1%,0.667 ns,-0.048 ns,0.854,0.507,1.50 (p=0.135),0.470
+AMMOD,AMMOD2 vs AMMOD3,8,0.351 ns,"0.35 [-0.12, 0.81]",42.9%,0.571 ns,-0.333 ns,0.673,0.594,1.54 (p=0.147),0.350

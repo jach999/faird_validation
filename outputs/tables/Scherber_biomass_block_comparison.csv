@@ -1,0 +1,9 @@
+Quantity,Block_random,Block_fixed
+Model label,Block RANDOM (1|Block/Site/Device) + AR1,"Block FIXED (+ Block, 1|Site/Device) + AR1"
+AR1 retained,TRUE,TRUE
+p: Date x Device_type interaction,0.0052,0.0063
+"p: spline bs(Date.num,3)",0.0006,0.0010
+p: Device_type,0.0000,0.0000
+p: Block (fixed only),— (not in model),0.0846
+Block variance (random only),0.0003328,— (not in model)
+AIC,1658.74,1656.08

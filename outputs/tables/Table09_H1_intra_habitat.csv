@@ -1,0 +1,4 @@
+System,Pair,Habitat,n,R² (log),Slope [95% CI],Concordance,Spearman ρ,Kendall τ,SW p,BP p,DW,Pseudo-R²
+FAIRD,FAIRD1 vs FAIRD2,Maize,22,0.674 ***,"0.84 [0.56, 1.11]",57.1%,0.808 ***,0.445 **,0.216,0.392,1.65 (p=0.172),0.674
+FAIRD,FAIRD3 vs FAIRD4,Meadow,22,0.733 ***,"1.15 [0.83, 1.48]",71.4%,0.837 ***,0.601 ***,0.411,0.174,1.42 (p=0.055),0.731
+AMMOD,AMMOD1 vs AMMOD2,Maize,12,0.741 ***,"1.13 [0.66, 1.61]",63.6%,0.874 ***,0.345 ns,0.702,0.225,2.03 (p=0.442),0.740

@@ -1,0 +1,41 @@
+==============================================================================
+SCHERBER TEMPORAL BIOMASS ANALYSIS
+glmmTMB: biomass ~ bs(Date.num, 3) * Device_type + (1|Site/Device)
+==============================================================================
+Script started: 2026-09-30 15:29:53 
+
+=== DATA PREPARATION ===
+
+Combined dataset: 186 observations
+Overlap period (2023-08-23 to 2023-09-03): 116 observations
+Device types: AMMOD, FAIRD, ID
+
+Observations per Device_type (overlap period):
+# A tibble: 3 × 4
+  Device_type     n n_devices mean_biomass
+  <fct>       <int>     <int>        <dbl>
+1 AMMOD          32         3        2349.
+2 FAIRD          48         4         222.
+3 ID             36         3         448.
+
+Observations per Device (overlap period):
+# A tibble: 10 × 4
+   Device_type Device Site      n
+   <fct>       <fct>  <fct> <int>
+ 1 AMMOD       AMMOD1 Site1    12
+ 2 AMMOD       AMMOD2 Site2    12
+ 3 AMMOD       AMMOD3 Site3     8
+ 4 FAIRD       FAIRD1 Site1    12
+ 5 FAIRD       FAIRD2 Site2    12
+ 6 FAIRD       FAIRD3 Site3    12
+ 7 FAIRD       FAIRD4 Site4    12
+ 8 ID          ID1    Site1    12
+ 9 ID          ID2    Site2    12
+10 ID          ID4    Site4    12
+
+=== MODEL FITTING ===
+
+--- Model A: Overlap period (AMMOD + FAIRD + ID) ---
+Formula: Biomass_mg ~ bs(Date.num, 3) * Device_type + (1 | Site/Device)
+Family: Tweedie
+

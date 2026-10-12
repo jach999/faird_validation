@@ -1,0 +1,5 @@
+Term,Chisq,Df,Pr(>Chisq),Run,Model
+(Intercept),71.63093724728108,1,2.594566055408128e-17,operational,"B0 (Block/Site/Device, no AR1)"
+"bs(Date.num, 3)",98.6212324216853,3,3.0756386799427512e-21,operational,"B0 (Block/Site/Device, no AR1)"
+Device_type,1.5977549983292723,1,0.20622165055920127,operational,"B0 (Block/Site/Device, no AR1)"
+"bs(Date.num, 3):Device_type",24.254575961655615,3,2.210207543981216e-5,operational,"B0 (Block/Site/Device, no AR1)"

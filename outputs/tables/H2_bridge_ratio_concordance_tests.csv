@@ -1,0 +1,7 @@
+Resolution,Association,n,r_within,p_perm,Method
+3-day windows,log(ratio) vs Delta S,11,0.186,0.5955,exact (3456 permutations)
+3-day windows,log(ratio) vs log(n FAIRD),11,-0.398,0.2277,exact (3456 permutations)
+3-day windows,Delta S vs log(n FAIRD),11,-0.448,0.1467,exact (3456 permutations)
+single days,log(ratio) vs Delta S,24,-0.35,0.1163,Monte Carlo (9999 permutations)
+single days,log(ratio) vs log(n FAIRD),24,-0.635,0.0025,Monte Carlo (9999 permutations)
+single days,Delta S vs log(n FAIRD),24,-0.095,0.6756,Monte Carlo (9999 permutations)

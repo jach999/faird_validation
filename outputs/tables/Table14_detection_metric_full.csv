@@ -1,0 +1,7 @@
+Site,Metric,n,R2,Slope,Slope_p,Spearman_rho,Spearman_p,SW_p,BP_p,DW_stat,DW_p
+Site1,Counts vs Dry mass,12,0.171,2.643,0.181,0.391,0.2345,0.426,0.67,1.709,0.232
+Site1,Biomass vs Live mass,12,0.282,1.438,0.0755,0.509,0.1097,0.728,0.202,1.988,0.41
+Site2,Counts vs Dry mass,12,0.365,2.015,0.0373,0.7,0.0165,0.735,0.908,1.688,0.219
+Site2,Biomass vs Live mass,12,0.445,0.862,0.0179,0.636,0.0353,0.403,0.877,1.429,0.096
+Site3,Counts vs Dry mass,8,0.029,0.398,0.6871,-0.429,0.3374,0.571,0.251,1.962,0.353
+Site3,Biomass vs Live mass,8,0.058,0.335,0.5655,0.071,0.879,0.974,0.559,1.8,0.264

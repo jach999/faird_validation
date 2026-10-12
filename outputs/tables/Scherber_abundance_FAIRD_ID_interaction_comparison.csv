@@ -1,0 +1,3 @@
+Run,Days,BX_p_TypeII,BX_verdict,glmmTMB_p_TypeIII,glmmTMB_verdict
+conservative,22,0.8282583633057715,parallel,0.0002 (B1),NOT parallel
+operational,22,0.6473580502213182,parallel,0.0000 (B0),NOT parallel

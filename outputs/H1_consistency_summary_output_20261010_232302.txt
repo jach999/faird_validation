@@ -1,0 +1,290 @@
+====================================================================== 
+Script: H1_consistency_summary.R 
+Date: 2026-10-10 23:23:02 
+R version: R version 4.5.1 (2025-06-13 ucrt) 
+====================================================================== 
+
+
+=== H1 CONSOLIDATED SUMMARY (COMPLETE v3.0) ===
+Loading cleaned data...
+
+═══════════════════════════════════════════════════════════════════════════
+CLEANED DATA STRUCTURE:
+═══════════════════════════════════════════════════════════════════════════
+=== FAIRD devices ===
+[1] "FAIRD2" "FAIRD3" "FAIRD4" "FAIRD1"
+
+=== ID devices ===
+[1] "ID2" "ID4" "ID1"
+
+=== AMMOD devices ===
+[1] "AMMOD1" "AMMOD2" "AMMOD3" "AMMOD4"
+
+=== Sample FAIRD data ===
+# A tibble: 10 × 12
+   Date       Device Device_type Site  Ambient abundance biomass_mg n_orders n_families
+   <date>     <chr>  <chr>       <chr> <chr>       <int>      <dbl>    <int>      <int>
+ 1 2023-08-23 FAIRD2 FAIRD       Site2 Maize           7       55.4        1          2
+ 2 2023-08-23 FAIRD3 FAIRD       Site3 Meadow         23      221.         3          6
+ 3 2023-08-23 FAIRD4 FAIRD       Site4 Meadow         25      258.         4          9
+ 4 2023-08-23 FAIRD1 FAIRD       Site1 Maize           8       63.9        1          3
+ 5 2023-08-24 FAIRD2 FAIRD       Site2 Maize           6       52.0        2          3
+ 6 2023-08-24 FAIRD3 FAIRD       Site3 Meadow         18      155.         3          6
+ 7 2023-08-24 FAIRD4 FAIRD       Site4 Meadow         17      133.         3          7
+ 8 2023-08-24 FAIRD1 FAIRD       Site1 Maize           6      115.         2          4
+ 9 2023-08-25 FAIRD2 FAIRD       Site2 Maize          10      244.         2          3
+10 2023-08-25 FAIRD3 FAIRD       Site3 Meadow         24      402.         3          9
+# ℹ 3 more variables: n_genera <int>, mean_body_length <dbl>, mean_body_width <dbl>
+
+=== Structure of etraps_daily ===
+tibble [154 × 12] (S3: tbl_df/tbl/data.frame)
+ $ Date            : Date[1:154], format: "2023-08-23" "2023-08-23" "2023-08-23" ...
+ $ Device          : chr [1:154] "ID2" "ID4" "FAIRD2" "FAIRD3" ...
+ $ Device_type     : chr [1:154] "ID" "ID" "FAIRD" "FAIRD" ...
+ $ Site            : chr [1:154] "Site2" "Site4" "Site2" "Site3" ...
+ $ Ambient         : chr [1:154] "Maize" "Meadow" "Maize" "Meadow" ...
+ $ abundance       : int [1:154] 29 32 7 23 25 12 8 19 141 6 ...
+ $ biomass_mg      : num [1:154] 331.2 376.7 55.4 221.3 257.8 ...
+ $ n_orders        : int [1:154] 2 2 1 3 4 3 1 2 3 2 ...
+ $ n_families      : int [1:154] 3 3 2 6 9 3 3 3 3 3 ...
+ $ n_genera        : int [1:154] 3 2 2 5 10 2 3 1 2 3 ...
+ $ mean_body_length: num [1:154] 6.14 6.4 4.43 5.3 5.09 ...
+ $ mean_body_width : num [1:154] 1.89 1.95 1.61 1.93 1.83 ...
+NULL
+Data loaded successfully.
+
+Calculating consistency metrics (with complete diagnostics)...
+Metrics calculated successfully.
+
+Exporting consolidated results...
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             ✅ Table exported: outputs/Table1_H1_Consolidated_Results_COMPLETE.csv
+
+═══════════════════════════════════════════════════════════════════════════
+H1: TEMPORAL CONSISTENCY RESULTS (COMPLETE v3.0)
+═══════════════════════════════════════════════════════════════════════════
+Correlation analysis (Pearson and Spearman) on log10(x+1) transformed data.
+Includes: R², Adjusted R², Slope + 95% CI, Intercept + significance test,
+          Shapiro-Wilk, Breusch-Pagan, and Pseudo-R² (robust regression)
+
+# A tibble: 4 × 10
+  Comparison Metric     n R2_log Adj_R2_log Pearson_r Pearson_p Spearman_rho Spearman_p Verdict
+  <chr>      <chr>  <int>  <dbl>      <dbl>     <dbl>     <dbl>        <dbl>      <dbl> <chr>  
+1 FAIRD1 vs… Abund…    22 0.674      0.658      0.821   2.85e-6        0.808 0.00000544 Strong 
+2 FAIRD3 vs… Abund…    22 0.733      0.719      0.856   3.76e-7        0.837 0.00000118 Strong 
+3 ID1 vs ID2 Abund…    22 0.0272    -0.0214     0.165   4.63e-1        0.284 0.200      Poor (…
+4 AMMOD1 vs… Bioma…    12 0.741      0.716      0.861   3.21e-4        0.874 0.000201   Strong 
+
+═══════════════════════════════════════════════════════════════════════════
+KEY FINDINGS:
+═══════════════════════════════════════════════════════════════════════════
+• FAIRD average R² = 0.703 (strong consistency)
+• FAIRD average Adjusted R² = 0.689 (conservative estimate)
+• ID R² = 0.027 (poor consistency)
+• FAIRD is 25.9× more consistent than ID
+• AMMOD R² = 0.741 (strong consistency, ground truth)
+
+• All FAIRD and AMMOD comparisons: p < 0.001 (highly significant)
+• ID comparison: p >= 0.05 (not significant)
+
+═══════════════════════════════════════════════════════════════════════════
+
+SPEARMAN CORRELATIONS (non-parametric validation):
+───────────────────────────────────────────────────────────────────────────
+FAIRD1 vs FAIRD2  : ρ = 0.808, p < 0.001
+FAIRD3 vs FAIRD4  : ρ = 0.837, p < 0.001
+ID1 vs ID2        : ρ = 0.284, p = 0.1999
+AMMOD1 vs AMMOD2  : ρ = 0.874, p < 0.001
+═══════════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════════
+REGRESSION COEFFICIENTS (log-log scale: log10(y+1) ~ log10(x+1))
+═══════════════════════════════════════════════════════════════════════════
+
+FAIRD1 vs FAIRD2   (n = 22):
+───────────────────────────────────────────────────────────────────────────
+  Slope       = 0.84 (95% CI: 0.56 to 1.11)
+                SE = 0.130, p < 0.001
+                CI includes 1.0 → Proportional 1:1 relationship ✓
+
+  Intercept   = -0.05 (95% CI: -0.31 to 0.21)
+                SE = 0.124, p = 0.7121
+                Not significantly different from 0 ✓
+
+  R²          = 0.674
+  Adj. R²     = 0.658
+
+FAIRD3 vs FAIRD4   (n = 22):
+───────────────────────────────────────────────────────────────────────────
+  Slope       = 1.15 (95% CI: 0.83 to 1.48)
+                SE = 0.156, p < 0.001
+                CI includes 1.0 → Proportional 1:1 relationship ✓
+
+  Intercept   = -0.09 (95% CI: -0.44 to 0.26)
+                SE = 0.167, p = 0.5995
+                Not significantly different from 0 ✓
+
+  R²          = 0.733
+  Adj. R²     = 0.719
+
+ID1 vs ID2         (n = 22):
+───────────────────────────────────────────────────────────────────────────
+  Slope       = 0.19 (95% CI: -0.34 to 0.73)
+                SE = 0.257, p = 0.4633
+                Slope < 1.0 → Device 2 captures relatively less
+
+  Intercept   = 1.20 (95% CI: 0.54 to 1.86)
+                SE = 0.316, p = 0.0011
+                Significantly > 0 → Systematic positive offset ⚠
+
+  R²          = 0.027
+  Adj. R²     = -0.021
+
+AMMOD1 vs AMMOD2   (n = 12):
+───────────────────────────────────────────────────────────────────────────
+  Slope       = 1.13 (95% CI: 0.66 to 1.61)
+                SE = 0.212, p < 0.001
+                CI includes 1.0 → Proportional 1:1 relationship ✓
+
+  Intercept   = -0.48 (95% CI: -2.01 to 1.04)
+                SE = 0.683, p = 0.4953
+                Not significantly different from 0 ✓
+
+  R²          = 0.741
+  Adj. R²     = 0.716
+
+═══════════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════════
+REGRESSION DIAGNOSTICS (log-transformed models)
+═══════════════════════════════════════════════════════════════════════════
+Tests for parametric assumptions:
+  • Shapiro-Wilk: normality of residuals (H₀: residuals are normal)
+  • Breusch-Pagan: homoscedasticity (H₀: constant variance)
+  • Criterion: p > 0.05 indicates assumptions are met ✓
+
+FAIRD1 vs FAIRD2  :
+  • Shapiro-Wilk (normality): p = 0.2162 ✓
+  • Breusch-Pagan (homoscedasticity): p = 0.3921 ✓
+
+FAIRD3 vs FAIRD4  :
+  • Shapiro-Wilk (normality): p = 0.4114 ✓
+  • Breusch-Pagan (homoscedasticity): p = 0.1744 ✓
+
+ID1 vs ID2        :
+  • Shapiro-Wilk (normality): p = 0.0829 ✓
+  • Breusch-Pagan (homoscedasticity): p = 0.5388 ✓
+
+AMMOD1 vs AMMOD2  :
+  • Shapiro-Wilk (normality): p = 0.7023 ✓
+  • Breusch-Pagan (homoscedasticity): p = 0.2249 ✓
+
+✅ SUMMARY: All comparisons pass diagnostic tests (p > 0.05).
+   Log-transformation successfully normalizes residuals and stabilizes variance.
+═══════════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════════
+ROBUST REGRESSION VALIDATION (Pseudo-R²)
+═══════════════════════════════════════════════════════════════════════════
+Purpose: Verify that correlations are not driven by outliers
+Method: MASS::rlm() robust regression on original scale
+Interpretation:
+  • Pseudo-R² >> R² → Relationship is genuine, not outlier-dependent
+  • Pseudo-R² ≈ R² → Consistent relationship across data range
+  • Pseudo-R² << R² → Some outlier influence (still acceptable if moderate)
+
+FAIRD1 vs FAIRD2  : Pseudo-R² = 0.933 (validates R² = 0.674)
+  → High pseudo-R²: relationship is genuine, not outlier-dependent ✓
+
+FAIRD3 vs FAIRD4  : Pseudo-R² = 0.803 (validates R² = 0.733)
+  → High pseudo-R²: relationship is genuine, not outlier-dependent ✓
+
+ID1 vs ID2        : Pseudo-R² = 0.013 (validates R² = 0.027)
+  → Low pseudo-R²: weak relationship confirmed
+
+AMMOD1 vs AMMOD2  : Pseudo-R² = 0.588 (validates R² = 0.741)
+  → Moderate pseudo-R²: some outlier influence, but relationship remains
+  → Note: Some influence from high-biomass days (expected in biomass data)
+
+═══════════════════════════════════════════════════════════════════════════
+
+========================================
+SECTION 11: PUBLICATION-READY H1 TABLE
+========================================
+
+FAIRD1 vs FAIRD2: concordance=57.1% | tau=0.445 (p=0.0065)
+FAIRD3 vs FAIRD4: concordance=71.4% | tau=0.601 (p=0.0002)
+ID1 vs ID2 (conservative n=22): concordance=61.9% | tau=0.202 (p=0.2037)
+ID1 vs ID2 (operational  n=17): concordance=68.8% | tau=0.438 (p=0.0204)
+AMMOD1 vs AMMOD2: concordance=63.6% | tau=0.345 (p=0.1391)
+
+ID operational regression: R2=0.434 | slope=0.489 [0.181, 0.796] | p=0.0040
+
+=== H1 PUBLICATION TABLE ===
+
+# A tibble: 5 × 8
+  Pair           Habitat     n `R² (log)` `Slope [95% CI]` Concordance `Spearman ρ` `Kendall τ`
+  <chr>          <chr>   <int> <chr>      <chr>            <chr>       <chr>        <chr>      
+1 FAIRD1 vs FAI… Maize      22 0.674 ***  0.84 [0.56, 1.1… 57.1%       0.808 ***    0.445 **   
+2 FAIRD3 vs FAI… Meadow     22 0.733 ***  1.15 [0.83, 1.4… 71.4%       0.837 ***    0.601 ***  
+3 ID1 vs ID2 (c… Maize      22 0.027 ns   0.19 [-0.34, 0.… 61.9%       0.284 ns     0.202 ns   
+4 ID1 vs ID2 (o… Maize      17 0.434 **   0.49 [0.18, 0.8… 68.8%       0.625 **     0.438 *    
+5 AMMOD1 vs AMM… Maize      12 0.741 ***  1.13 [0.66, 1.6… 63.6%       0.874 ***    0.345 ns   
+
+Significance: *** p<0.001 | ** p<0.01 | * p<0.05 | ns p>=0.05
+† cons. = conservative (n=22, includes battery failure days)
+  oper. = operational  (n=17, excludes Aug 28-Sep 1)
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] outputs/H1_Publication_Table.csv
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] outputs/H1_Publication_Table_numeric.csv
+
+
+═══════════════════════════════════════════════════════════════════════════
+SECTION 12: CROSS-HABITAT TABLE (TABLE 7)
+═══════════════════════════════════════════════════════════════════════════
+
+FAIRD Maize vs Meadow           n=22  R²=0.719 (p<0.001)  slope=0.60 [0.42,0.77]
+  Concordance=81.0%  Kendall τ=0.652 (p<0.001)  Pseudo-R²=0.717
+
+AMMOD cross-habitat: 8 overlapping days with biomass
+
+AMMOD Maize vs Meadow           n=8  R²=0.399 (p=0.0930)  slope=0.42 [-0.09,0.93]
+  Concordance=42.9%  Kendall τ=0.429 (p=0.1376)  Pseudo-R²=0.396
+
+=== TABLE 7: CROSS-HABITAT CONSISTENCY ===
+
+# A tibble: 2 × 10
+  Pair    Habitat Metric     n `R² (log)` `Slope [95% CI]` Concordance `Spearman ρ` `Kendall τ`
+  <chr>   <chr>   <chr>  <int> <chr>      <chr>            <chr>       <chr>        <chr>      
+1 FAIRD … Maize … Abund…    22 0.719 ***  0.60 [0.42, 0.7… 81.0%       0.795 ***    0.652 ***  
+2 AMMOD … Maize … Bioma…     8 0.399 ns   0.42 [-0.09, 0.… 42.9%       0.595 ns     0.429 ns   
+# ℹ 1 more variable: `Pseudo-R²` <chr>
+
+Significance: *** p<0.001 | ** p<0.01 | * p<0.05 | ns p>=0.05
+FAIRD: mean(FAIRD1+FAIRD2) vs mean(FAIRD3+FAIRD4); Metric = daily abundance
+AMMOD: mean(AMMOD1+AMMOD2) vs AMMOD3;              Metric = daily live biomass (mg)
+
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] outputs/H1_CrossHabitat_Table_display.csv
+[OK] outputs/H1_CrossHabitat_Table_numeric.csv
+
+
+═══════════════════════════════════════════════════════════════════════════
+ANALYSIS COMPLETE (v3.0)
+═══════════════════════════════════════════════════════════════════════════
+
+Files generated:
+  [OK] outputs/Table1_H1_Consolidated_Results_COMPLETE.csv
+  [OK] outputs/H1_Publication_Table.csv
+  [OK] outputs/H1_Publication_Table_numeric.csv
+  [OK] outputs/H1_CrossHabitat_Table_display.csv
+  [OK] outputs/H1_CrossHabitat_Table_numeric.csv
+
+Consolidated H1 analysis complete with FULL diagnostics:
+  [OK] Regression coefficients (Slope + CI, Intercept + CI)
+  [OK] Adjusted R² values
+  [OK] Shapiro-Wilk tests (normality)
+  [OK] Breusch-Pagan tests (homoscedasticity)
+  [OK] Pseudo-R² (robust regression validation, log scale)
+  [OK] Directional concordance + Kendall tau (all 5 pairs)
+  [OK] Publication-ready summary table (Section 11)
+  [OK] Cross-habitat supplementary table (Section 12 / Table 7)
+
