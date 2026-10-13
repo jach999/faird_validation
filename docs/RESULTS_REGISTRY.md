@@ -1,5 +1,5 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
- 
+
 **Version:** 0.7.1 (October 13, 2026). Diagnostic mixed models A and B (Section 2.5)
 verified against the SAS results file in the repository; their row removed from Section
 6; path of PC V16 updated (`docs/old/`). Otherwise as v0.7.
@@ -26,9 +26,9 @@ unchanged from v0.3.
 Methods live in EXPERIMENT_CONTEXT_STATIC (V1.5); the chronology of decisions lives in
 the session logs. This file answers one question: what is the result of analysis X, and
 is it still valid.
- 
+
 ## Conventions
- 
+
 - **ID scheme:** `R-<branch>-<pair or system>-<nn>`. Branches: `TB` temporal biomass
   model, `TA` temporal abundance model, `CC` system-level concordance, `TX` taxonomic,
   `DX` diagnostic or data fact, `OBS` observation (Section 4), `DC` Scherber's
@@ -101,12 +101,13 @@ is it still valid.
   of the repository (since 2026-10-10 in ADP, since 2026-10-12 in the repository);
   `BodySize_Distribution.R` and `TaxConsistency_IntraCrossHabitat.R` are not available.
 - p-values are LRT unless stated; "Holm" = Holm-adjusted over the primary family.
+
 ---
- 
+
 ## 1. INTERNAL CONSISTENCY (within each system)
- 
+
 ### 1.1 Quantitative (biomass, abundance)
- 
+
 | ID | Status | Note |
 | --- | --- | --- |
 | R-V5-H1Q-FAIRD-01 | LEGACY V5 | FAIRD replicate pairs within habitat, daily abundance (entry below) |
@@ -120,7 +121,7 @@ is it still valid.
 | R-OUT-H1Q-01 | OUTPUT ONLY | Spearman rho on daily log changes, all H1 pairs (entry below) |
 | R-OUT-H1Q-02 | OUTPUT ONLY | OLS residual diagnostics of the H1 pairs (entry below) |
 | R-CC-INT-* | DONE, see R-TB-INT-01 and R-CC-INT-01 below | System-level concordance among devices of the same system |
- 
+
 Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
 - Method: pairwise OLS on log-transformed daily values; Pearson R² (primary), Spearman
   rho, temporal concordance (% of consecutive day-pairs moving in the same direction),
@@ -137,6 +138,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   2026-07-22). Spearman rho is on absolute log values and Kendall tau on raw daily
   changes (output, l.331). The script has no ID section, so ID entries cannot be
   verified against it.
+
 **R-V5-H1Q-FAIRD-01, FAIRD replicate pairs within habitat** | LEGACY V5
 - Level: Intra-Habitat (device pair within one habitat). Window: full 22-day series.
 - Source: V5, Results 3.2.1.1 (Intra-Habitat Level) and Table 8.
@@ -147,6 +149,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
 - PC V16: same values (H1 summary table).
 - Output: same values (l.177 to 195).
 - Reading: strong replicate agreement in both habitats.
+
 **R-V5-H1Q-FAIRD-02, FAIRD Maize vs Meadow** | LEGACY V5
 - Level: habitat (Inter-Habitat; daily habitat series = mean of the two replicates).
   Window: full 22-day series, n = 22.
@@ -162,6 +165,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
 - Note: Table 9 and the text of 3.2.1.2 report zero low-weight days only for the
   within-habitat pairs; the between-habitat count is a separate figure.
 - Reading: the two habitats share the daily FAIRD abundance signal.
+
 **R-V5-H1Q-AMMOD-01, AMMOD1 vs AMMOD2** | LEGACY V5, DISCREPANCY V5/V16
 - Level: Intra-Habitat (Maize). Window: 12 days (first AMMOD batch), n = 12.
 - Source: V5, Results 3.2.1.1 and Table 8.
@@ -173,6 +177,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   are correct roundings; V5 kept.
 - Output: all other values identical (l.217 to 225).
 - Reading: reference level of replicate agreement for the H1 comparison.
+
 **R-V5-H1Q-AMMOD-02, AMMOD Maize devices vs AMMOD3** | LEGACY V5
 - Level: Inter-Habitat, device against device (no averaging possible on the Meadow
   side). Window: 8 days (AMMOD3 limited by ATL processing), n = 8.
@@ -188,6 +193,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   (threshold weight < 0.5). Cause: hypothesis, as in R-V5-H1Q-FAIRD-02. Note that
   PC V16 reports the same 2/8 and 1/8 as V5.
 - Reading: no detectable between-habitat agreement for AMMOD at n = 8; not interpretable.
+
 **R-V5-H1Q-ID-01, ID1 vs ID2** | LEGACY V5, DISCREPANCY V5/V16, V5 NOT REPRODUCED
 - Level: Intra-Habitat (Maize; ID3 lost, so no Meadow pair).
 - Source: V5, Results 3.2.1.1 (text) and Table 8; scenarios defined in V5, Methods,
@@ -217,6 +223,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   reclassified as partial, unknown-effort days (R-DX-ID-WIN-01). The conservative
   scenario therefore mixes failure and genuine low activity.
 - Reading: ID replicates agree only when the battery window is removed.
+
 **R-V5-H1Q-ROB-01, robust regression check, log scale** | LEGACY V5
 - Method: Huber M-estimation (`MASS::rlm`); pseudo-R² = 1 - SS_res,robust / SS_tot,OLS,
   compared with OLS R². Same pairs, metrics and windows as the entries above.
@@ -242,6 +249,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   (original scale, l.201). No code found that yields a log-scale conservative ID
   pseudo-R². V5 NOT REPRODUCED (add to V6 corrections).
 - Reading: OLS R² not driven by influential days, except ID conservative.
+
 **R-V16-H1Q-ROB-01, robust regression check, original scale** | LEGACY PC V16
 - Not in V5. Source: PC V16, H1, "Robust Regression Validation".
 - Metric: same pairs as above, untransformed daily values.
@@ -250,6 +258,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
 - Reading: on the raw scale low-weight days appear for ID and AMMOD; the log scale
   removes them. Not to be confused with R-V5-H1Q-ROB-01 (ID conservative -0.013 there is
   log scale).
+
 **R-TB-INT-01, parallelism within each system (constant ratio)** | CURRENT
 - Source: `Scherber_temporal_biomass_5.R`, Section 2g. Same GLMM, cascade, PAIRED_BLOCK
   pairing and LRT as Section 2e; units of one system replace Device_type. Maize-only
@@ -262,6 +271,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   ID2) are NOT FOR MAIN TEXT (C2). The FAIRD halves combine devices across both blocks.
 - Reading: no internal comparison rejects parallelism; the non-proportionality between
   systems (R-TB-AF-01, R-TB-FI-22F, R-TB-FI-22X) does not appear within any system.
+
 **R-CC-INT-01, concordance within each system** | CURRENT
 - Source: `Scherber_temporal_concordance_biomass.R`. LOW = r between fitted unit curves
   (raw scale, coefficient-simulation interval, lower limit pessimistic); HIGH = r between
@@ -277,6 +287,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
 - Reading: FAIRD consistent in all components; AMMOD reasonably consistent (Maize,
   12 days); ID poorly consistent day to day, mainly on partial-operation days
   (consistent with R-V5-H1Q-ID-01).
+
 **R-V16-H1Q-DIAG-01, transformation diagnostic, FAIRD1 vs FAIRD2** | LEGACY PC V16
 - Not reported with values in V5. Source: PC V16, "Statistical Methodology", point 1
   (Logarithmic transformation); reproduced by `H1_quanti_consistency_output.txt`,
@@ -288,6 +299,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   scale (not printed in the output).
 - Reading: the raw scale fails homoscedasticity; basis of the log10(x+1) decision for
   all Stage 2 regressions.
+
 **R-OUT-H1Q-01, Spearman rho on daily log changes** | OUTPUT ONLY
 - Source: `H1_quanti_consistency_output.txt`, l.182, 192, 222, 269, 293, 304.
 - Metric: Spearman rho between day-to-day changes of the log10(x+1) series (V5 reports
@@ -298,6 +310,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
 - Caution: the "Intra-Habitat Summary" lines of the output (l.204 to 205, 230, 277)
   print this daily-change rho under the label "Spearman rho", while the manuscript
   tables use rho on absolute values. Quote with the metric stated.
+
 **R-OUT-H1Q-02, OLS residual diagnostics of the H1 pairs** | OUTPUT ONLY
 - Source: `H1_quanti_consistency_output.txt`, robust regression table (l.240 to 250).
 - Metric: log10(x+1) OLS models of R-V5-H1Q-FAIRD-01 and -AMMOD-01.
@@ -306,8 +319,9 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   2.03, 0.442.
 - Reading: no assumption violation detected; FAIRD3-FAIRD4 residual autocorrelation
   borderline.
+
 ### 1.2 Taxonomic
- 
+
 | ID | Status | Note |
 | --- | --- | --- |
 | R-V5-H1T-01 | LEGACY V5 | Intra-habitat similarity, 3-day windows, Superfamily (entry below) |
@@ -318,7 +332,7 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
 | R-OUT-H1T-02 | OUTPUT ONLY | Temporal trend of FAIRD windowed M-H (entry below) |
 | R-OUT-H1T-03 | OUTPUT ONLY | AMMOD daily inter-habitat I-P at Superfamily level (entry below) |
 | R-OUT-H1T-04 | OUTPUT ONLY | Intra vs inter-habitat and habitat tests, Wilcoxon (entry below) |
- 
+
 Common to the R-V5-H1T entries (Stage 2 framework, `H1_quali_consistency.R`):
 - Indices: Morisita-Horn (M-H) for FAIRD, on abundance counts; Izsak-Price (I-P) for
   AMMOD, on presence/absence with taxonomic distances (`vegan::taxa2dist`). Source: V5,
@@ -332,6 +346,7 @@ Common to the R-V5-H1T entries (Stage 2 framework, `H1_quali_consistency.R`):
   consistency was not evaluated (PC V16, "H1: TEMPORAL CONSISTENCY", methodology note).
 - Verification: `H1_quali_consistency_output.txt` (run of 2026-07-22). All values in
   this section are reproduced by the output.
+
 **R-V5-H1T-01, intra-habitat similarity, 3-day windows** | LEGACY V5
 - Level: Intra-Habitat (replicate pair within one habitat). Metric: community
   composition, Superfamily. Window: full season in 3-day windows.
@@ -341,6 +356,7 @@ Common to the R-V5-H1T entries (Stage 2 framework, `H1_quali_consistency.R`):
   87.9% +/- 5.3 (n = 7), Meadow 87.8% +/- 4.2 (n = 5).
 - Output: same values (FAIRD l.229 to 230 and l.251 to 254; AMMOD windowed summary).
 - Reading: high replicate similarity for both systems; no habitat difference for FAIRD.
+
 **R-V5-H1T-02, inter-habitat similarity, 3-day windows** | LEGACY V5
 - Level: habitat (Maize pool vs Meadow pool). Metric and window as R-V5-H1T-01.
 - Source: V5, Results 3.2.2.2, last paragraph (values in text only, no table).
@@ -350,6 +366,7 @@ Common to the R-V5-H1T entries (Stage 2 framework, `H1_quali_consistency.R`):
 - Note: this is the value cited in the draft email to Scherber (v0.3 note).
 - Reading: between-habitat similarity of the same order as within-habitat similarity,
   for both systems.
+
 **R-V5-H1T-03, AMMOD daily intra-habitat baseline** | LEGACY V5
 - Level: Intra-Habitat (AMMOD1 vs AMMOD2 Maize; AMMOD3 vs AMMOD4 Meadow). Metric: I-P,
   presence/absence. Window: daily; Maize n = 21 days, Meadow n = 13 (AMMOD4 limited by
@@ -360,6 +377,7 @@ Common to the R-V5-H1T entries (Stage 2 framework, `H1_quali_consistency.R`):
 - Output: same values (daily summary block).
 - Reading: baseline of natural spatial turnover for the reference system; similarity
   rises with coarser taxonomic level.
+
 **R-V5-H1T-04, AMMOD daily inter-habitat similarity** | LEGACY V5
 - Level: habitat (daily detections pooled: AMMOD1+2 vs AMMOD3+4). Metric: I-P. Window:
   daily, n = 21 days.
@@ -369,9 +387,10 @@ Common to the R-V5-H1T entries (Stage 2 framework, `H1_quali_consistency.R`):
   run is recorded in R-OUT-H1T-03.
 - Reading: inter-habitat similarity close to the intra-Maize baseline (74.1% and 76.5%
   in R-V5-H1T-03).
+
 Common to the R-OUT-H1T entries: source `H1_quali_consistency_output.txt`; indices,
 windows and filters as in the R-V5-H1T common note.
- 
+
 **R-OUT-H1T-01, FAIRD M-H at Order and Genus levels** | OUTPUT ONLY
 - Source: output, Sections 1.5 and windowed summary (l.210 to 232).
 - Result, 3-day windows filtered (mean +/- SD, n windows; Maize / Meadow): Order 91.1
@@ -382,6 +401,7 @@ windows and filters as in the R-V5-H1T common note.
   n = 22; Genus 71.5 +/- 37.6, n = 11 / 51.0 +/- 35.5, n = 18.
 - Reading: FAIRD replicate similarity falls with finer taxonomic level and is very
   variable at daily resolution, especially in Meadow.
+
 **R-OUT-H1T-02, temporal trend of FAIRD windowed M-H, Superfamily** | OUTPUT ONLY
 - Source: output, Section 1.6 (l.242 to 247). Linear regression of M-H on window index.
 - Result: pooled slope -6.19 pp per window, R² = 0.653, p = 0.0015, n = 12; FAIRD1-FAIRD2
@@ -389,9 +409,11 @@ windows and filters as in the R-V5-H1T common note.
   n = 7.
 - Reading: replicate similarity declines over the season (consistent with falling
   FAIRD capture counts, V5 Methods, H1 Qualitative Consistency).
+
 **R-OUT-H1T-03, AMMOD daily inter-habitat I-P, Superfamily** | OUTPUT ONLY
 - Source: output, Section 4.1, Inter-Habitat Daily Summary. Pooled AMMOD1+2 vs AMMOD3+4.
 - Result: 83.6% +/- 5.2, n = 21 days (Species and Genus in R-V5-H1T-04).
+
 **R-OUT-H1T-04, intra vs inter-habitat and habitat tests (Wilcoxon)** | OUTPUT ONLY
 - Source: output, Section 5 (l.389 to 410). 3-day windows, Superfamily.
 - Result: FAIRD intra (n = 12, mean 85.2%) vs inter (n = 7, 86.1%): W = 45, p = 0.833,
@@ -402,36 +424,40 @@ windows and filters as in the R-V5-H1T common note.
   Wilcoxon version is not in V5. Same conclusion.
 - Reading: no intra vs inter-habitat difference for either system; supports the
   side-by-side reading of R-V5-H1T-01 and -02.
+
 ---
- 
+
 ## 2. AGREEMENT BETWEEN SYSTEMS
- 
+
 ### 2.1 Temporal biomass trajectories, pair models (parallelism, log link)
- 
+
 Common to all entries: `Scherber_temporal_biomass_3.R`, Section 2e, run of 2026-10-02.
 Model bs(Date.num, 3) * Device_type + Block fixed, (1|Site/Device), AR1, Tweedie, log
 link; interaction 3 df. Parallel on the log link = constant ratio between systems. Full
 table with all variants: `outputs/tables/Scherber_biomass_pairs.csv`. The same results
 are reproduced by `Scherber_temporal_biomass_5.R` (Section 2e unchanged).
- 
+
 ---
- 
+
 **R-TB-ALL-01, omnibus three systems** | CURRENT
 - Question: are the three biomass trajectories parallel?
 - Data: 12-day AMMOD window (Aug 23 to Sep 3), FULL, ID full series.
 - Result: Date x Device_type p = 0.0063 (Wald, 6 df).
 - Reading: not all three trajectories are parallel.
+
 **R-TB-AF-01, AMMOD vs FAIRD, primary** | CURRENT
 - Data: A_12d, PAIRED_BLOCK.
 - Result: LRT p = 0.013, Holm 0.039.
 - Sensitivities: every variant p < 0.05 (range 0.005 to 0.049); post hoc removal of the
   first 3 days p = 0.049.
 - Reading: not parallel; robust to the pairing criterion; the only pair surviving Holm.
+
 **R-TB-AF-00, AMMOD vs FAIRD, co-located site-days** | SUPERSEDED by R-TB-AF-01 as
 primary (kept as sensitivity)
 - Data: 12 days, PAIRED by site (now PAIRED_SITE).
 - Result: Wald p = 0.015, LRT p = 0.028 (LRT at level `simple`). Reproduced exactly on
   2026-10-02.
+
 **R-TB-AI-01, AMMOD vs ID, primary** | CURRENT
 - Data: A_12d, PAIRED_BLOCK, 64 obs (Maize: AMMOD1-2 vs ID1-2, 12 days; Meadow: AMMOD3 vs
   ID4, 8 days).
@@ -439,14 +465,17 @@ primary (kept as sensitivity)
 - Sensitivities: range 0.011 to 0.049 (PAIRED_SITE is Maize only, Block not estimable).
 - Reading: not significant after correction; Wald anti-conservative at this n; not
   evidence of parallelism.
+
 **R-TB-FI-01, FAIRD vs ID, 12 days, primary** | CURRENT
 - Data: A_12d, PAIRED_BLOCK (identical to FULL), ID full series.
 - Result: LRT p = 0.043, Holm 0.085; PAIRED_SITE p = 0.091.
 - Reading: not significant after correction; fragile to the pairing criterion.
+
 **R-TB-FI-22F, FAIRD vs ID, 22 days, full series** | CURRENT (complementary)
 - Data: B_22d, PAIRED_BLOCK, all days.
 - Result: LRT p = 0.0008.
 - Reading: not parallel over the season.
+
 **R-TB-FI-22X, FAIRD vs ID, 22 days, window excluded** | CURRENT (complementary)
 - Data: B_22d, PAIRED_BLOCK, Aug 28 to Sep 1 removed for both systems (17 days); AR1
   valid.
@@ -457,6 +486,7 @@ primary (kept as sensitivity)
   rejected; shared temporal shape is not tested here (see 2.2).
   [SUPERSEDED in part (v0.3): the difference is not constant either, see
   R-TB-ALL-ID-01; shared shape tested in R-CC-FI-22-01.]
+
 **R-TB-ALL-ID-01, constant-difference test (identity link), all pairs** | CURRENT
 - Source: `Scherber_temporal_biomass_5.R`, Section 2f. Same runs and data as above; only
   the link changes. AMMOD divided by the dual-axis figure factor k. Cascade: Tweedie
@@ -470,8 +500,9 @@ primary (kept as sensitivity)
   A_12d isolates the link change cleanly. Identity-link figures not for the manuscript.
 - Reading: neither constant ratio nor constant difference describes the systems;
   non-rejection under the identity link is lack of precision, not parallelism.
+
 ### 2.2 Temporal concordance, system level (shared signal)
- 
+
 | ID | Status | Note |
 | --- | --- | --- |
 | R-CC-AF/AI/FI-* | DONE, see entries below | Two components per pair: shared low-frequency shape, shared day-to-day fluctuation. Scale to be declared per claim |
@@ -490,7 +521,7 @@ primary (kept as sensitivity)
 | R-OUT-H2Q-03 | OUTPUT ONLY | Overall CCF and Fisher z average (entry below) |
 | R-OUT-H2Q-04 | OUTPUT ONLY | FAIRD body-length classes by site (entry below) |
 | (moved) | see Section 2.5 | Diagnostic mixed models A and B (R-V5-H2Q-MM-01, -02) |
- 
+
 Common to the entries below: `Scherber_temporal_concordance_biomass.R`, spline df 3,
 PAIRED_BLOCK unless stated; definitions as in R-CC-INT-01; HIGH intervals by Fisher z
 (indicative). A bootstrap p-value for HIGH was implemented and removed (run never
@@ -507,19 +538,22 @@ above the upper limit persists (Section 6).
 Level of comparison for the manuscript (v0.6): the two-block rows are the primary,
 system-level results. Maize-only rows compare systems within one block (secondary).
 Disattenuation rests on Maize device-pair references (C2, R-OBS-05).
- 
+
 **R-CC-AF-01, AMMOD vs FAIRD, A_12d** | CURRENT
 - Result: LOW 0.25 [-0.39, 0.78]; HIGH 0.61 [0.05, 0.88]; TOTAL 0.38. Maize only: LOW
   0.05; HIGH 0.87 [0.59, 0.96]; TOTAL 0.66.
 - Reading: shape over 12 days not estimable; shared day-to-day fluctuation, part of it
   the common response to the cold spell. Primary manuscript value: HIGH two-block 0.61
   (R-OBS-05).
+
 **R-CC-AI-01, AMMOD vs ID, A_12d** | CURRENT
 - Result: LOW -0.20; HIGH 0.65; TOTAL 0.20. Maize only: LOW -0.72; HIGH 0.53; TOTAL 0.05.
 - Reading: daily agreement similar to AMMOD-FAIRD; shape not estimable.
+
 **R-CC-FI-01, FAIRD vs ID, A_12d** | CURRENT
 - Result: LOW -0.46; HIGH 0.12; TOTAL -0.07. Maize only: LOW -0.44; HIGH 0.33; TOTAL 0.13.
 - Reading: no shared signal over 12 days.
+
 **R-CC-FI-22-01, FAIRD vs ID, B_22d** | CURRENT, LOW NOT ROBUST (see R-CC-SENS-01)
 - Result: full LOW 0.92 [-0.45, 0.97], HIGH -0.02, TOTAL 0.15; window excluded LOW 0.93
   [0.51, 0.98], HIGH -0.34, TOTAL 0.11; excluded, Maize only LOW 0.94 [0.65, 0.97],
@@ -527,6 +561,7 @@ Disattenuation rests on Maize device-pair references (C2, R-OBS-05).
 - Reading: only the timing of the rise and peak is shared (clearest without the
   partial-operation days); curves diverge in the second half; no shared day-to-day
   fluctuation.
+
 **R-CC-DIS-01, disattenuated HIGH, Maize only (Spearman-Brown)** | CURRENT, NOT FOR MAIN
 TEXT (C2)
 - Result: AMMOD-FAIRD 1.01; AMMOD-ID 1.04 (unstable, ID reliability 0.33); FAIRD-ID 0.61 /
@@ -537,13 +572,15 @@ TEXT (C2)
   FAIRD2, ID1 vs ID2); diagnostic or appendix only (R-OBS-05).
 - Reading: AMMOD-FAIRD share the daily signal as far as reliability allows; FAIRD-ID
   disagreement not explained by ID noise alone.
+
 **R-CC-SENS-01, sensitivity spline df 4** | CURRENT
 - Result: LOW FAIRD-ID B_22d 0.92 to 0.09 (full), 0.93 to 0.40 (excl); AMMOD-FAIRD 0.25
   to 0.53; FAIRD-ID A_12d -0.46 to -0.02. HIGH AMMOD-FAIRD 0.61 to 0.53; AMMOD-ID 0.65 to
   0.59.
 - Reading: LOW depends on spline flexibility; HIGH is stable.
+
 **H2 quantitative agreement, FAIRD vs AMMOD (Stage 2 framework)**
- 
+
 Common to R-V5-H2Q-01 to -05 and the R-OUT-H2Q entries (`H2_quanti_validation.R`):
 - Pair: FAIRD vs the co-located AMMOD; Site 4 excluded (no AMMOD4 biomass). Window:
   Sites 1 and 2, 12 days (Aug 23 to Sep 3); Site 3, 8 days (Aug 23 to 30).
@@ -569,6 +606,7 @@ Common to R-V5-H2Q-01 to -05 and the R-OUT-H2Q entries (`H2_quanti_validation.R`
   `outputs/console/H2_quanti_registry_diagnostics_output.txt`.
 - Diagnostics: `H2_quanti_registry_diagnostics_output.txt` ("diag" below; Section 8 of
   the script, run of 2026-10-08), tests of the hypotheses recorded in v0.4.
+
 **R-V5-H2Q-01, FAIRD vs AMMOD, site level** | LEGACY V5, DISCREPANCY V5/V16
 - Level: Site (one FAIRD vs one AMMOD).
 - Source: V5, Results 3.3.1.1 and Table 13.
@@ -589,6 +627,7 @@ Common to R-V5-H2Q-01 to -05 and the R-OUT-H2Q entries (`H2_quanti_validation.R`
 - Output: all V5 values reproduced (l.167 to 186; Table 13 assembly l.307 to 309).
 - Reading: significant covariation of daily log biomass only at Site 2; Site 1
   inconclusive; Site 3 underpowered (n = 8).
+
 **R-V5-H2Q-02, FAIRD vs AMMOD, Maize pooled** | LEGACY V5, DISCREPANCY V5/V16, V5 NOT
 REPRODUCED
 - Level: Intra-Habitat (Sites 1 and 2 stacked, n = 24 site-days).
@@ -613,6 +652,7 @@ REPRODUCED
   the same model gives DW 1.38, p = 0.0409 (diag 8A row 2); the script sorts by Site
   then Date (script l.310). See R-OBS-02.
 - Reading: pooled Maize daily log biomass covaries positively; R² interval wide.
+
 **R-V5-H2Q-03, FAIRD vs AMMOD, Overall pooled** | LEGACY V5, DISCREPANCY V5/V16, V5 NOT
 REPRODUCED
 - Level: Overall (Sites 1 to 3 stacked, n = 32 site-days).
@@ -631,6 +671,7 @@ REPRODUCED
   limitation sentence rests on the 0.917 value (R-OBS-02).
 - Reading: positive covariation across the three sites; directional (tau) agreement
   diluted by Site 3.
+
 **R-V5-H2Q-04, FAIRD vs AMMOD cross-correlation** | LEGACY V5, DISCREPANCY V5/V16
 - Method: z-scored raw (untransformed) daily biomass, `stats::acf` on the paired series,
   CI +/- 1.96/sqrt(n) (script l.585 to 597, l.612 to 625). Lag 0 primary.
@@ -655,6 +696,7 @@ REPRODUCED
   0.792).
 - Reading: same-day synchrony at Site 2 and in the Maize summed series; lag +1 values
   compatible with autocorrelation, no lead-lag claim.
+
 **R-V5-H2Q-05, detection metric sensitivity** | LEGACY V5
 - Metric: same OLS, with FAIRD raw counts and AMMOD dry mass ("Alternative") against
   inferred biomass and live mass ("Standard"); DeltaR² = R²(alternative) minus
@@ -671,6 +713,7 @@ REPRODUCED
   subtracting (l.915), so 0.445 minus 0.365; the V5 value is correct.
 - Reading: the inferred-biomass metrics give higher R² than raw counts and dry mass at
   every site.
+
 **R-V5-H2Q-06, AMMOD body length and taxonomic DeltaS by site** | LEGACY V5
 - Metric: mean daily family body length (mm) of the AMMOD-detected taxon pool; pairwise
   Mann-Whitney, Bonferroni over 6 pairs. Table 15 also lists daily Izsak-Price DeltaS
@@ -686,6 +729,7 @@ REPRODUCED
 - Output: not verifiable. Section 6 of the output, also labelled "Table 15", is a
   different analysis (R-OUT-H2Q-04); the Stage 1 scripts are not in ADP.
 - Reading: no body-length difference between sites in the AMMOD taxon pool.
+
 **R-V16-H2Q-01, pooling-validity covariate models** | LEGACY PC V16
 - Source: PC V16, "Section 10" and "Section 11"; output l.198 to 204 and l.221 to 226.
 - Model: log_faird ~ log_ammod + Site, log10(x+1).
@@ -693,6 +737,7 @@ REPRODUCED
   log_ammod 1.072 (p = 0.0060) and 0.956 (p = 0.0036).
 - Output: same values.
 - Reading: no site offset detected at fixed AMMOD biomass; used to justify pooling.
+
 **R-V16-H2Q-02, OLS residual diagnostics and adjusted R²** | LEGACY PC V16
 - Source: PC V16, "Section 1-3" (sites), "Section 10" and "Section 11" (pooled); output
   l.172, 179, 186, 211, 233; Table 13 assembly l.307 to 311.
@@ -703,6 +748,7 @@ REPRODUCED
 - Output: same values.
 - Note: per-site DW had been listed as an OUTPUT ONLY candidate; it is in PC V16.
 - Reading: no assumption violation detected at site level.
+
 **R-V16-H2Q-03, taxonomic cross-habitat tests** | LEGACY PC V16
 - Source: PC V16, "Supplementary: Taxonomic Cross-Habitat Consistency"
   (`TaxConsistency_IntraCrossHabitat.R`), quoted in the Site 1 and Site 3 blocks of
@@ -717,6 +763,7 @@ REPRODUCED
 - Relation to V5: Table 15 shows the AMMOD DeltaS means without these tests.
 - Reading: higher compositional heterogeneity within Maize than within Meadow (AMMOD);
   no difference between the two Maize sites relative to Meadow.
+
 **R-V16-H2Q-AI-01, ID vs AMMOD, exploratory correlation** | SUPERSEDED by R-TB-AI-01 and
 R-CC-AI-01
 - Source: PC V16, "H2, Supplementary: ID vs AMMOD Validation (Exploratory)"
@@ -730,11 +777,13 @@ R-CC-AI-01
   (0.245; lag 0 0.228).
 - Replaced by: R-TB-AI-01 and R-CC-AI-01 (block pairing, AMMOD3 vs ID4 included,
   64 obs).
+
 **R-OUT-H2Q-01, Spearman rho on daily log changes** | OUTPUT ONLY
 - Source: output l.169, 176, 183, 208, 230.
 - Result: Site 1 0.509 (p = 0.110); Site 2 0.636 (p = 0.035); Site 3 0.071 (p = 0.879);
   Maize 0.504 (p < 0.05); Overall 0.370 (p < 0.05).
 - Caution: V5 reports rho on absolute log values; quote with the metric stated.
+
 **R-OUT-H2Q-02, robust regression check** | OUTPUT ONLY
 - Source: output l.171, 178, 185, 210, 232. Method: `MASS::rlm`, Huber psi, log10(x+1);
   pseudo-R² = 1 minus SS(residual) / SS(total); low-weight days = weight < 0.5 (script
@@ -742,6 +791,7 @@ R-CC-AI-01
 - Result: pseudo-R² Site 0.280 / 0.445 / 0.048; Maize 0.302; Overall 0.314; low-weight
   days 0 at every level.
 - Reading: OLS results not driven by influential days.
+
 **R-OUT-H2Q-03, Overall CCF and Fisher z average** | OUTPUT ONLY
 - Source: output l.254 to 257.
 - Method: daily mean of FAIRD and of AMMOD biomass across the sites with data that day
@@ -751,6 +801,7 @@ R-CC-AI-01
   average of Site 1 and Site 2 lag 0: 0.608 (descriptive).
 - Caution: V5 states the Overall CCF was not computed (Methods, H2 Quantitative; Table
   13 footnote).
+
 **R-OUT-H2Q-04, FAIRD body-length classes by site** | OUTPUT ONLY
 - Source: output Section 6, "Table 15", l.283 to 291 (labelled Table 15 but unrelated to
   V5 Table 15).
@@ -758,14 +809,15 @@ R-CC-AI-01
   51.7; Site 2 (186) 0 / 34.4 / 65.6; Site 3 (279) 0.7 / 25.8 / 73.5; Site 4 (398) 0.5 /
   39.4 / 60.1; Overall (1128) 0.4 / 37.3 / 62.3.
 - Reading: FAIRD records almost no individuals below 3 mm at any site.
+
 ### 2.3 Temporal abundance, FAIRD vs ID
- 
+
 | ID | Status | Note |
 | --- | --- | --- |
 | R-TA-FI-01 | CURRENT, PROVISIONAL | Parallelism of daily abundance trajectories, Gaussian lme vs Tweedie glmmTMB, conservative and operational runs (entry below) |
 | R-DX-FI-ABUND-01 | see Section 3 | Per-site check of the central ID abundance peak |
 | R-TA-FI-02 | PLANNED | Rerun with symmetric window exclusion and full `times` levels; then the concordance measures of 2.2 (LOW, HIGH, TOTAL) and internal consistency in abundance |
- 
+
 Common to the R-TA-FI entries:
 - Source: `Scherber_temporal_abundance_FAIRD_ID.R`, run of 2026-09-02; output
   `outputs/console/Scherber_temporal_abundance_FAIRD_ID_output.txt` (line numbers
@@ -788,6 +840,7 @@ Common to the R-TA-FI entries:
   of October 2026 that the window is excluded for both systems of a comparison
   (EXPERIMENT_CONTEXT V1.5, Section 8.5); the planned rerun (R-TA-FI-02) also completes
   the `times` levels. Not for the manuscript until the rerun.
+
 **R-TA-FI-01, parallelism of FAIRD and ID abundance trajectories** | CURRENT, PROVISIONAL
 - Result, conservative (n = 154): BX interaction chi² = 0.89, 3 df, p = 0.828 (Date
   p = 0.029, Device_type p = 0.003) (l.60 to 71). glmmTMB: B0, B1 and B_simple valid;
@@ -813,8 +866,9 @@ Common to the R-TA-FI entries:
   disagreement is not an AR1 artefact.
 - Open: reading of the disagreement as a difference of distributional framework is
   pending validation by Scherber (Section 6).
+
 ### 2.4 Taxonomic agreement
- 
+
 | ID | Status | Note |
 | --- | --- | --- |
 | R-V5-H2T-01 | LEGACY V5 | FAIRD vs AMMOD Izsak-Price, 3-day windows, Superfamily: site, intra-habitat, overall (entry below) |
@@ -828,7 +882,7 @@ Common to the R-TA-FI entries:
 | R-OUT-H2T-02 | OUTPUT ONLY | Identification success of the minor Orders (entry below) |
 | R-OUT-H2T-03 | OUTPUT ONLY | Sub-3 mm diagnostic by site (entry below) |
 | R-DC-TX-* | see Section 2.6 | Order composition, three systems, Scherber's multinomial model |
- 
+
 Common to the R-V5-H2T entries (Stage 2 framework, `H2_quali_validation.R`):
 - Index: Izsak-Price DeltaS at Superfamily level, taxonomic distances from
   `vegan::taxa2dist`; FAIRD counts reduced to presence/absence; bidirectional
@@ -840,6 +894,7 @@ Common to the R-V5-H2T entries (Stage 2 framework, `H2_quali_validation.R`):
 - PC V16 has no counterpart for the windowed Superfamily analysis: Stage 1 used daily
   genus-level Izsak-Price (H3), dropped in V5 (R-V16-H3T-01).
 - Verification: `H2_quali_validation_output.txt` (run of 2026-07-22).
+
 **R-V5-H2T-01, FAIRD vs AMMOD similarity, 3-day windows** | LEGACY V5
 - Level: Site (FAIRD vs co-located AMMOD), Intra-Habitat (site-windows pooled by
   habitat), Overall (all 24 site-windows). Metric: community composition,
@@ -857,6 +912,7 @@ Common to the R-V5-H2T entries (Stage 2 framework, `H2_quali_validation.R`):
   verified.
 - Reading: FAIRD-AMMOD compositional similarity higher in Meadow than in Maize; all
   sites between 61 and 72%.
+
 **R-V5-H2T-02, size-threshold sensitivity and sub-3 mm diagnostic** | LEGACY V5, V5 NOT
 REPRODUCED
 - Metric: DeltaS of R-V5-H2T-01 with three AMMOD pools by body length (raw, >= 3 mm,
@@ -880,6 +936,7 @@ REPRODUCED
   265). Value reproduced, description wrong.
 - Reading: removing the sub-3 mm fraction barely changes DeltaS; restricting AMMOD to
   >= 5 mm raises it by about 4 pp.
+
 **R-V5-H2T-03, taxonomic breadth** | LEGACY V5, DISCREPANCY V5/V16, V5 NOT REPRODUCED
 - Metric: distinct Orders, Families and Genera per system over the full study period,
   #N/C excluded; coverage = genera of the e-trap / AMMOD genera.
@@ -899,6 +956,7 @@ REPRODUCED
   the output lists 10 (l.359 to 368), so five additional. Araneae is one of the 10.
 - Reading: FAIRD covers a broader taxonomic range than ID; its coverage of AMMOD
   decreases from Order to Genus.
+
 **R-V5-H2T-04, FAIRD identification success by Order** | LEGACY V5, DISCREPANCY V5/V16,
 V5 NOT REPRODUCED
 - Metric: % of FAIRD individuals resolved to Genus, to Family only, and to Superfamily
@@ -923,6 +981,7 @@ V5 NOT REPRODUCED
   not printed.
 - Reading: Diptera dominate FAIRD records and have the lowest genus resolution among the
   main Orders.
+
 **R-V5-H2T-05, genus-level daily values quoted in V5** | LEGACY V5, DISCREPANCY V5/V16
 - Source: V5, Results 3.3.2: Site Level (SD "4.8 to 12.0% in the genus-level daily
   analysis"), Intra-Habitat Level (d = 0.507), Overall Level (50.4% +/- 6.0%, 95% CI
@@ -934,6 +993,7 @@ V5 NOT REPRODUCED
 - Output: no counterpart in the 2026-07-22 outputs; not verifiable.
 - Reading: V5 compares the windowed Superfamily results with a superseded analysis;
   these are not current results.
+
 **R-V16-H3T-01, daily genus-level Izsak-Price, FAIRD vs AMMOD** | SUPERSEDED by
 R-V5-H2T-01 and -02
 - Source: PC V16, "H3: Daily Taxonomic Similarity" (H3 block). Dropped in V5 as a
@@ -947,6 +1007,7 @@ R-V5-H2T-01 and -02
   53.5% overall (+3.5 pp).
 - Replaced by: R-V5-H2T-01 and -02 (Superfamily, 3-day windows, which address the low
   daily FAIRD counts behind the declining trend).
+
 **R-V16-H3T-02, FAIRD vs ID taxonomic comparison** | SUPERSEDED by R-V5-H2T-03
 - Source: PC V16, "Additional Analysis: FAIRD vs ID Taxonomic Comparison
   (Supplementary)" (H3 block). Dropped in V5 except for the breadth counts.
@@ -958,24 +1019,28 @@ R-V5-H2T-01 and -02
 - Note: the FAIRD Diptera share 87.4% differs from 89.5% in V5 (R-V5-H2T-04), which
   excludes #N/C.
 - Replaced by: R-V5-H2T-03.
+
 **R-OUT-H2T-01, FAIRD Order composition by site** | OUTPUT ONLY
 - Source: output l.314 to 343.
 - Result: Diptera Site 1 91.5% (236/258), Site 2 96.7% (178/184), Site 3 84.8%
   (234/276), Site 4 88.0% (338/384); remaining Orders by site in the same lines.
 - Note: site totals here exclude #N/C and differ from those of R-OUT-H2Q-04 (265, 186,
   279, 398).
+
 **R-OUT-H2T-02, identification success of the minor Orders** | OUTPUT ONLY
 - Source: output l.379 to 385. Metric as in R-V5-H2T-04.
 - Result: Araneae (n = 7) 28.6 / 28.6 / 42.9; Hemiptera (5) 80 / 20 / 0; Dermaptera,
   Neuroptera, Orthoptera (1 each) to Genus; Trichoptera (1) to Family.
 - Note: these 16 individuals complete the 1102 of the Overall row of Table 19.
+
 **R-OUT-H2T-03, sub-3 mm diagnostic by site** | OUTPUT ONLY
 - Source: output l.255 to 265.
 - Result: mean Superfamilies present only below 3 mm per window, Site 1 1.86, Site 2
   1.43, Site 3 2.14, Site 4 2.40 (maximum 3 / 3 / 3 / 4); present in every window at
   every site.
+
 ### 2.5 Level differences between systems (diagnostic mixed models)
- 
+
 | ID | Status | Note |
 | --- | --- | --- |
 | R-V5-H2Q-MM-01 | LEGACY V5 | Diagnostic mixed model A, biomass level by device type, Sites 1 to 3 (entry below; moved from 2.2) |
@@ -983,7 +1048,7 @@ R-V5-H2T-01 and -02
 | R-V16-LV-01 | SUPERSEDED by R-V5-H2Q-MM-01 | Three-system Kruskal-Wallis and Dunn (entry below) |
 | R-V16-LV-02 | SUPERSEDED by R-V5-H2Q-MM-02 | FAIRD vs ID by habitat, Mann-Whitney (entry below) |
 | R-V16-LV-03 | SUPERSEDED by R-V5-H2Q-MM-01 and -MM-02 | Habitat x device Kruskal-Wallis (entry below) |
- 
+
 Common to R-V5-H2Q-MM-01 and -02:
 - Scope: compare levels between systems (device type main effect and its consistency
   across sites). They do not test temporal concordance; for the temporal question see
@@ -998,6 +1063,7 @@ Common to R-V5-H2Q-MM-01 and -02:
   LRT chi² = 5.88, p = 0.0153 for Analysis B). The back-transformed LS means and the
   17.7-fold ratio are not printed (computed outside SAS, PC V16). An older results file
   (`SAS/old/`, not tracked) is superseded by this one.
+
 **R-V5-H2Q-MM-01, Analysis A, biomass level by device type** | LEGACY V5
 - Level: device type x site. Metric: daily biomass (mg), log10 (PC V16). Window: 12-day
   AMMOD overlap (Aug 23 to Sep 3); Sites 1 to 3; n = 92.
@@ -1013,6 +1079,7 @@ Common to R-V5-H2Q-MM-01 and -02:
   the SAS "N Used".
 - Reading: AMMOD biomass level above FAIRD at every site, with no detectable
   site-dependence of the gap (see R-OBS-03 on the 17.7 ratio).
+
 **R-V5-H2Q-MM-02, Analysis B, abundance level FAIRD vs ID** | LEGACY V5
 - Level: device type x site. Metric: daily abundance, log10 (PC V16). Window: 22 days;
   Sites 1, 2, 4; n = 132.
@@ -1024,6 +1091,7 @@ Common to R-V5-H2Q-MM-01 and -02:
   10.1), ID 20.4 (14.1 to 29.4); AR(1) 0.220, null LRT chi² = 5.88, p = 0.015.
 - Reading: ID records more individuals per day than FAIRD, with no detectable
   site-dependence of the gap.
+
 **R-V16-LV-01, three-system level comparison, Kruskal-Wallis and Dunn** | SUPERSEDED by
 R-V5-H2Q-MM-01
 - Source: PC V16, H2, "Section 6B: Three-way device comparison". Dropped in V5.
@@ -1036,6 +1104,7 @@ R-V5-H2Q-MM-01
 - Limitation recorded in PC V16 itself: ranks pooled across groups measured in different
   units; repeated daily observations treated as independent.
 - Replaced by: R-V5-H2Q-MM-01 (common unit, AR(1), device x site).
+
 **R-V16-LV-02, FAIRD vs ID by habitat, Mann-Whitney** | SUPERSEDED by R-V5-H2Q-MM-02
 - Source: PC V16, "Section 8: E-trap performance by habitat type". Dropped in V5.
 - Metric: daily abundance (individuals/day), 22 days.
@@ -1043,6 +1112,7 @@ R-V5-H2Q-MM-01
   p < 0.0001; Meadow (Site 4, n = 22 each) FAIRD 18.1 +/- 19.6, ID 35.1 +/- 32.7,
   p = 0.0219.
 - Replaced by: R-V5-H2Q-MM-02; abundance trajectories in 2.3 (R-TA-FI).
+
 **R-V16-LV-03, habitat x device, Kruskal-Wallis** | SUPERSEDED by R-V5-H2Q-MM-01 and
 -MM-02
 - Source: PC V16, "Section 8B: Habitat x device comparison". Dropped in V5.
@@ -1054,8 +1124,9 @@ R-V5-H2Q-MM-01
 - Note: the Meadow FAIRD vs ID contrast is ns here but p = 0.0219 in R-V16-LV-02
   (different test and adjustment).
 - Replaced by: R-V5-H2Q-MM-01 and -MM-02 (site and device x site terms).
+
 ### 2.6 Scherber's device-comparison script (main figures proposed by Scherber, 2026-10-08)
- 
+
 | ID | Status | Note |
 | --- | --- | --- |
 | R-DC-TX-01 | SUPERSEDED by R-DC-TX-02 | Multinomial order composition, original input (AMMOD genus-level records) |
@@ -1063,7 +1134,7 @@ R-V5-H2Q-MM-01
 | R-DC-TX-03 | CURRENT | Order detection frequency by system, device-days with the order present |
 | R-DC-BM-01 | SUPERSEDED by R-DC-BM-02 | Tweedie biomass model, AMMOD dry mass |
 | R-DC-BM-02 | CURRENT | Tweedie biomass model, AMMOD live mass (Figure 2 proposed) |
- 
+
 Common to the R-DC entries:
 - Origin: Scherber's email of 2026-10-08 proposes the two figures of this script as the
   main figures of the paper (lean MEE manuscript: no detailed pairwise comparisons; a
@@ -1092,6 +1163,7 @@ Common to the R-DC entries:
   (`mclogit`, `mixcat`, `multpois`) did not run and `brms` could not be installed (his
   email of 2026-10-08). Its p-values ignore Site/Device and the non-independence of
   records and are anti-conservative.
+
 **R-DC-TX-01, multinomial order composition, original input** | SUPERSEDED by R-DC-TX-02
 - Model: `nnet::multinom(Order ~ bs(Date.num, 3) * Device_type)`, six orders (Diptera,
   Hymenoptera, Coleoptera, Lepidoptera, Hemiptera, Araneae); `car::Anova` Type II LR.
@@ -1103,6 +1175,7 @@ Common to the R-DC entries:
   richness by order and the e-trap panels show order presence; the proportions are not
   comparable. The rank index `c(1:5,7)` excluded "Indet." (rank 6), so the order set is
   unchanged in R-DC-TX-02.
+
 **R-DC-TX-02, multinomial order composition, order-level presence** | CURRENT, DESCRIPTIVE
 - Model: as R-DC-TX-01. Data: AMMOD 319 records, e-traps 271, all one per
   Date x Device x Order. Abundance enters for no system (one record per order present
@@ -1117,6 +1190,7 @@ Common to the R-DC entries:
 - Reading: the systems differ in which orders they detect; no common temporal trend in
   composition once the record unit is harmonised. Descriptive only (p-values
   anti-conservative).
+
 **R-DC-TX-03, order detection frequency by system** | CURRENT
 - Source: corrected output l.18 to 36 (order-level presence records, i.e. device-days
   with the order present).
@@ -1129,6 +1203,7 @@ Common to the R-DC entries:
 - Reading: Diptera detected on almost every device-day by all systems; Lepidoptera and
   Hemiptera detected by AMMOD on many device-days and by the e-traps on very few.
   Causes: hypotheses only (R-OBS-06).
+
 **R-DC-BM-01, Tweedie biomass model, AMMOD dry mass** | SUPERSEDED by R-DC-BM-02
 - Model: `glmmTMB(biomass_mg ~ bs(Date.num, 3) * Device_type + (1 | Site/Device),
   family = tweedie)`, log link; no Block, no AR1. Data: 116 rows, 12 dates (Aug 23 to
@@ -1139,6 +1214,7 @@ Common to the R-DC entries:
   12.6; AIC 1577.0.
 - Reason superseded: dry mass for AMMOD against allometric live mass for the e-traps.
   The non-significant ID level contrast was an artefact of the units (R-OBS-07).
+
 **R-DC-BM-02, Tweedie biomass model, AMMOD live mass** | CURRENT
 - Model and data: as R-DC-BM-01, AMMOD = `Live_mass` (mg).
 - Result (corrected output l.87 to 119): intercept 8.24; Device_type FAIRD -3.42
@@ -1162,46 +1238,55 @@ Common to the R-DC entries:
   Scherber's note: power about 1.6).
 - Reading: same temporal shape as R-DC-BM-01; with live mass both e-traps record
   significantly less biomass than AMMOD at the reference date.
+
 ---
- 
+
 ## 3. DIAGNOSTICS AND DATA FACTS
- 
+
 **R-DX-AF-RATIO-01, AMMOD/FAIRD ratio drift** | CURRENT
 - Source: Section 2e, ratio of device means per block-day (PAIRED_BLOCK).
 - Result: Spearman rho(ratio, date) = -0.08; AMMOD-scale factor for figures about 10.
 - Reading: no monotonic drift; divergence is of shape, concentrated at the ends of the
   12-day window.
+
 **R-DX-AI-RATIO-01 and R-DX-FI-RATIO-01, ratio drift** | CURRENT
 - Result: AMMOD/ID rho = -0.77; FAIRD/ID rho = -0.57.
 - Reading: FAIRD loses relative signal in the second half of the season (consistent with
   context Section 13).
+
 **R-DX-INTRA-01, intra-FAIRD check of the PAIRED_BLOCK assumption** | CURRENT
 - Source: `diagnostic_per_site_biomass.R`, Table 3c. Diagnostic only, not for the
   manuscript.
 - Result: FAIRD3/FAIRD4 on AMMOD3 days 0.34 to 1.16 (median 0.87); FAIRD1/FAIRD2 0 to 6.1.
 - Reading: Meadow sites share their dynamics (supports AMMOD3 vs ID4 pairing); Maize
   instability is irrelevant because Maize pairs are co-located.
+
 **R-DX-ID-WIN-01, structure of the ID battery window** | CURRENT
 - Result: 15 device-days, 5 zeros and 10 with biomass; by session calendar 3 fully off,
   8 partial, 4 full effort; Sep 2 partial for ID2 and ID4. ID1 Aug 29 is a genuine zero
   under full effort. Details: context Section 8.5.
+
 **R-DX-ID-BOUT-01, temporal clustering of ID detections** | CURRENT (not used in models)
 - Result: bouts/detections (same class, gap < 30 s) 0.37 and 0.29 for ID2 Aug 30 and 31,
   0.23 for ID4 Aug 24, against device medians about 0.6; a session-level Poisson model
   predicts much of it.
 - Reading: compatible with revisits, not separable from dense genuine activity.
+
 **R-DX-WX-01, weather during the campaign** | CURRENT
 - Result: cold front Aug 27 to Sep 1 (daytime mean 14 C on Aug 28 and 29, radiation
   4 to 5 MJ m-2 on Aug 27 to 29, rain most days); battery failures lag the radiation
   minimum by about one day. Details: context Section 8.7.
+
 **R-DX-AR1-01, behaviour of the AR1 term in the pair models** | CURRENT
 - Result: rho 0.02 to 0.21, SD 0.38 to 0.80 (log scale) in all valid pair models; Site
   and Device:Site variances about 0.
 - Reading: AR1 acts as a device-day effect; its BLUPs are the day-to-day deviations
   (excluded when computing the HIGH component).
+
 **R-DX-COVER-01, daily recording coverage** | CURRENT (data fact)
 - FAIRD 07-19 h continuous; ID 9 sessions of about 40 min within 07-09, 12-14 and
   17-19 h; AMMOD 00-24 h. Shared calendar-day boundary, lag 0 by design.
+
 **R-DX-FAIL-01, attribution of ID failures** | CURRENT (data fact, for the reliability
 analysis)
 - ID3 total loss: corrupt or badly flashed SD card, noticed at the end of the experiment
@@ -1209,6 +1294,7 @@ analysis)
   maize field (deployment configuration, corrected mid-experiment). Not device-intrinsic.
 - AMMOD losses (AMMOD4 no biomass; AMMOD3 from Aug 30, ATL processing and jam): to be
   classified with the same criterion.
+
 **R-DX-PRES-01, record units of the presence objects in `00_load_data.R`** | CURRENT
 (data fact, v0.6)
 - `etraps_presence_daily`: one row per Date x Device x Order (`present = 1`), abundance
@@ -1218,6 +1304,7 @@ analysis)
 - Consequence: any cross-system comparison of these two objects must first bring them
   to a common unit (done inside the corrected script, not in `00_load_data.R`, which
   other scripts use at genus level).
+
 **R-DX-FI-ABUND-01, per-site check of the central ID abundance peak** | CURRENT
 (diagnostic, v0.7), NOT FOR MAIN TEXT (C2)
 - Source: `diagnostic_per_device_operational.R` (throwaway diagnostic, no output file in
@@ -1230,14 +1317,15 @@ analysis)
 - Reading: the aggregated central ID peak of R-TA-FI-01 is the superposition of three
   different site dynamics, not a consistent system pattern; with one device per system
   per site it cannot be separated from device idiosyncrasy.
+
 ---
- 
- 
+
+
 ## 4. OBSERVATIONS (cross-entry syntheses)
- 
+
 Format and update rule: see Conventions. Observations condense reasoning across entries;
 they are not ecological interpretation.
- 
+
 **R-OBS-01, pooled p-values in PC V16 come from another model**
 - Rests on: R-V5-H2Q-02, R-V5-H2Q-03, R-V16-H2Q-01.
 - Statement: for the Maize (n = 24) and Overall (n = 32) levels, PC V16 reports as the
@@ -1245,6 +1333,7 @@ they are not ecological interpretation.
   not the p of the simple OLS whose R² it reports (0.0047, 0.0007).
 - Basis: verified (output l.201, 224, 317, 318).
 - Implication: no pooled-level p is taken from PC V16; V5 values are the correct ones.
+
 **R-OBS-02, the V5 Durbin-Watson limitation is probably an ordering artefact**
 - Rests on: R-V5-H2Q-02, R-V5-H2Q-03, R-V16-H2Q-02.
 - Statement: on a stacked multi-site series DW depends on row order. Sorted by site then
@@ -1257,6 +1346,7 @@ they are not ecological interpretation.
   V16 values (diag 8A: 0.917, p = 0.0002; 1.38, p = 0.0409).
 - Implication: the V5 limitation sentence in 3.3.1.3 rests on a doubtful value; V6
   drops or recomputes it (Section 5).
+
 **R-OBS-03, the 17.7-fold AMMOD/FAIRD ratio is not a conversion factor**
 - Rests on: R-V5-H2Q-MM-01, R-TB-AF-01, R-DX-AF-RATIO-01.
 - Statement: 17.7 is the ratio of geometric means (LS-mean difference 1.248 on log10)
@@ -1267,6 +1357,7 @@ they are not ecological interpretation.
 - Basis: verified for the definitions; the size of the gap between 17.7 and 10 is not
   explained here.
 - Implication: if the manuscript cites both numbers, it states what each one is.
+
 **R-OBS-04, Stage 2 and Stage 3 agree on what AMMOD and FAIRD share**
 - Rests on: R-V5-H2Q-01, R-V5-H2Q-04, R-CC-AF-01, R-TB-AF-01.
 - Statement: both frameworks show shared day-to-day fluctuation, mainly in Maize (CCF
@@ -1277,6 +1368,7 @@ they are not ecological interpretation.
 - Implication: "FAIRD tracks AMMOD" is qualified in the manuscript as day-to-day
   synchrony, not proportional tracking. (v0.6: the main-text value is the two-block HIGH
   0.61, R-OBS-05; Site 2 CCF is LEGACY and device-level.)
+
 **R-OBS-05, level of comparison for the manuscript (Scherber C2)**
 - Rests on: R-CC-AF-01, R-CC-AI-01, R-CC-FI-01, R-CC-INT-01, R-CC-DIS-01, R-TB-INT-01,
   R-TB-AF-01, `claude/SCHERBER_FEEDBACK_V5_EN.md` (C1, C2).
@@ -1291,6 +1383,7 @@ they are not ecological interpretation.
   of 2026-10-12.
 - Implication: the device-pair references stay as diagnostics or appendix; the
   manuscript does not use them to calibrate between-system agreement.
+
 **R-OBS-06, Figure 1 shows detection frequency, not abundance composition**
 - Rests on: R-DC-TX-02, R-DC-TX-03, R-DX-PRES-01, R-V5-H2T-04, R-DX-COVER-01,
   R-OUT-H2Q-04.
@@ -1308,6 +1401,7 @@ they are not ecological interpretation.
   possible: hour of `Checkin` of the FAIRD Lepidoptera and Hemiptera records (Section 6).
 - Implication: the figure and caption speak of detection frequency; causes go to the
   Discussion as candidates.
+
 **R-OBS-07, the biomass unit correction changes levels, not shapes**
 - Rests on: R-DC-BM-01, R-DC-BM-02.
 - Statement: replacing AMMOD dry mass by live mass multiplies AMMOD by 4; on the log
@@ -1317,14 +1411,15 @@ they are not ecological interpretation.
 - Basis: verified (coefficients of both runs).
 - Implication: Figure 2 and any level statement use live mass; the original figure
   suggested comparable AMMOD and ID levels by an artefact of units.
+
 ---
- 
- 
+
+
 ## 5. MANUSCRIPT CORRECTIONS FOR V6
- 
+
 All V5 NOT REPRODUCED items. Correct value = output of the script that produced the V5
 value (or the count it implies). Details and causes in the cited entries.
- 
+
 | Entry | V5 location | V5 value | Correct value | Cause |
 | --- | --- | --- | --- | --- |
 | R-V5-H1Q-FAIRD-02 | Table 10, FAIRD Maize vs Meadow | low-weight days 3/22 | 1/22 (weight < 0.5) | hypothesis, other weight threshold |
@@ -1340,20 +1435,21 @@ value (or the count it implies). Details and causes in the cited entries.
 | R-V5-H2T-03 | Table 18 and text | ID coverage 1.5% (5/341) | 1.2% (4/341) | verified, PC V16 count carried over |
 | R-V5-H2T-03 | 3.3.2, Taxonomic breadth text | "and six additional orders" | five additional orders | verified, 10 Orders listed in output |
 | R-V5-H2T-04 | Table 19, Overall row | Family 6.3%; Superfamily or lower 50.4% | 6.4% (71/1102); 49.1% (541/1102) | verified in part, PC V16 row carried over |
- 
+
 Notes:
 - Table 13 significance stars are unchanged by the R-V5-H2Q-02 corrections (p < 0.05 in
   both values).
 - Not V6 corrections (no V5 value differs from the output): DW Maize in PC V16
   (R-V5-H2Q-02); the H2 quantitative DeltaR² rounding (R-V5-H2Q-05, V5 correct).
+
 ---
- 
+
 ## 6. VALUES PENDING RESOLUTION
- 
+
 Values whose cause is not determined, that no output in ADP prints, or whose hypothesis
 needs a source not in ADP. "Testable in ADP" means a rerun or an extra print in an ADP
 script would settle it.
- 
+
 | Entry | Value | Problem | Needed to resolve |
 | --- | --- | --- | --- |
 | R-V5-H1Q-FAIRD-02, R-V5-H1Q-AMMOD-02 | low-weight days 3/22; 2 and 1 (V5) | cause hypothesis (weight threshold) | threshold used for V5 Table 10; testable in ADP by rerunning with other thresholds |
