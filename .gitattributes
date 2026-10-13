@@ -1,0 +1,16 @@
+# Normalize text files to LF in the repository
+* text=auto
+
+# Scripts and documents: always LF, also in the working copy
+*.R    text eol=lf
+*.Rmd  text eol=lf
+*.md   text eol=lf
+*.sas  text eol=lf
+
+# Binary files
+*.docx  binary
+*.xlsx  binary
+*.pdf   binary
+*.png   binary
+*.RData binary
+*.rds   binary
