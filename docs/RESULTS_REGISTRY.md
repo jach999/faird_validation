@@ -1,6 +1,10 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
 
-**Version:** 0.7.1 (October 13, 2026). Diagnostic mixed models A and B (Section 2.5)
+**Version:** 0.7.2 (October 27, 2026). File moved from ADP (`claude/20261012_RESULTS_REGISTRY.md`)
+to the repository as `docs/RESULTS_REGISTRY.md`; update rule, location of Scherber's
+original script and reference to his criticisms (now `claude/20261013_SCHERBER_GUIDELINES_EN.md`)
+updated in Conventions. No result changed.
+v0.7.1 (October 13, 2026): diagnostic mixed models A and B (Section 2.5)
 verified against the SAS results file in the repository; their row removed from Section
 6; path of PC V16 updated (`docs/old/`). Otherwise as v0.7.
 v0.7 (October 12, 2026, second update): populates Section 2.3 (temporal
@@ -58,6 +62,10 @@ is it still valid.
     (`claude/SCHERBER_FEEDBACK_V5_EN.md`): device-device comparisons are not
     scientifically admissible; the main argument uses system-level comparisons over
     both blocks. Kept as diagnostic or appendix material only (R-OBS-05).
+  - Criticism IDs C1 to C9 (v0.7.2 note): `SCHERBER_FEEDBACK_V5_EN.md` was replaced on
+    2026-10-13 by `claude/20261013_SCHERBER_GUIDELINES_EN.md`, which numbers his
+    guidelines G1 to G18 and maps the old IDs in its Section 4 (C1 = G6, C2 = G8 and
+    G11, C4 = G14, C9 = G3). The flag keeps its name.
 - **Sources:** V5 = `FAIRD_Paper_V5.docx`, cited by Results section number and table;
   PC V16 = `docs/old/20260317_PROJECT_CONTEXT_V16_EN_UPDATE_NEEDED.md` (repository), cited by
   block heading (its table of contents line numbers are not reliable); outputs =
@@ -74,8 +82,10 @@ is it still valid.
 - **Reading line:** one line, statistical reading only. Ecological interpretation belongs
   to the manuscript.
 - **Update rule:** at the end of each session, from its session log. ONE cumulative
-  document: entries are added or marked in place, never moved to a separate file; the
-  file is renamed with the date of the latest update (`YYYYMMDD_RESULTS_REGISTRY.md`).
+  document: entries are added or marked in place, never moved to a separate file. Since
+  v0.7.2 the file lives in the repository as `docs/RESULTS_REGISTRY.md`, without a date
+  in its name: the version and date are in the header, and git keeps the history.
+  Until v0.7.1 it lived in ADP and was renamed with the date of each update.
 - **Scripts:** Section 2e is unchanged from `Scherber_temporal_biomass_3.R` to
   `Scherber_temporal_biomass_5.R`; version 5 adds Sections 2f (identity link) and 2g
   (internal consistency). Concordance: `Scherber_temporal_concordance_biomass.R`.
@@ -83,9 +93,11 @@ is it still valid.
   (with `Christoph_Device_Comparisons.RData`), run through two versions prepared on
   2026-10-12: `Christoph_device_comparisons_2026-10-08_runnable.R` (runs with
   `source()`, analyses unchanged) and `Christoph_device_comparisons_2026-10-08_corrected.R`
-  (same models, corrected inputs). Original script in ADP under `claude/` (in the
-  repository only on branch `main`); runnable and corrected versions in `R/`; run
-  outputs in `outputs/console/`.
+  (same models, corrected inputs). Original script in `R/` (the file is named
+  `Christoph_device_comparisons_2026-10-08_taxon and biomass analyses.R`, with spaces;
+  byte-identical to the copy on `main`, brought to `revision-scherber` on 2026-10-13,
+  the ADP copy deleted); runnable and corrected versions in `R/`; run outputs in
+  `outputs/console/`.
 - **Extraction marks:** the `[cite: ...]` marks of the v0.2 LEGACY rows were removed in
   v0.4; every value carries its exact source.
 - **Observations:** Section 4 holds cross-entry syntheses (`R-OBS-nn`) with the fields
