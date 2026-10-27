@@ -1142,7 +1142,8 @@ earlier sessions are not repeated.
 10. LOW interval method, if LOW values are reported (registry Section 6). (10-02b.)
 
 **Documents**
-11. Guidelines: correct "k = 11" in the note on G15 (Juan).
+11. [Done 2026-10-27, by Claude at Juan's request: "k = 11" replaced in the notes on
+    G15 and E4 of the guidelines; the rest of the file unchanged, checked by diff.]
 12. Registry: replace the citation of `H1_consistency_summary_output_20261006_114514.txt`
     with the 2026-10-10 output and record its two cross-habitat differences; Stage 1
     scripts now in `R/old/`, update the entries that say "not in ADP". (2026-10-10,
