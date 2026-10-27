@@ -31,7 +31,8 @@ those sessions, not at their close. Reconstructed entries, reviewed by Juan.]
 [Note added 2026-10-27: sessions 1 to 8 were transferred from
 `claude/20261012_SESSION_LOG.md` (ADP) by Claude, who cannot copy an ADP file and
 therefore retyped them from a reading of that file; checked by structure and by spot
-values, not byte for byte. The ADP file is kept until Juan confirms the transfer.]
+values, not byte for byte. Transfer confirmed by Juan and the ADP file deleted on
+2026-10-27.]
 
 ---
 
@@ -1152,8 +1153,8 @@ earlier sessions are not repeated.
     (mainly the taxonomic entries). (2026-10-07/08.)
 14. Optional: registry Section 6 rows testable with the Stage 1 scripts or extra prints;
     no V6 value depends on them. (2026-10-07/08, 2026-10-10.)
-15. Confirm the transfer of sessions 1 to 8 into this file, then delete
-    `claude/20261012_SESSION_LOG.md` from ADP.
+15. [Done 2026-10-27: transfer of sessions 1 to 8 confirmed by Juan;
+    `claude/20261012_SESSION_LOG.md` deleted from ADP.]
 
 **Figures and text**
 16. Figure 1: y label "Relative detection frequency", no title, caption on detection
