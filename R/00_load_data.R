@@ -1,5 +1,5 @@
 # ==============================================================================
-# DATA LOADING — FAIR-Device Validation Project
+# DATA LOADING, FAIR-Device validation project
 # ==============================================================================
 # All file paths use here::here() so the script resolves correctly whether
 # sourced from the project root via .Rproj or run directly from R/.
@@ -10,7 +10,7 @@ library(here)
 
 # Anchor here to the project root regardless of where this script is executed from.
 # here::i_am() walks upward from the script location until it finds a directory
-# that contains R/00_load_data.R — that directory becomes the project root.
+# that contains R/00_load_data.R; that directory becomes the project root.
 here::i_am("R/00_load_data.R")
 
 cat("\n=== LOADING E-TRAPS DATA ===\n")
@@ -85,7 +85,7 @@ cat("\nIMPORTANT: AMMOD taxonomy is QUALITATIVE (presence/absence)\n")
 cat("  'Count' = DNA sequence reads, NOT individual insect counts.\n")
 cat("  Use ONLY for presence/absence analyses.\n")
 
-# Presence/absence deduplication — Count column intentionally discarded
+# Presence/absence deduplication; Count column intentionally discarded
 ammod_taxonomy_presence <- ammod_taxonomy %>%
   dplyr::mutate(Present = 1) %>%
   dplyr::distinct(Date, Device, Device_type, Site, Ambient,
@@ -167,7 +167,7 @@ cat(sprintf(paste0("\nField_Valid_Operational_ID: %d additional device-days mark
                    "This column is not used by any analysis yet.\n"),
             n_op_excluded))
 
-# Apply Taxo_Valid to ammod_taxonomy_presence — single authoritative filter
+# Apply Taxo_Valid to ammod_taxonomy_presence, single authoritative filter
 n_before <- nrow(ammod_taxonomy_presence)
 
 ammod_taxonomy_presence <- ammod_taxonomy_presence %>%
@@ -268,7 +268,7 @@ if (nrow(incomplete_devices) > 0) {
       missing_dates <- ammod_biomass %>%
         dplyr::filter(Device == "AMMOD4", is.na(Live_mass)) %>%
         dplyr::pull(Date)
-      cat(sprintf("  Status: Mechanical failure — rotation jammed (Aug 28-Sep 3).\n"))
+      cat(sprintf("  Status: Mechanical failure, rotation jammed (Aug 28-Sep 3).\n"))
       cat(sprintf("  Missing dates: %s to %s\n",
                   as.character(min(missing_dates)),
                   as.character(max(missing_dates))))

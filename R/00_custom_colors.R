@@ -2,7 +2,7 @@
 # custom_colors.R
 # Project-wide color palette for ggplot2 figures
 #
-# IMPORTANT — before using these colors in any ggplot2 script, read:
+# IMPORTANT: before using these colors in any ggplot2 script, read:
 #   custom_colors_guide.md
 #
 # Key rule: always pass `custom_colors` directly to scale_color_manual() /

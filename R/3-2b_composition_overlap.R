@@ -1,6 +1,13 @@
 # ==============================================================================
-# H2_quali_validation.R  — §3.3.2 Inter-System Qualitative Agreement
-# FAIRD vs AMMOD — Izsak-Price ΔS — Superfamily — 3-day non-overlapping windows
+# 3-2b_composition_overlap.R
+# Manuscript Section 3.2 (Composition): FAIRD vs AMMOD community overlap
+# ------------------------------------------------------------------------------
+# Izsak-Price similarity (DeltaS) at Superfamily level between each FAIRD unit
+# and the co-located AMMOD unit, in non-overlapping 3-day windows (windows with
+# fewer than 3 FAIRD individuals resolved to Superfamily excluded), by site, by
+# habitat and over all sites; size-threshold sensitivity (AMMOD pool raw,
+# >= 3 mm, >= 5 mm); taxonomic breadth and FAIRD identification success by
+# order (Table 3).
 # ==============================================================================
 
 library(tidyverse)
@@ -12,23 +19,23 @@ library(patchwork)
 library(scales)
 library(MASS)
 
-here::i_am("R/H2_quali_validation.R")
+here::i_am("R/3-2b_composition_overlap.R")
 
-dir.create("outputs/figures",  showWarnings = FALSE, recursive = TRUE)
-dir.create("outputs/tables",   showWarnings = FALSE, recursive = TRUE)
-dir.create("outputs/console",  showWarnings = FALSE, recursive = TRUE)
+dir.create(here::here("outputs", "figures"),  showWarnings = FALSE, recursive = TRUE)
+dir.create(here::here("outputs", "tables"),   showWarnings = FALSE, recursive = TRUE)
+dir.create(here::here("outputs", "console"),  showWarnings = FALSE, recursive = TRUE)
 
 while (sink.number() > 0) sink()
-sink("outputs/console/H2_quali_validation_output.txt", split = TRUE)
+sink(here::here("outputs", "console", "3-2b_composition_overlap_output.txt"), split = TRUE)
 
 cat("==============================================================================\n")
-cat("H2 QUALITATIVE VALIDATION — §3.3.2\n")
+cat("SECTION 3.2, COMPOSITION: FAIRD VS AMMOD COMMUNITY OVERLAP\n")
 cat("FAIRD vs AMMOD | Izsak-Price ΔS | Superfamily | 3-day windows\n")
 cat("==============================================================================\n")
 cat("Script started:", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n\n")
 
-source("R/00_load_data.R")
-source("R/00_custom_colors.R")
+source(here::here("R", "00_load_data.R"))
+source(here::here("R", "00_custom_colors.R"))
 
 
 # ==============================================================================
@@ -62,7 +69,7 @@ window_lookup <- tibble::tibble(Date = all_dates) %>%
 
 
 # ==============================================================================
-# SECTION 1: SITE LEVEL (§3.3.2.1)
+# SECTION 1: SITE LEVEL
 # ==============================================================================
 
 cat("=== SECTION 1: SITE LEVEL ===\n\n")
@@ -228,7 +235,7 @@ p_site <- ggplot2::ggplot(plot_valid,
                                           "Site3" = "Site 3 (Meadow)",
                                           "Site4" = "Site 4 (Meadow)")) +
   ggplot2::labs(
-    title    = "H2 Qualitative — Taxonomic Similarity: FAIRD vs AMMOD — Site Level",
+    title    = "FAIRD vs AMMOD overlap: Taxonomic Similarity: FAIRD vs AMMOD: Site Level",
     subtitle = paste0("Izsak-Price index | 3-day windows | Superfamily level | filter: >= ",
                       MIN_INDIV, " FAIRD individuals"),
     x = "Window", y = "Izsak-Price Similarity (%)",
@@ -245,13 +252,13 @@ p_site <- ggplot2::ggplot(plot_valid,
   )
 
 print(p_site)
-ggplot2::ggsave("outputs/figures/Fig25_H2_quali_site_level.png",
+ggplot2::ggsave(here::here("outputs", "figures", "3-2b_overlap_by_site.png"),
                 plot = p_site, width = 10, height = 6, dpi = 300)
-cat("[OK] Fig25_H2_quali_site_level.png\n\n")
+cat("[OK] 3-2b_overlap_by_site.png\n\n")
 
 
 # ==============================================================================
-# SECTION 2: INTRA-HABITAT LEVEL (§3.3.2.2)
+# SECTION 2: INTRA-HABITAT LEVEL
 # ==============================================================================
 
 cat("=== SECTION 2: INTRA-HABITAT LEVEL ===\n\n")
@@ -268,7 +275,7 @@ cat(sprintf("Maize:  %.1f%% +/- %.1f%% (n = %d windows)\n",
 cat(sprintf("Meadow: %.1f%% +/- %.1f%% (n = %d windows)\n\n",
             mean(meadow_w) * 100, stats::sd(meadow_w) * 100, length(meadow_w)))
 
-# Levene's test first (then t-test with correct var.equal)
+# Levene test first (then t-test with correct var.equal)
 gd <- data.frame(
   val = c(maize_w, meadow_w),
   grp = factor(c(rep("Maize", length(maize_w)), rep("Meadow", length(meadow_w))))
@@ -289,7 +296,7 @@ cat(sprintf("t-test: t(%s) = %.3f, p = %.4f\n",
 cd <- effsize::cohen.d(maize_w, meadow_w)
 cat(sprintf("Cohen's d = %.3f (%s)\n\n", cd$estimate, cd$magnitude))
 
-# Intra-Habitat figure (Fig 26 — violin + boxplot)
+# Intra-Habitat figure (Fig 26: violin + boxplot)
 violin_df <- data.frame(
   Delta_S_pct = c(maize_w * 100, meadow_w * 100),
   Habitat     = factor(c(rep("Maize", length(maize_w)),
@@ -307,7 +314,7 @@ p_violin <- ggplot2::ggplot(violin_df,
   ggplot2::scale_fill_manual(values  = custom_colors) +
   ggplot2::scale_color_manual(values = custom_colors) +
   ggplot2::labs(
-    title    = "H2 Qualitative — Intra-Habitat Comparison: FAIRD vs AMMOD",
+    title    = "FAIRD vs AMMOD overlap: Intra-Habitat Comparison: FAIRD vs AMMOD",
     subtitle = sprintf(
       "t = %.3f, p = %.4f | Cohen's d = %.3f (%s) | Levene's p = %.4f (%s)",
       tt$statistic, tt$p.value, cd$estimate, cd$magnitude,
@@ -324,9 +331,9 @@ p_violin <- ggplot2::ggplot(violin_df,
   )
 
 print(p_violin)
-ggplot2::ggsave("outputs/figures/Fig26_H2_quali_intra_habitat.png",
+ggplot2::ggsave(here::here("outputs", "figures", "3-2b_overlap_by_habitat.png"),
                 plot = p_violin, width = 8, height = 6, dpi = 300)
-cat("[OK] Fig26_H2_quali_intra_habitat.png\n\n")
+cat("[OK] 3-2b_overlap_by_habitat.png\n\n")
 
 # Intra-Habitat temporal figure (Fig 27)
 plot_intra <- plot_valid %>%
@@ -343,7 +350,7 @@ p_intra <- ggplot2::ggplot(plot_intra,
                                labels = function(x) paste0("W", x)) +
   ggplot2::scale_color_manual(values = custom_colors) +
   ggplot2::labs(
-    title    = "H2 Qualitative — Taxonomic Similarity: FAIRD vs AMMOD — Intra-Habitat Level",
+    title    = "FAIRD vs AMMOD overlap: Taxonomic Similarity: FAIRD vs AMMOD: Intra-Habitat Level",
     subtitle = sprintf(
       "Maize: %.1f%% ± %.1f%% (n=%d) | Meadow: %.1f%% ± %.1f%% (n=%d)",
       mean(maize_w) * 100, stats::sd(maize_w) * 100, length(maize_w),
@@ -363,13 +370,13 @@ p_intra <- ggplot2::ggplot(plot_intra,
   )
 
 print(p_intra)
-ggplot2::ggsave("outputs/figures/Fig27_H2_quali_intra_habitat_temporal.png",
+ggplot2::ggsave(here::here("outputs", "figures", "3-2b_overlap_by_habitat_over_time.png"),
                 plot = p_intra, width = 10, height = 6, dpi = 300)
-cat("[OK] Fig27_H2_quali_intra_habitat_temporal.png\n\n")
+cat("[OK] 3-2b_overlap_by_habitat_over_time.png\n\n")
 
 
 # ==============================================================================
-# SECTION 3: OVERALL LEVEL (§3.3.2.3)
+# SECTION 3: OVERALL LEVEL
 # ==============================================================================
 
 cat("=== SECTION 3: OVERALL LEVEL ===\n\n")
@@ -402,7 +409,7 @@ p_overall <- ggplot2::ggplot(plot_overall,
   ggplot2::scale_x_continuous(breaks = win_breaks_x,
                                labels = function(x) paste0("W", x)) +
   ggplot2::labs(
-    title    = "H2 Qualitative — Taxonomic Similarity: FAIRD vs AMMOD — Overall Level",
+    title    = "FAIRD vs AMMOD overlap: Taxonomic Similarity: FAIRD vs AMMOD: Overall Level",
     subtitle = sprintf(
       "Izsak-Price | 3-day windows | Superfamily | Overall mean: %.1f%% ± %.1f%% (n=%d, 95%% CI: %.1f–%.1f%%)",
       mean_all * 100, sd_all * 100, n_all, ci_lo, ci_hi
@@ -418,9 +425,9 @@ p_overall <- ggplot2::ggplot(plot_overall,
   )
 
 print(p_overall)
-ggplot2::ggsave("outputs/figures/Fig28_H2_quali_overall_level.png",
+ggplot2::ggsave(here::here("outputs", "figures", "3-2b_overlap_all_sites.png"),
                 plot = p_overall, width = 10, height = 6, dpi = 300)
-cat("[OK] Fig28_H2_quali_overall_level.png\n\n")
+cat("[OK] 3-2b_overlap_all_sites.png\n\n")
 
 # --- Build and export Table 16 ---
 cat("--- TABLE 16: Izsak-Price ΔS Summary ---\n\n")
@@ -457,12 +464,12 @@ table16_overall <- tibble::tibble(
 table16 <- dplyr::bind_rows(table16_sites, table16_intra, table16_overall)
 print(table16, n = Inf)
 
-readr::write_csv(table16, "outputs/tables/Table16_H2_quali_IP_summary.csv")
-cat("[OK] Table16_H2_quali_IP_summary.csv\n\n")
+readr::write_csv(table16, here::here("outputs", "tables", "3-2b_overlap_summary.csv"))
+cat("[OK] 3-2b_overlap_summary.csv\n\n")
 
 
 # ==============================================================================
-# SECTION 4: SIZE-THRESHOLD SENSITIVITY (§3.3.2.4)
+# SECTION 4: SIZE-THRESHOLD SENSITIVITY
 # ==============================================================================
 
 cat("=== SECTION 4: SIZE-THRESHOLD SENSITIVITY ===\n\n")
@@ -580,8 +587,8 @@ print(table17, n = Inf)
 cat("\nNOTE: Delta_raw_to_3mm = DS_3mm - DS_raw (pp). Positive = filtering >=3mm improves concordance.\n")
 cat("      Delta_3mm_to_5mm = DS_5mm - DS_3mm (pp). Same interpretation for stricter threshold.\n\n")
 
-readr::write_csv(table17, "outputs/tables/Table17_H2_quali_size_threshold.csv")
-cat("[OK] Table17_H2_quali_size_threshold.csv\n\n")
+readr::write_csv(table17, here::here("outputs", "tables", "3-2b_size_threshold.csv"))
+cat("[OK] 3-2b_size_threshold.csv\n\n")
 
 # --- Sub-3mm Superfamily diagnostic ---
 cat("--- Sub-3mm Superfamily diagnostic ---\n\n")
@@ -660,7 +667,7 @@ all_new_sf <- diag_df %>%
 
 cat("\nUnique Superfamilies appearing ONLY in sub-3mm fraction (across all windows):\n")
 if (length(all_new_sf) == 0) {
-  cat("  None — sub-3mm fraction adds no new Superfamilies in any window.\n")
+  cat("  None: sub-3mm fraction adds no new Superfamilies in any window.\n")
 } else {
   cat(paste0("  ", all_new_sf, "\n"), sep = "")
 }
@@ -668,7 +675,7 @@ cat("\n")
 
 
 # ==============================================================================
-# SECTION 5: TAXONOMIC BREADTH — FAIRD ONLY (§3.3.2.5)
+# SECTION 5: TAXONOMIC BREADTH: FAIRD ONLY
 # ==============================================================================
 
 cat("=== SECTION 5: TAXONOMIC BREADTH (FAIRD) ===\n\n")
@@ -676,7 +683,7 @@ cat("=== SECTION 5: TAXONOMIC BREADTH (FAIRD) ===\n\n")
 # --- 5a. Table 18: Diptera dominance by Habitat (Ambient) and Site ---
 cat("--- TABLE 18: Diptera dominance by Habitat and Site ---\n\n")
 
-# By habitat (Ambient = Maize / Meadow) — #N/C excluded: not a valid taxon
+# By habitat (Ambient = Maize / Meadow): #N/C excluded: not a valid taxon
 faird_by_ambient <- data_list$faird %>%
   dplyr::filter(is.na(Order) | Order != nc) %>%
   dplyr::group_by(Ambient, Order) %>%
@@ -699,7 +706,7 @@ faird_by_ambient %>%
   dplyr::rename(Diptera_n = n, Total_n = total, Diptera_pct = pct) %>%
   print()
 
-# By site — #N/C excluded
+# By site: #N/C excluded
 faird_by_site <- data_list$faird %>%
   dplyr::filter(is.na(Order) | Order != nc) %>%
   dplyr::group_by(Site, Ambient, Order) %>%
@@ -722,7 +729,7 @@ faird_by_site %>%
   dplyr::rename(Diptera_n = n, Total_n = total, Diptera_pct = pct) %>%
   print()
 
-# Overall reference — #N/C excluded
+# Overall reference: #N/C excluded
 cat("\n--- Diptera % overall (all sites, #N/C excluded) ---\n")
 diptera_overall <- data_list$faird %>%
   dplyr::filter(is.na(Order) | Order != nc) %>%
@@ -738,8 +745,8 @@ table18 <- faird_by_ambient %>%
   dplyr::select(Ambient, n, total, pct) %>%
   dplyr::rename(Habitat = Ambient, Diptera_n = n, Total_n = total, Diptera_pct = pct)
 
-readr::write_csv(table18, "outputs/tables/Table18_H2_quali_diptera_dominance.csv")
-cat("\n[OK] Table18_H2_quali_diptera_dominance.csv\n\n")
+readr::write_csv(table18, here::here("outputs", "tables", "3-2b_diptera_share.csv"))
+cat("\n[OK] 3-2b_diptera_share.csv\n\n")
 
 # --- 5b. Table 19: Taxonomic resolution by Order ---
 cat("--- TABLE 19: Taxonomic resolution by Order ---\n\n")
@@ -851,10 +858,10 @@ resolution_overall <- resolution_data %>%
 cat("\n--- Overall resolution (all Orders combined) ---\n")
 print(resolution_overall)
 
-readr::write_csv(resolution_table_order, "outputs/tables/Table19_H2_quali_resolution_by_order.csv")
-readr::write_csv(resolution_condensed,   "outputs/tables/Table19_H2_quali_resolution_condensed.csv")
-cat("\n[OK] Table19_H2_quali_resolution_by_order.csv\n")
-cat("[OK] Table19_H2_quali_resolution_condensed.csv\n\n")
+readr::write_csv(resolution_table_order, here::here("outputs", "tables", "3-2b_identification_by_order.csv"))
+readr::write_csv(resolution_condensed,   here::here("outputs", "tables", "3-2b_identification_condensed.csv"))
+cat("\n[OK] 3-2b_identification_by_order.csv\n")
+cat("[OK] 3-2b_identification_condensed.csv\n\n")
 
 
 # ==============================================================================
@@ -862,21 +869,21 @@ cat("[OK] Table19_H2_quali_resolution_condensed.csv\n\n")
 # ==============================================================================
 
 cat("==============================================================================\n")
-cat("H2_quali_validation.R COMPLETE\n")
+cat("3-2b_composition_overlap.R COMPLETE\n")
 cat("==============================================================================\n\n")
 
 cat("FIGURES:\n")
-cat("  outputs/figures/Fig25_H2_quali_site_level.png\n")
-cat("  outputs/figures/Fig26_H2_quali_intra_habitat.png\n")
-cat("  outputs/figures/Fig27_H2_quali_intra_habitat_temporal.png\n")
-cat("  outputs/figures/Fig28_H2_quali_overall_level.png\n\n")
+cat("  outputs/figures/3-2b_overlap_by_site.png\n")
+cat("  outputs/figures/3-2b_overlap_by_habitat.png\n")
+cat("  outputs/figures/3-2b_overlap_by_habitat_over_time.png\n")
+cat("  outputs/figures/3-2b_overlap_all_sites.png\n\n")
 
 cat("TABLES:\n")
-cat("  outputs/tables/Table16_H2_quali_IP_summary.csv\n")
-cat("  outputs/tables/Table17_H2_quali_size_threshold.csv\n")
-cat("  outputs/tables/Table18_H2_quali_diptera_dominance.csv\n")
-cat("  outputs/tables/Table19_H2_quali_resolution_by_order.csv\n")
-cat("  outputs/tables/Table19_H2_quali_resolution_condensed.csv\n\n")
+cat("  outputs/tables/3-2b_overlap_summary.csv\n")
+cat("  outputs/tables/3-2b_size_threshold.csv\n")
+cat("  outputs/tables/3-2b_diptera_share.csv\n")
+cat("  outputs/tables/3-2b_identification_by_order.csv\n")
+cat("  outputs/tables/3-2b_identification_condensed.csv\n\n")
 
 cat("Script finished:", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n")
 

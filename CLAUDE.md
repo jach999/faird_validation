@@ -28,9 +28,18 @@ Evolution. Current draft: V5 (in the claude.ai project); V6 is being planned fro
 ## Repository layout
 
 ```
-R/            current scripts (00_load_data.R, 00_custom_colors.R, analysis scripts)
-R/old/        archived scripts
-outputs/      console/ (*_output*.txt) and tables/ (*.csv); figures not versioned
+R/            one script per V6 section (since 2026-10-28):
+              00_load_data.R, 00_custom_colors.R, 00_trajectory_functions.R (shared)
+              2-4_data_availability.R        Methods 2.4, Table 1
+              3-1a_quantity_trajectories.R   Results 3.1, Figure 3, trajectory tests
+              3-1b_quantity_concordance.R    Results 3.1, concordance, simple correlations
+              3-2a_composition_orders.R      Results 3.2, Figure 4, Table 2
+              3-2b_composition_overlap.R     Results 3.2, Izsak-Price, Table 3
+R/supplementary/  S1 to S4, one script per supplementary section
+R/old/        archived scripts, not part of the published repository
+              (stage2_v5/: V5 framework; stage3_versions/: superseded Stage 3 versions)
+outputs/      console/ and tables/, file names prefixed with the script name;
+              figures not versioned
 source_tables/  the four input CSV files (read-only)
 SAS/          V5 diagnostic mixed models (program and results)
 diagnostics/  throwaway diagnostic scripts
@@ -44,7 +53,10 @@ docs/         registry, outline, namespace standards, old/ for retired documents
 - Scripts source `R/00_load_data.R` and `R/00_custom_colors.R`; `00_load_data.R` anchors
   paths with `here::i_am("R/00_load_data.R")`. Paths via `here::here()`, never
   `setwd()` or hardcoded paths.
-- Console output to `outputs/console/`, tables to `outputs/tables/`.
+- Console output to `outputs/console/`, tables to `outputs/tables/`, each prefixed with
+  the script name (`<script>_output.txt`, `<script>_<table>.csv`).
+- File names follow the V6 sections and contain no person names; the same holds for
+  outputs and printed text. Only `R/old/` is exempt.
 
 ## R conventions
 

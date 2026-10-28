@@ -119,6 +119,22 @@ is it still valid.
   `Scherber_temporal_biomass_block_comparison.R`, `diagnostic_per_site_biomass.R`) moved to
   `R/old/stage3_versions/`; `diagnostic_per_site_biomass_2.R` contains Table 3c cited by
   R-DX-INTRA-01. File names are kept until the repository reorganisation.
+- **Repository reorganisation (2026-10-28, after v0.7.3).** Scripts renamed after the V6
+  sections; entries keep their old citations until the new scripts have been run and
+  checked against the old outputs, then the citations are replaced in one pass. Mapping:
+
+  | Old script (now in `R/old/`) | New script |
+  | --- | --- |
+  | `Scherber_temporal_biomass_6.R`, Sections 1, 2a to 2e (primary and complementary pairs), 2g | `3-1a_quantity_trajectories.R` (functions in `00_trajectory_functions.R`) |
+  | `Scherber_temporal_biomass_6.R`, Block random, nlme cross-check, pairing sensitivities, post hoc, 2f | `supplementary/S1_pair_model_sensitivity.R` |
+  | `Christoph_device_comparisons_2026-10-08_corrected.R`, biomass part (model, k, dual-axis figure) | `3-1a_quantity_trajectories.R` |
+  | `Christoph_device_comparisons_2026-10-08_corrected.R`, taxon part (multinomial, Figure 1 of the original) | `3-2a_composition_orders.R` |
+  | `Scherber_temporal_concordance_biomass_4.R` and `descriptive_correlations_daily_means.R` | `3-1b_quantity_concordance.R` |
+  | `H2_quali_validation.R` | `3-2b_composition_overlap.R` (renamed, analysis unchanged) |
+  | `diagnostic_per_site_biomass_2.R`, `diagnostic_per_device_operational.R` | `supplementary/S3_site_diagnostics.R` (abundance part now keeps all days with the outage window flagged for both systems) |
+  | `Scherber_temporal_abundance_FAIRD_ID.R` | `supplementary/S4_abundance_cameras.R` (descriptive only; the provisional tests of R-TA-FI-01 stay in `R/old/`) |
+  | `H1_quanti_consistency.R`, `H2_quanti_validation.R` (pair correlations only) | `supplementary/S2_unit_pair_correlations.R` |
+  | (new) | `2-4_data_availability.R` (Table 1, valid unit-days, checks of the validity calendar) |
 - **Extraction marks:** the `[cite: ...]` marks of the v0.2 LEGACY rows were removed in
   v0.4; every value carries its exact source.
 - **Observations:** Section 4 holds cross-entry syntheses (`R-OBS-nn`) with the fields
