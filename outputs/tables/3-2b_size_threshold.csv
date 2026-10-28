@@ -1,0 +1,6 @@
+Site,Habitat,n_windows,Mean_DS_raw,Mean_DS_3mm,Mean_DS_5mm,Delta_raw_to_3mm,Delta_3mm_to_5mm,Taxa_raw,Taxa_3mm,Taxa_5mm
+Site1,Maize,7,65.2,65.5,70.7,0.3,5.2,21.1,19.3,10.4
+Site2,Maize,5,61.3,60.3,64.1,-1,3.8,19,17.6,9.8
+Site3,Meadow,7,72.2,72.3,75.4,0.2,3.1,30.6,28.4,14.1
+Site4,Meadow,5,71.8,72.9,78.4,1.1,5.4,25.8,23.4,11.8
+All sites,-,24,67.8,68,72.3,0.2,4.3,24.4,22.5,11.7

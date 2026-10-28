@@ -2,7 +2,7 @@
 SIMPLE CORRELATIONS OF DAILY SYSTEM MEANS, BIOMASS AND ABUNDANCE
 Descriptive only: no models, no tests
 ==============================================================================
-Script started: 2026-10-28 11:22:24 
+Script started: 2026-10-28 16:08:53 
 
 A_12d: 2023-08-23 to 2023-09-03 (12 dates)
 B_22d: 2023-08-23 to 2023-09-13 (22 dates)
@@ -11,7 +11,7 @@ Excluded window (B_22d_excl, both units): 2023-08-28, 2023-08-29, 2023-08-30, 20
 23 comparisons defined.
 
 === CHECK: biomass Pearson vs r_total of the concordance script ===
-indexing Scherber_concordance_biomass.csv [==============================] 470.33MB/s, eta:  0s                                                                                               Matched 23 of 23 biomass comparisons; largest difference 1.11e-16.
+indexing Scherber_concordance_biomass.csv [==============================] 685.04MB/s, eta:  0s                                                                                               Matched 23 of 23 biomass comparisons; largest difference 1.11e-16.
 [OK] Biomass Pearson reproduces r_total for every comparison.
 
 === BETWEEN SYSTEMS (two blocks = main text; Maize only = secondary) ===
@@ -90,6 +90,6 @@ Reading notes (definitions, not results):
     peak); Spearman weights all days equally.
   - Biomass vs abundance within the camera systems: a lower biomass r than
     abundance r indicates noise added by the mass estimates.
-wrote 1.90kB in  0s, 67.36MB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             
+wrote 1.90kB in  0s, 105.98MB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             
 [OK] Table written: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/tables/descriptive_correlations_daily_means.csv 
-Run finished: 2026-10-28 11:22:26 
+Run finished: 2026-10-28 16:08:55 

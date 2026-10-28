@@ -1,0 +1,79 @@
+==============================================================================
+SECTION 2.4, DATA AVAILABILITY AND EXCLUSIONS
+==============================================================================
+Script started: 2026-10-28 16:00:45 
+
+=== TABLE 1: INCIDENTS ===
+Planned unit-days per system: 4 units x 22 days
+# A tibble: 8 × 9
+  System Units                          Stream   Start      End        Unit_days Cause_type
+  <chr>  <chr>                          <chr>    <date>     <date>         <int> <chr>     
+1 AMMOD  AMMOD1, AMMOD2, AMMOD3, AMMOD4 all      2023-09-04 2023-09-04         4 Protocol  
+2 AMMOD  AMMOD1, AMMOD2, AMMOD3, AMMOD4 biomass  2023-09-05 2023-09-13        36 Laboratory
+3 AMMOD  AMMOD3                         biomass  2023-08-31 2023-09-03         4 Laboratory
+4 AMMOD  AMMOD4                         biomass  2023-08-23 2023-09-03        12 Laboratory
+5 AMMOD  AMMOD4                         all      2023-08-28 2023-09-03         7 Device    
+6 AMMOD  AMMOD4                         taxonomy 2023-09-10 2023-09-10         1 Laboratory
+7 ID     ID3                            all      2023-08-23 2023-09-13        22 Operation 
+8 ID     ID1, ID2, ID4                  all      2023-08-28 2023-09-01        15 Power     
+  Cause                                                   
+  <chr>                                                   
+1 Bottle change, no sample collected                      
+2 ATL buffer extraction destroys the material for weighing
+3 ATL buffer extraction                                   
+4 ATL buffer extraction                                   
+5 Bottle rotation jammed, seven days in one bottle        
+6 Sample discarded                                        
+7 Corrupted SD card, detected after the campaign          
+8 Insufficient solar charging during a cold front         
+  Treatment                                   
+  <chr>                                       
+1 No sample                                   
+2 Lost                                        
+3 Lost                                        
+4 Lost                                        
+5 Excluded                                    
+6 Excluded                                    
+7 Lost                                        
+8 Partial operation; analysed with and without
+
+=== VALID UNIT-DAYS PER SYSTEM ===
+Biomass_valid for AMMOD: days with a weighed sample; for the camera systems:
+  days with valid recordings (biomass estimated from detections).
+Full_effort_valid: Field_valid minus the ID power-outage window.
+
+# A tibble: 3 × 6
+  System Planned Field_valid Taxonomy_valid Biomass_valid Full_effort_valid
+  <chr>    <int>       <int>          <int>         <int>             <int>
+1 AMMOD       88          77             76            32                77
+2 FAIRD       88          88             88            88                88
+3 ID          88          66             66            66                51
+
+=== VALID UNIT-DAYS PER UNIT ===
+# A tibble: 12 × 6
+   System Device Field_valid Taxonomy_valid Biomass_valid Full_effort_valid
+   <chr>  <chr>        <int>          <int>         <int>             <int>
+ 1 AMMOD  AMMOD1          21             21            12                21
+ 2 AMMOD  AMMOD2          21             21            12                21
+ 3 AMMOD  AMMOD3          21             21             8                21
+ 4 AMMOD  AMMOD4          14             13             0                14
+ 5 FAIRD  FAIRD1          22             22            22                22
+ 6 FAIRD  FAIRD2          22             22            22                22
+ 7 FAIRD  FAIRD3          22             22            22                22
+ 8 FAIRD  FAIRD4          22             22            22                22
+ 9 ID     ID1             22             22            22                17
+10 ID     ID2             22             22            22                17
+11 ID     ID3              0              0             0                 0
+12 ID     ID4             22             22            22                17
+
+=== CHECKS ===
+[OK]   Field_Valid: 0 unit-days where the incident log and the calendar disagree
+[OK]   Taxo_Valid: 0 unit-days where the incident log and the calendar disagree
+[OK]   Bio_Valid: 0 unit-days where the incident log and the calendar disagree
+[OK]   Field_Valid_Operational_ID: 0 unit-days where the incident log and the calendar disagree
+[OK]   AMMOD biomass: 32 weighed unit-days in the data, 32 valid in the calendar, 32 in both
+[OK]   AMMOD taxonomy: 76 unit-days with at least one record, 76 valid in the calendar; records outside valid days: 0
+[OK]   Camera systems: 154 unit-days in the daily series, 154 valid in the calendar
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             
+[OK] Tables written to C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/tables 
+Finished: 2026-10-28 16:00:46 

@@ -1,0 +1,9 @@
+System,Units,Stream,Start,End,Unit_days,Cause_type,Cause,Treatment
+AMMOD,"AMMOD1, AMMOD2, AMMOD3, AMMOD4",all,2023-09-04,2023-09-04,4,Protocol,"Bottle change, no sample collected",No sample
+AMMOD,"AMMOD1, AMMOD2, AMMOD3, AMMOD4",biomass,2023-09-05,2023-09-13,36,Laboratory,ATL buffer extraction destroys the material for weighing,Lost
+AMMOD,AMMOD3,biomass,2023-08-31,2023-09-03,4,Laboratory,ATL buffer extraction,Lost
+AMMOD,AMMOD4,biomass,2023-08-23,2023-09-03,12,Laboratory,ATL buffer extraction,Lost
+AMMOD,AMMOD4,all,2023-08-28,2023-09-03,7,Device,"Bottle rotation jammed, seven days in one bottle",Excluded
+AMMOD,AMMOD4,taxonomy,2023-09-10,2023-09-10,1,Laboratory,Sample discarded,Excluded
+ID,ID3,all,2023-08-23,2023-09-13,22,Operation,"Corrupted SD card, detected after the campaign",Lost
+ID,"ID1, ID2, ID4",all,2023-08-28,2023-09-01,15,Power,Insufficient solar charging during a cold front,Partial operation; analysed with and without

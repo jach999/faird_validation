@@ -1,0 +1,11 @@
+Order,total,pct_Genus_ID,n_Genus_ID,pct_Family_only,n_Family_only,pct_Superfamily_or_lower,n_Superfamily_or_lower
+Diptera,986,41.5,409,4.1,40,54.5,537
+Coleoptera,53,66,35,34,18,0,0
+Hymenoptera,44,81.8,36,18.2,8,0,0
+Araneae,7,28.6,2,28.6,2,42.9,3
+Hemiptera,5,80,4,20,1,0,0
+Lepidoptera,3,33.3,1,33.3,1,33.3,1
+Dermaptera,1,100,1,0,0,0,0
+Neuroptera,1,100,1,0,0,0,0
+Orthoptera,1,100,1,0,0,0,0
+Trichoptera,1,0,0,100,1,0,0
