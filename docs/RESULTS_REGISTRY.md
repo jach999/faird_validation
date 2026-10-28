@@ -1,6 +1,10 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
 
-**Version:** 0.7.4 (October 28, 2026). R-TB-INT-01: Maize-pair LRT values corrected
+**Version:** 0.7.5 (October 28, 2026). Citation pass for the entries reproduced by the
+main-text scripts (Conventions, "Repository reorganisation"); outputs of archived
+scripts moved to `outputs/*/old/` and their paths updated (Conventions, "Output
+locations"). No result changed.
+v0.7.4 (October 28, 2026). R-TB-INT-01: Maize-pair LRT values corrected
 (transcription error; reading unchanged), checked against the rerun of
 `3-1a_quantity_trajectories.R`. The reorganised scripts 2-4, 3-1a, 3-1b, 3-2a and 3-2b
 reproduce every value in this registry.
@@ -78,9 +82,15 @@ is it still valid.
 - **Sources:** V5 = `FAIRD_Paper_V5.docx`, cited by Results section number and table;
   PC V16 = `docs/old/20260317_PROJECT_CONTEXT_V16_EN_UPDATE_NEEDED.md` (repository), cited by
   block heading (its table of contents line numbers are not reliable); outputs =
-  `<script>_output.txt` with line numbers, now in `outputs/console/` of the repository
-  (except `H1_consistency_summary_output_*.txt`, in `outputs/`). Line numbers refer to
-  the files as of 2026-10-06, except where an entry or common note states otherwise.
+  `<script>_output.txt` with line numbers. Line numbers refer to the files as of
+  2026-10-06, except where an entry or common note states otherwise.
+- **Output locations (v0.7.5).** Outputs of the current scripts are in
+  `outputs/console/` and `outputs/tables/`, prefixed with the script name. Since
+  2026-10-28 every output of an archived script (Stage 1 to 3, file names unchanged)
+  is in `outputs/console/old/` or `outputs/tables/old/`; the loose files formerly in
+  `outputs/` (`H1_consistency_summary_output_*.txt`, `H1_*Table*.csv`,
+  `Table1_H1_Consolidated_Results_COMPLETE.csv`) are in `outputs/old/`. An old output
+  cited by bare file name is in one of these folders.
 - **File locations (v0.7):** scripts and outputs live in the GitHub repository
   `jach999/faird_validation`, branch `revision-scherber`, synced to ADP. Scripts cited by
   bare name are in `R/` (current) or `R/old/` (archived). Earlier entries that say a
@@ -114,7 +124,7 @@ is it still valid.
   `Scherber_biomass_internal_consistency.csv`); the file named `_5.R` has Sections 2e and
   2f only. Entries citing `Scherber_temporal_concordance_biomass.R` refer to the current
   `R/Scherber_temporal_concordance_biomass_4.R`, which wrote
-  `outputs/tables/Scherber_concordance_biomass.csv`; the console output of the
+  `outputs/tables/old/Scherber_concordance_biomass.csv`; the console output of the
   2026-10-12 rerun was written by `Scherber_temporal_concordance_biomass (1).R`, the
   same analysis plus the internal parallelism LRT, with identical values (checked by
   R-CC-DESC-01 against the table). The file without suffix is the earlier version with
@@ -125,7 +135,14 @@ is it still valid.
   R-DX-INTRA-01. File names are kept until the repository reorganisation.
 - **Repository reorganisation (2026-10-28, after v0.7.3).** Scripts renamed after the V6
   sections; entries keep their old citations until the new scripts have been run and
-  checked against the old outputs, then the citations are replaced in one pass. Mapping:
+  checked against the old outputs, then the citations are replaced in one pass.
+  Status of the pass (v0.7.5): the main-text scripts (2-4, 3-1a, 3-1b, 3-2a, 3-2b) were
+  run on 2026-10-28 and reproduce every value checked (models, LRTs, Holm, k, internal
+  parallelism, all LOW / HIGH / TOTAL values, multinomial LR tests, overlap tables);
+  entries resting on them now cite the new script and output first and keep the old
+  one as "Earlier source". Line numbers in those entries still refer to the old output.
+  Entries resting on S1 to S4 keep their old citations until those scripts have been
+  run. Mapping:
 
   | Old script (now in `R/old/`) | New script |
   | --- | --- |
@@ -313,7 +330,11 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   log scale).
 
 **R-TB-INT-01, parallelism within each system (constant ratio)** | CURRENT
-- Source: `Scherber_temporal_biomass_5.R`, Section 2g. Same GLMM, cascade, PAIRED_BLOCK
+- Source: `3-1a_quantity_trajectories.R`, internal parallelism; table
+  `outputs/tables/3-1a_quantity_trajectories_internal_parallelism.csv` (run of
+  2026-10-28, all 13 rows equal to the earlier table). Earlier source:
+  `Scherber_temporal_biomass_5.R`, Section 2g (`Scherber_biomass_internal_consistency.csv`).
+  Same GLMM, cascade, PAIRED_BLOCK
   pairing and LRT as Section 2e; units of one system replace Device_type. Maize-only
   comparisons may use last-resort levels without Site/Device intercepts. Unadjusted.
 - Result (LRT p): FAIRD halves {1,3} vs {2,4} 0.94 / 0.78 / not computed and {1,4} vs
@@ -331,7 +352,9 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   systems (R-TB-AF-01, R-TB-FI-22F, R-TB-FI-22X) does not appear within any system.
 
 **R-CC-INT-01, concordance within each system** | CURRENT
-- Source: `Scherber_temporal_concordance_biomass.R`. LOW = r between fitted unit curves
+- Source: `3-1b_quantity_concordance.R`; table
+  `outputs/tables/3-1b_quantity_concordance_components.csv` (run of 2026-10-28).
+  Earlier source: `Scherber_temporal_concordance_biomass.R`. LOW = r between fitted unit curves
   (raw scale, coefficient-simulation interval, lower limit pessimistic); HIGH = r between
   unit series of Pearson residuals (no-AR1 model), lag 0; TOTAL = r of daily unit means.
 - Result: FAIRD halves LOW 0.85 to 0.99, HIGH 0.70 to 0.88, TOTAL 0.90 to 0.95;
@@ -492,8 +515,15 @@ windows and filters as in the R-V5-H1T common note.
 Common to all entries: `Scherber_temporal_biomass_3.R`, Section 2e, run of 2026-10-02.
 Model bs(Date.num, 3) * Device_type + Block fixed, (1|Site/Device), AR1, Tweedie, log
 link; interaction 3 df. Parallel on the log link = constant ratio between systems. Full
-table with all variants: `outputs/tables/Scherber_biomass_pairs.csv`. The same results
+table with all variants: `Scherber_biomass_pairs.csv`. The same results
 are reproduced by `Scherber_temporal_biomass_5.R` (Section 2e unchanged).
+Current source (v0.7.5): `3-1a_quantity_trajectories.R`, run of 2026-10-28; output
+`outputs/console/3-1a_quantity_trajectories_output.txt`, tables
+`outputs/tables/3-1a_quantity_trajectories_pair_models.csv` (primary and complementary
+pairs, Holm) and `3-1a_quantity_trajectories_test_model_ANOVA_III.csv` (omnibus). The
+pairing sensitivities, Block random and the post hoc removal of the first 3 days
+(R-TB-AF-01, R-TB-AI-01, R-TB-FI-01) and R-TB-ALL-ID-01 move to
+`supplementary/S1_pair_model_sensitivity.R`, not yet run.
 
 ---
 
@@ -585,7 +615,7 @@ Common to the entries below: `Scherber_temporal_concordance_biomass.R`, spline d
 PAIRED_BLOCK unless stated; definitions as in R-CC-INT-01; HIGH intervals by Fisher z
 (indicative). A bootstrap p-value for HIGH was implemented and removed (run never
 finished); its partial values are not for reporting.
-Rerun of 2026-10-12 (`outputs/console/Scherber_temporal_concordance_biomass_output.txt`,
+Rerun of 2026-10-12 (`outputs/console/old/Scherber_temporal_concordance_biomass_output.txt`,
 3.8 min; until v0.6 cited as `claude/Scherber_temporal_concordance_biomass_output_20261012.txt`,
 same run): every
 point estimate of R-CC-INT-01, R-CC-AF-01 to R-CC-SENS-01 and every parallelism LRT of
@@ -597,6 +627,11 @@ above the upper limit persists (Section 6).
 Level of comparison for the manuscript (v0.6): the two-block rows are the primary,
 system-level results. Maize-only rows compare systems within one block (secondary).
 Disattenuation rests on Maize device-pair references (C2, R-OBS-05).
+Current source (v0.7.5): `3-1b_quantity_concordance.R`, run of 2026-10-28; output
+`outputs/console/3-1b_quantity_concordance_output.txt`, tables
+`outputs/tables/3-1b_quantity_concordance_components.csv` and
+`3-1b_quantity_concordance_disattenuation.csv`. All 28 LOW / HIGH / TOTAL lines,
+including the df 4 sensitivity, identical to the 2026-10-12 rerun.
 
 **R-CC-AF-01, AMMOD vs FAIRD, A_12d** | CURRENT
 - Result: LOW 0.25 [-0.39, 0.78]; HIGH 0.61 [0.05, 0.88]; TOTAL 0.38. Maize only: LOW
@@ -639,9 +674,11 @@ TEXT (C2)
 - Reading: LOW depends on spline flexibility; HIGH is stable.
 
 **R-CC-DESC-01, simple correlations of daily system means** | CURRENT, DESCRIPTIVE
-- Source: `descriptive_correlations_daily_means.R`, run of 2026-10-28; output
-  `outputs/console/descriptive_correlations_daily_means_output.txt`, table
-  `outputs/tables/descriptive_correlations_daily_means.csv`. No models, no tests.
+- Source: `3-1b_quantity_concordance.R`, Section 9 (simple correlations), run of
+  2026-10-28; table `outputs/tables/3-1b_quantity_concordance_daily_mean_correlations.csv`.
+  Earlier source: `descriptive_correlations_daily_means.R` (same day, same values);
+  output `descriptive_correlations_daily_means_output.txt`, table
+  `descriptive_correlations_daily_means.csv`. No models, no tests.
 - Metric: daily unit means averaged within block, then across blocks (definition of
   TOTAL); Pearson (raw scale) and Spearman. Same comparisons, windows, block-day
   pairing and symmetric window exclusion as R-CC-*. Biomass for all systems, abundance
@@ -688,13 +725,13 @@ Common to R-V5-H2Q-01 to -05 and the R-OUT-H2Q entries (`H2_quanti_validation.R`
   2026-10-08 reproduces every value of its Sections 1 to 7; line references are kept to
   the 2026-07-22 file.
 - File in use (v0.7): the 2026-07-22 file is no longer in ADP; the repository holds the
-  2026-10-08 rerun (`outputs/console/H2_quanti_validation_output.txt`). Its Sections 1
+  2026-10-08 rerun (`outputs/console/old/H2_quanti_validation_output.txt`). Its Sections 1
   to 7 are the 2026-07-22 lines shifted by +3 (three Truth Calendar lines added by
   `00_load_data.R`; checked at l.170, 205, 209, 228 and 231, cited here as l.167, 202,
   206, 225 and 228); add 3 to every line reference below when reading that file. Its
   Section 8 (registry diagnostics) also appears there from l.359, because the run
   predates the `split = FALSE` fix; the separate diagnostics file is
-  `outputs/console/H2_quanti_registry_diagnostics_output.txt`.
+  `outputs/console/old/H2_quanti_registry_diagnostics_output.txt`.
 - Diagnostics: `H2_quanti_registry_diagnostics_output.txt` ("diag" below; Section 8 of
   the script, run of 2026-10-08), tests of the hypotheses recorded in v0.4.
 
@@ -911,8 +948,8 @@ R-CC-AI-01
 
 Common to the R-TA-FI entries:
 - Source: `Scherber_temporal_abundance_FAIRD_ID.R`, run of 2026-09-02; output
-  `outputs/console/Scherber_temporal_abundance_FAIRD_ID_output.txt` (line numbers
-  below); tables `outputs/tables/Scherber_abundance_FAIRD_ID_*.csv`. Session summary of
+  `outputs/console/old/Scherber_temporal_abundance_FAIRD_ID_output.txt` (line numbers
+  below); tables `outputs/tables/old/Scherber_abundance_FAIRD_ID_*.csv`. Session summary of
   the same date (`resumen_sesion_abundancia_FAIRD_ID.txt`, retired from ADP on
   2026-10-12): its results are entered here and in R-DX-FI-ABUND-01, its methodological
   findings are in EXPERIMENT_CONTEXT V1.5, Sections 14 and 15.
@@ -985,6 +1022,15 @@ Common to the R-V5-H2T entries (Stage 2 framework, `H2_quali_validation.R`):
 - PC V16 has no counterpart for the windowed Superfamily analysis: Stage 1 used daily
   genus-level Izsak-Price (H3), dropped in V5 (R-V16-H3T-01).
 - Verification: `H2_quali_validation_output.txt` (run of 2026-07-22).
+- Current source (v0.7.5): `3-2b_composition_overlap.R` (the same script renamed, labels
+  and output names changed, analysis unchanged), run of 2026-10-28; output
+  `outputs/console/3-2b_composition_overlap_output.txt`, tables
+  `outputs/tables/3-2b_overlap_summary.csv`, `3-2b_size_threshold.csv`,
+  `3-2b_diptera_share.csv`, `3-2b_identification_by_order.csv` and
+  `3-2b_identification_condensed.csv`. Values identical to the 2026-07-22 output (print
+  width differs, so the line numbers below refer to the old output). The status flags
+  of the entries are unchanged: V5 NOT REPRODUCED still means that V5 differs from this
+  output.
 
 **R-V5-H2T-01, FAIRD vs AMMOD similarity, 3-day windows** | LEGACY V5
 - Level: Site (FAIRD vs co-located AMMOD), Intra-Habitat (site-windows pooled by
@@ -1243,6 +1289,17 @@ Common to the R-DC entries:
   (corrected inputs); figures `Device effects 2026-10-08-2.pdf` (Scherber) and
   `Device effects 2026-10-08-2_corrected.pdf` (2 pages; run before the dual-axis page
   was added).
+- Current source (v0.7.5), run of 2026-10-28, corrected inputs only: biomass model, k and
+  dual-axis figure in `3-1a_quantity_trajectories.R` (table
+  `outputs/tables/3-1a_quantity_trajectories_figure_model_coefficients.csv`, figure
+  `3-1a_quantity_trajectories_fig3_biomass_dualaxis.png`); multinomial model, order
+  frequencies and figure in `3-2a_composition_orders.R` (tables
+  `outputs/tables/3-2a_composition_orders_table2_order_unit_days.csv` and
+  `3-2a_composition_orders_multinomial_LR_tests.csv`, figure
+  `3-2a_composition_orders_fig4_order_composition.pdf`). Reproduced: intercept 8.2354,
+  FAIRD -3.4157, ID -2.1405, AIC 1657.4, k = 11 over 32 site-days; LR chi² 17.160,
+  86.092, 59.003; all order frequencies of R-DC-TX-03. The original-input runs
+  (R-DC-TX-01, R-DC-BM-01) and the exploratory checks are not carried over.
 - Input corrections (all on inputs, models unchanged): (1) AMMOD presence deduplicated
   to Date x Device x Order, the unit of `etraps_presence_daily`; (2) AMMOD biomass =
   `Live_mass` (mg) instead of `Dry_mass_g * 1000` (unit homogeneity with the allometric
@@ -1339,7 +1396,9 @@ Common to the R-DC entries:
 ## 3. DIAGNOSTICS AND DATA FACTS
 
 **R-DX-AF-RATIO-01, AMMOD/FAIRD ratio drift** | CURRENT
-- Source: Section 2e, ratio of device means per block-day (PAIRED_BLOCK).
+- Source: `3-1a_quantity_trajectories.R`, daily ratio of unit means per pair, run of
+  2026-10-28 (rho reproduced). Earlier source: Section 2e, ratio of device means per
+  block-day (PAIRED_BLOCK).
 - Result: Spearman rho(ratio, date) = -0.08; AMMOD-scale factor for figures about 10.
 - Reading: no monotonic drift; divergence is of shape, concentrated at the ends of the
   12-day window.

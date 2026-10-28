@@ -39,7 +39,8 @@ R/supplementary/  S1 to S4, one script per supplementary section
 R/old/        archived scripts, not part of the published repository
               (stage2_v5/: V5 framework; stage3_versions/: superseded Stage 3 versions)
 outputs/      console/ and tables/, file names prefixed with the script name;
-              figures not versioned
+              figures not versioned; old/ subfolders (and outputs/old/) hold outputs
+              of archived scripts, not part of the published repository
 source_tables/  the four input CSV files (read-only)
 SAS/          V5 diagnostic mixed models (program and results)
 diagnostics/  throwaway diagnostic scripts
@@ -56,7 +57,7 @@ docs/         registry, outline, namespace standards, old/ for retired documents
 - Console output to `outputs/console/`, tables to `outputs/tables/`, each prefixed with
   the script name (`<script>_output.txt`, `<script>_<table>.csv`).
 - File names follow the V6 sections and contain no person names; the same holds for
-  outputs and printed text. Only `R/old/` is exempt.
+  outputs and printed text. Only `R/old/` and the `old/` output folders are exempt.
 
 ## R conventions
 
