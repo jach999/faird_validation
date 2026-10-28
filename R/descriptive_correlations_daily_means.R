@@ -10,7 +10,7 @@
 # results), Methods 2.5 (definition). At the repository reorganisation this
 # script becomes a section of the quantity / concordance file.
 #
-# Definition (identical to TOTAL in Scherber_temporal_concordance_biomass.R):
+# Definition (identical to TOTAL in Scherber_temporal_concordance_biomass_4.R):
 #   daily mean per unit, averaged within block, then across blocks; one
 #   series per unit; correlation between the two series over the dates on
 #   which both units have a value in the same block (block-day pairing).

@@ -1,6 +1,11 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
 
-**Version:** 0.7.2 (October 27, 2026). File moved from ADP (`claude/20261012_RESULTS_REGISTRY.md`)
+**Version:** 0.7.3 (October 28, 2026). Conventions: which script files produced the
+current results, and superseded versions moved to `R/old/stage3_versions/`; adds
+R-CC-DESC-01 (Section 2.2, simple correlations of daily means, biomass and abundance);
+R-DC-BM-02: factor k printed (11); R-DC-TX-03: denominators; both Section 6 rows
+removed. No earlier result changed.
+v0.7.2 (October 27, 2026). File moved from ADP (`claude/20261012_RESULTS_REGISTRY.md`)
 to the repository as `docs/RESULTS_REGISTRY.md`; update rule, location of Scherber's
 original script and reference to his criticisms (now `claude/20261013_SCHERBER_GUIDELINES_EN.md`)
 updated in Conventions. No result changed.
@@ -98,6 +103,22 @@ is it still valid.
   byte-identical to the copy on `main`, brought to `revision-scherber` on 2026-10-13,
   the ADP copy deleted); runnable and corrected versions in `R/`; run outputs in
   `outputs/console/`.
+- **Script files (v0.7.3).** Checked on 2026-10-28 against the outputs in the
+  repository. Entries citing `Scherber_temporal_biomass_5.R` for Sections 2e to 2g refer
+  to the file `R/Scherber_temporal_biomass_6.R`, whose header also says "Version 5" and
+  which is the only version with Section 2g (it writes
+  `Scherber_biomass_internal_consistency.csv`); the file named `_5.R` has Sections 2e and
+  2f only. Entries citing `Scherber_temporal_concordance_biomass.R` refer to the current
+  `R/Scherber_temporal_concordance_biomass_4.R`, which wrote
+  `outputs/tables/Scherber_concordance_biomass.csv`; the console output of the
+  2026-10-12 rerun was written by `Scherber_temporal_concordance_biomass (1).R`, the
+  same analysis plus the internal parallelism LRT, with identical values (checked by
+  R-CC-DESC-01 against the table). The file without suffix is the earlier version with
+  the bootstrap p-value that never finished. Superseded versions (`Scherber_temporal_biomass.R`
+  and `_2` to `_5`, concordance without suffix, `(1)` and `_2`, `H2_bridge_exploratory.R`,
+  `Scherber_temporal_biomass_block_comparison.R`, `diagnostic_per_site_biomass.R`) moved to
+  `R/old/stage3_versions/`; `diagnostic_per_site_biomass_2.R` contains Table 3c cited by
+  R-DX-INTRA-01. File names are kept until the repository reorganisation.
 - **Extraction marks:** the `[cite: ...]` marks of the v0.2 LEGACY rows were removed in
   v0.4; every value carries its exact source.
 - **Observations:** Section 4 holds cross-entry syntheses (`R-OBS-nn`) with the fields
@@ -518,6 +539,7 @@ primary (kept as sensitivity)
 | ID | Status | Note |
 | --- | --- | --- |
 | R-CC-AF/AI/FI-* | DONE, see entries below | Two components per pair: shared low-frequency shape, shared day-to-day fluctuation. Scale to be declared per claim |
+| R-CC-DESC-01 | CURRENT, DESCRIPTIVE | Simple correlations of daily system means, biomass and abundance, Pearson and Spearman (entry below) |
 | R-V5-H2Q-01 | LEGACY V5, DISCREPANCY V5/V16 | FAIRD vs AMMOD, site-level OLS, daily biomass (entry below) |
 | R-V5-H2Q-02 | LEGACY V5, DISCREPANCY V5/V16, V5 NOT REPRODUCED | FAIRD vs AMMOD, Maize pooled, n = 24 (entry below) |
 | R-V5-H2Q-03 | LEGACY V5, DISCREPANCY V5/V16, V5 NOT REPRODUCED | FAIRD vs AMMOD, Overall pooled, n = 32 (entry below) |
@@ -590,6 +612,38 @@ TEXT (C2)
   to 0.53; FAIRD-ID A_12d -0.46 to -0.02. HIGH AMMOD-FAIRD 0.61 to 0.53; AMMOD-ID 0.65 to
   0.59.
 - Reading: LOW depends on spline flexibility; HIGH is stable.
+
+**R-CC-DESC-01, simple correlations of daily system means** | CURRENT, DESCRIPTIVE
+- Source: `descriptive_correlations_daily_means.R`, run of 2026-10-28; output
+  `outputs/console/descriptive_correlations_daily_means_output.txt`, table
+  `outputs/tables/descriptive_correlations_daily_means.csv`. No models, no tests.
+- Metric: daily unit means averaged within block, then across blocks (definition of
+  TOTAL); Pearson (raw scale) and Spearman. Same comparisons, windows, block-day
+  pairing and symmetric window exclusion as R-CC-*. Biomass for all systems, abundance
+  for FAIRD and ID.
+- Check: biomass Pearson reproduces r_total of `Scherber_concordance_biomass.csv` for
+  all 23 comparisons (largest difference 1.1e-16).
+- Result, Spearman (Pearson), biomass / abundance:
+  - FAIRD halves, mean of two splits, A_12d / B_22d full / B_22d excl: biomass 0.74 /
+    0.85 / 0.82 (0.91 / 0.93 / 0.95); abundance 0.83 / 0.88 / 0.84 (0.96 / 0.97 / 0.98).
+  - FAIRD1 vs FAIRD2: biomass 0.71 / 0.79 / 0.79 (0.88 / 0.90 / 0.93); abundance 0.82 /
+    0.81 / 0.78 (0.96 / 0.97 / 0.98).
+  - AMMOD1 vs AMMOD2, A_12d: 0.87 (0.80).
+  - ID1 vs ID2, A_12d / B_22d full / B_22d excl: biomass 0.16 / 0.27 / 0.60 (0.08 /
+    0.25 / 0.69); abundance 0.21 / 0.28 / 0.63 (0.09 / 0.24 / 0.78).
+  - AMMOD vs FAIRD, A_12d: two blocks 0.33 (0.38); Maize 0.33 (0.66).
+  - AMMOD vs ID, A_12d: two blocks 0.42 (0.20); Maize 0.21 (0.05).
+  - FAIRD vs ID, A_12d: two blocks biomass 0.03 (-0.07), abundance 0.06 (-0.08).
+  - FAIRD vs ID, B_22d full / excl, two blocks: biomass 0.24 / 0.28 (0.15 / 0.11);
+    abundance 0.22 / 0.19 (0.13 / 0.11). Maize: biomass 0.58 / 0.43 (0.31 / 0.35);
+    abundance 0.58 / 0.44 (0.26 / 0.36).
+- Reading: raw-scale Pearson is dominated by the shared seasonal peak (FAIRD internal
+  Pearson close to LOW); Spearman weights all days equally. Within FAIRD, abundance is
+  more consistent than biomass (the mass estimates add noise). Between FAIRD and ID,
+  abundance agrees no better than biomass.
+- Manuscript use (Juan's decision, 2026-10-28): Spearman of daily means in parentheses
+  next to the model-based results, for every comparison; Pearson and both measures in
+  Supplementary Material S2.
 
 **H2 quantitative agreement, FAIRD vs AMMOD (Stage 2 framework)**
 
@@ -1211,7 +1265,10 @@ Common to the R-DC entries:
   0; Opiliones 10 / 0 / 0; Psocoptera 10 / 0 / 0; Trichoptera 6 / 1 / 0; Orthoptera 5 /
   1 / 0; Dermaptera, Isopoda, Neuroptera, Odonata 2 / 0 to 1 / 0; Trombidiformes 1 / 0 /
   0; Indet. 0 / 13 / 17.
-- Denominators (valid device-days per system) not yet computed (Section 6).
+- Denominators (v0.7.3): valid taxonomic unit-days from the `effort_base` rules
+  (`00_load_data.R`, `Taxo_Valid`): AMMOD 76 (AMMOD1 to AMMOD3, 21 each; AMMOD4 13),
+  FAIRD 88, ID 66 (ID3 excluded; outage days are valid unit-days). Derived from the
+  rules, not printed by a run; equal to EXPERIMENT_CONTEXT V1.5, Section 9.
 - Reading: Diptera detected on almost every device-day by all systems; Lepidoptera and
   Hemiptera detected by AMMOD on many device-days and by the e-traps on very few.
   Causes: hypotheses only (R-OBS-06).
@@ -1243,8 +1300,9 @@ Common to the R-DC entries:
   compressed near zero by the live-mass AMMOD level); page 3 (added after the run),
   dual-axis figure: linear axes, FAIRD/ID left, AMMOD right divided by a data-derived
   factor k (sum AMMOD / sum FAIRD over co-located site-days, 2 significant digits).
-  Juan's decision: figure kept as designed, k data-derived (not rounded to 10). Value
-  of k from the next run (Section 6).
+  Juan's decision: figure kept as designed, k data-derived (not rounded to 10).
+  k = 11 over 32 co-located site-days (corrected output of 2026-10-12 16:02:55, l.122;
+  the 15:32 output predates the dual-axis page and is otherwise identical).
 - Exploratory checks in the script: `fitdistrplus::fitdist` gamma fails (zero-biomass
   days); `tweedie_profile` result printed as NULL (`t1$p.max` not in the object;
   Scherber's note: power about 1.6).
@@ -1476,8 +1534,6 @@ script would settle it.
 | R-V5-H2T-04 | genus share 37 to 51% across devices (V5 Methods) | not printed | testable in ADP: genus share by device |
 | R-V5-H2T-05 | SD range 4.8 to 12.0% (V5) | cause not determined (PC V16 4.8 to 6.8%) | Stage 1 H3 output; or remove the comparison in V6 |
 | R-CC-INT-01 | ID1 vs ID2 B_22d full LOW 0.991, interval [-0.558, 0.982] | estimate above the upper limit; interval differs from the 2026-10-05 log ([-0.60, 0.988]) although the seed is fixed | change the LOW interval method for the paper, or report LOW without interval |
-| R-DC-BM-02 | dual-axis scale factor k | not yet printed (page 3 added after the run) | rerun of the corrected script |
-| R-DC-TX-03 | valid device-days per system (denominators) | not computed | count from `effort_base` (`Taxo_Valid` for AMMOD, `Field_Valid` for the e-traps) |
 | R-OBS-06 | hour of `Checkin` of FAIRD Lepidoptera and Hemiptera records | not computed | `table()` of the hour by Order in `faird_data` |
 | R-DC-BM-02 | Tweedie power from `tweedie_profile` | printed as NULL | print the correct element of the profile object |
 | R-TA-FI-01 | interaction p BX 0.828 / 0.647 vs Tweedie 0.0002 / < 0.0001 | operational exclusion asymmetric (ID only); reading of the BX vs Tweedie disagreement (distributional framework) not validated | rerun R-TA-FI-02 with symmetric exclusion; Scherber's reading of the disagreement |

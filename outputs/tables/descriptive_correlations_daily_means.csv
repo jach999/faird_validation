@@ -1,0 +1,42 @@
+id,type,comparison,window,version,measure,n_dates,pearson,spearman
+AMMOD-FAIRD|A_12d|two_block,between,AMMOD vs FAIRD,A_12d,two_block,biomass,12,0.3759228484915924,0.3286713286713287
+AMMOD-FAIRD|A_12d|maize_only,between,AMMOD vs FAIRD,A_12d,maize_only,biomass,12,0.6565984970553249,0.3286713286713287
+AMMOD-ID|A_12d|two_block,between,AMMOD vs ID,A_12d,two_block,biomass,12,0.2039466117906366,0.4195804195804196
+AMMOD-ID|A_12d|maize_only,between,AMMOD vs ID,A_12d,maize_only,biomass,12,0.052873620276267484,0.2097902097902098
+FAIRD-ID|A_12d|two_block,between,FAIRD vs ID,A_12d,two_block,biomass,12,-0.0705073181795798,0.03496503496503497
+FAIRD-ID|A_12d|two_block,between,FAIRD vs ID,A_12d,two_block,abundance,12,-0.07755142524950955,0.06304738215045116
+FAIRD-ID|A_12d|maize_only,between,FAIRD vs ID,A_12d,maize_only,biomass,12,0.12724612480397582,0.34965034965034975
+FAIRD-ID|A_12d|maize_only,between,FAIRD vs ID,A_12d,maize_only,abundance,12,0.1006500363950164,0.4685314685314686
+FAIRD-ID|B_22d_full|two_block,between,FAIRD vs ID,B_22d_full,two_block,biomass,22,0.14628156661055133,0.23997741389045732
+FAIRD-ID|B_22d_full|two_block,between,FAIRD vs ID,B_22d_full,two_block,abundance,22,0.12562754051202793,0.2154977720271182
+FAIRD-ID|B_22d_full|maize_only,between,FAIRD vs ID,B_22d_full,maize_only,biomass,22,0.30714950659132223,0.5810276679841897
+FAIRD-ID|B_22d_full|maize_only,between,FAIRD vs ID,B_22d_full,maize_only,abundance,22,0.2611771042280174,0.5846763027004366
+FAIRD-ID|B_22d_excl|two_block,between,FAIRD vs ID,B_22d_excl,two_block,biomass,17,0.11281263661456184,0.2843137254901961
+FAIRD-ID|B_22d_excl|two_block,between,FAIRD vs ID,B_22d_excl,two_block,abundance,17,0.11165467902650385,0.1893055059472968
+FAIRD-ID|B_22d_excl|maize_only,between,FAIRD vs ID,B_22d_excl,maize_only,biomass,17,0.3534328765661273,0.4338235294117648
+FAIRD-ID|B_22d_excl|maize_only,between,FAIRD vs ID,B_22d_excl,maize_only,abundance,17,0.3606174841007889,0.4407612862405517
+FAIRD|S1|A_12d|two_block,internal,FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4,A_12d,two_block,biomass,12,0.923427109175778,0.8321678321678323
+FAIRD|S1|A_12d|two_block,internal,FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4,A_12d,two_block,abundance,12,0.9589557370321304,0.9562186292818426
+FAIRD|S2|A_12d|two_block,internal,FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3,A_12d,two_block,biomass,12,0.9022806352550914,0.6503496503496504
+FAIRD|S2|A_12d|two_block,internal,FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3,A_12d,two_block,abundance,12,0.9613178266862203,0.6954268462916698
+FAIRD|maize|A_12d|maize_only,internal,FAIRD: FAIRD1 vs FAIRD2,A_12d,maize_only,biomass,12,0.87660604452244,0.7062937062937064
+FAIRD|maize|A_12d|maize_only,internal,FAIRD: FAIRD1 vs FAIRD2,A_12d,maize_only,abundance,12,0.9638173166109596,0.8162595129297464
+AMMOD|maize|A_12d|maize_only,internal,AMMOD: AMMOD1 vs AMMOD2,A_12d,maize_only,biomass,12,0.7998116117762666,0.8741258741258742
+ID|maize|A_12d|maize_only,internal,ID: ID1 vs ID2,A_12d,maize_only,biomass,12,0.07539167455193949,0.15614035087719302
+ID|maize|A_12d|maize_only,internal,ID: ID1 vs ID2,A_12d,maize_only,abundance,12,0.09470885368582561,0.20526315789473687
+FAIRD|S1|B_22d_full|two_block,internal,FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4,B_22d_full,two_block,biomass,22,0.9409134953591959,0.8441558441558441
+FAIRD|S1|B_22d_full|two_block,internal,FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4,B_22d_full,two_block,abundance,22,0.9650543608518577,0.8746820688704005
+FAIRD|S2|B_22d_full|two_block,internal,FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3,B_22d_full,two_block,biomass,22,0.927934049409989,0.852060982495765
+FAIRD|S2|B_22d_full|two_block,internal,FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3,B_22d_full,two_block,abundance,22,0.9716771416270299,0.8942145511094509
+FAIRD|maize|B_22d_full|maize_only,internal,FAIRD: FAIRD1 vs FAIRD2,B_22d_full,maize_only,biomass,22,0.9010566609834441,0.7870435987439796
+FAIRD|maize|B_22d_full|maize_only,internal,FAIRD: FAIRD1 vs FAIRD2,B_22d_full,maize_only,abundance,22,0.9663849187276574,0.8079089666944034
+ID|maize|B_22d_full|maize_only,internal,ID: ID1 vs ID2,B_22d_full,maize_only,biomass,22,0.2530982302942123,0.26751412429378535
+ID|maize|B_22d_full|maize_only,internal,ID: ID1 vs ID2,B_22d_full,maize_only,abundance,22,0.2442467199000245,0.28421945701357465
+FAIRD|S1|B_22d_excl|two_block,internal,FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4,B_22d_excl,two_block,biomass,17,0.9528399578418258,0.8186274509803922
+FAIRD|S1|B_22d_excl|two_block,internal,FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4,B_22d_excl,two_block,abundance,17,0.9681538874373266,0.8191888115699233
+FAIRD|S2|B_22d_excl|two_block,internal,FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3,B_22d_excl,two_block,biomass,17,0.9396394519933404,0.823529411764706
+FAIRD|S2|B_22d_excl|two_block,internal,FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3,B_22d_excl,two_block,abundance,17,0.9866279183243488,0.865883807169345
+FAIRD|maize|B_22d_excl|maize_only,internal,FAIRD: FAIRD1 vs FAIRD2,B_22d_excl,maize_only,biomass,17,0.9345716695001095,0.793351267486287
+FAIRD|maize|B_22d_excl|maize_only,internal,FAIRD: FAIRD1 vs FAIRD2,B_22d_excl,maize_only,abundance,17,0.9826095904417504,0.7786556399655745
+ID|maize|B_22d_excl|maize_only,internal,ID: ID1 vs ID2,B_22d_excl,maize_only,biomass,17,0.6895432086808813,0.5980392156862746
+ID|maize|B_22d_excl|maize_only,internal,ID: ID1 vs ID2,B_22d_excl,maize_only,abundance,17,0.7815780186259379,0.6253071253071252

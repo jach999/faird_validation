@@ -1,0 +1,95 @@
+==============================================================================
+SIMPLE CORRELATIONS OF DAILY SYSTEM MEANS, BIOMASS AND ABUNDANCE
+Descriptive only: no models, no tests
+==============================================================================
+Script started: 2026-10-28 11:22:24 
+
+A_12d: 2023-08-23 to 2023-09-03 (12 dates)
+B_22d: 2023-08-23 to 2023-09-13 (22 dates)
+Excluded window (B_22d_excl, both units): 2023-08-28, 2023-08-29, 2023-08-30, 2023-08-31, 2023-09-01
+
+23 comparisons defined.
+
+=== CHECK: biomass Pearson vs r_total of the concordance script ===
+indexing Scherber_concordance_biomass.csv [==============================] 470.33MB/s, eta:  0s                                                                                               Matched 23 of 23 biomass comparisons; largest difference 1.11e-16.
+[OK] Biomass Pearson reproduces r_total for every comparison.
+
+=== BETWEEN SYSTEMS (two blocks = main text; Maize only = secondary) ===
+# A tibble: 10 × 9
+   comparison     window     version    n_dates_biomass n_dates_abundance pearson_biomass
+   <chr>          <chr>      <chr>                <int>             <int>           <dbl>
+ 1 AMMOD vs FAIRD A_12d      two_block               12                NA           0.376
+ 2 AMMOD vs FAIRD A_12d      maize_only              12                NA           0.657
+ 3 AMMOD vs ID    A_12d      two_block               12                NA           0.204
+ 4 AMMOD vs ID    A_12d      maize_only              12                NA           0.053
+ 5 FAIRD vs ID    A_12d      two_block               12                12          -0.071
+ 6 FAIRD vs ID    A_12d      maize_only              12                12           0.127
+ 7 FAIRD vs ID    B_22d_full two_block               22                22           0.146
+ 8 FAIRD vs ID    B_22d_full maize_only              22                22           0.307
+ 9 FAIRD vs ID    B_22d_excl two_block               17                17           0.113
+10 FAIRD vs ID    B_22d_excl maize_only              17                17           0.353
+   pearson_abundance spearman_biomass spearman_abundance
+               <dbl>            <dbl>              <dbl>
+ 1            NA                0.329             NA    
+ 2            NA                0.329             NA    
+ 3            NA                0.42              NA    
+ 4            NA                0.21              NA    
+ 5            -0.078            0.035              0.063
+ 6             0.101            0.35               0.469
+ 7             0.126            0.24               0.215
+ 8             0.261            0.581              0.585
+ 9             0.112            0.284              0.189
+10             0.361            0.434              0.441
+
+=== WITHIN SYSTEMS ===
+# A tibble: 13 × 9
+   comparison                            window     version    n_dates_biomass
+   <chr>                                 <chr>      <chr>                <int>
+ 1 FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 A_12d      two_block               12
+ 2 FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 A_12d      two_block               12
+ 3 FAIRD: FAIRD1 vs FAIRD2               A_12d      maize_only              12
+ 4 AMMOD: AMMOD1 vs AMMOD2               A_12d      maize_only              12
+ 5 ID: ID1 vs ID2                        A_12d      maize_only              12
+ 6 FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 B_22d_full two_block               22
+ 7 FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 B_22d_full two_block               22
+ 8 FAIRD: FAIRD1 vs FAIRD2               B_22d_full maize_only              22
+ 9 ID: ID1 vs ID2                        B_22d_full maize_only              22
+10 FAIRD: FAIRD1+FAIRD3 vs FAIRD2+FAIRD4 B_22d_excl two_block               17
+11 FAIRD: FAIRD1+FAIRD4 vs FAIRD2+FAIRD3 B_22d_excl two_block               17
+12 FAIRD: FAIRD1 vs FAIRD2               B_22d_excl maize_only              17
+13 ID: ID1 vs ID2                        B_22d_excl maize_only              17
+   n_dates_abundance pearson_biomass pearson_abundance spearman_biomass spearman_abundance
+               <int>           <dbl>             <dbl>            <dbl>              <dbl>
+ 1                12           0.923             0.959            0.832              0.956
+ 2                12           0.902             0.961            0.65               0.695
+ 3                12           0.877             0.964            0.706              0.816
+ 4                NA           0.8              NA                0.874             NA    
+ 5                12           0.075             0.095            0.156              0.205
+ 6                22           0.941             0.965            0.844              0.875
+ 7                22           0.928             0.972            0.852              0.894
+ 8                22           0.901             0.966            0.787              0.808
+ 9                22           0.253             0.244            0.268              0.284
+10                17           0.953             0.968            0.819              0.819
+11                17           0.94              0.987            0.824              0.866
+12                17           0.935             0.983            0.793              0.779
+13                17           0.69              0.782            0.598              0.625
+
+=== FAIRD HALVES OVER BOTH BLOCKS, MEAN OF THE TWO SPLITS ===
+# A tibble: 6 × 6
+  window     measure   pearson spearman n_dates n_splits
+  <chr>      <chr>       <dbl>    <dbl>   <int>    <int>
+1 A_12d      abundance   0.96     0.826      12        2
+2 A_12d      biomass     0.913    0.741      12        2
+3 B_22d_excl abundance   0.977    0.843      17        2
+4 B_22d_excl biomass     0.946    0.821      17        2
+5 B_22d_full abundance   0.968    0.884      22        2
+6 B_22d_full biomass     0.934    0.848      22        2
+
+Reading notes (definitions, not results):
+  - Pearson on the raw scale is dominated by days of high values (the seasonal
+    peak); Spearman weights all days equally.
+  - Biomass vs abundance within the camera systems: a lower biomass r than
+    abundance r indicates noise added by the mass estimates.
+wrote 1.90kB in  0s, 67.36MB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             
+[OK] Table written: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/tables/descriptive_correlations_daily_means.csv 
+Run finished: 2026-10-28 11:22:26 
