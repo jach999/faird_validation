@@ -1,6 +1,10 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
 
-**Version:** 0.7.3 (October 28, 2026). Conventions: which script files produced the
+**Version:** 0.7.4 (October 28, 2026). R-TB-INT-01: Maize-pair LRT values corrected
+(transcription error; reading unchanged), checked against the rerun of
+`3-1a_quantity_trajectories.R`. The reorganised scripts 2-4, 3-1a, 3-1b, 3-2a and 3-2b
+reproduce every value in this registry.
+v0.7.3 (October 28, 2026). Conventions: which script files produced the
 current results, and superseded versions moved to `R/old/stage3_versions/`; adds
 R-CC-DESC-01 (Section 2.2, simple correlations of daily means, biomass and abundance);
 R-DC-BM-02: factor k printed (11); R-DC-TX-03: denominators; both Section 6 rows
@@ -314,8 +318,13 @@ Common to the R-V5-H1Q entries (Stage 2 framework, `H1_quanti_consistency.R`):
   comparisons may use last-resort levels without Site/Device intercepts. Unadjusted.
 - Result (LRT p): FAIRD halves {1,3} vs {2,4} 0.94 / 0.78 / not computed and {1,4} vs
   {2,3} 0.47 / 0.70 / 0.50 (A_12d / B_22d full / B_22d excl); FAIRD1 vs FAIRD2 0.59 /
-  0.99 / 0.99; AMMOD1 vs AMMOD2 0.31 (A_12d, level fixed, Wald 0.27); ID1 vs ID2 0.71 /
-  0.14 / 0.99 (B_22d excl Wald 0.56).
+  0.51 / 0.14; AMMOD1 vs AMMOD2 0.31 (A_12d, level fixed, Wald 0.27); ID1 vs ID2 0.71 /
+  0.99 / 0.99 (B_22d excl Wald 0.56).
+- Correction (2026-10-28): until this date the entry gave FAIRD1 vs FAIRD2 0.59 / 0.99 /
+  0.99 and ID1 vs ID2 0.71 / 0.14 / 0.99, which match neither
+  `Scherber_biomass_internal_consistency.csv` nor the 2026-10-28 run of
+  `3-1a_quantity_trajectories.R` (both give the values above). Transcription error;
+  the reading is unchanged (no internal comparison rejects parallelism).
 - Flag (v0.6): the Maize device-pair rows (FAIRD1 vs FAIRD2, AMMOD1 vs AMMOD2, ID1 vs
   ID2) are NOT FOR MAIN TEXT (C2). The FAIRD halves combine devices across both blocks.
 - Reading: no internal comparison rejects parallelism; the non-proportionality between
