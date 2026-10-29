@@ -1,6 +1,12 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
 
-**Version:** 0.7.5 (October 28, 2026). Citation pass for the entries reproduced by the
+**Version:** 0.7.6 (October 29, 2026). Supplementary scripts S1 to S4 run and checked:
+citation pass completed; new entries R-TB-ALL-02 (Block random and Gaussian cross-check
+of the omnibus test) and R-CC-S2-01 (log-scale unit-pair correlations, S2);
+R-DX-FI-ABUND-01 rewritten from the S3 output (earlier ID central means were Aug 27
+only, verified; reading revised), its Section 6 row removed; R-TA-FI-01: S4 means with
+symmetric exclusion. No model result changed.
+v0.7.5 (October 28, 2026). Citation pass for the entries reproduced by the
 main-text scripts (Conventions, "Repository reorganisation"); outputs of archived
 scripts moved to `outputs/*/old/` and their paths updated (Conventions, "Output
 locations"). No result changed.
@@ -141,8 +147,12 @@ is it still valid.
   parallelism, all LOW / HIGH / TOTAL values, multinomial LR tests, overlap tables);
   entries resting on them now cite the new script and output first and keep the old
   one as "Earlier source". Line numbers in those entries still refer to the old output.
-  Entries resting on S1 to S4 keep their old citations until those scripts have been
-  run. Mapping:
+  S1 to S4 were run on 2026-10-29 (v0.7.6): S1 reproduces the pair, Block and
+  identity-link tables; S2 reproduces the V5 log-scale pair correlations
+  (R-CC-S2-01); S3 Part A is identical to the earlier per-site output; S3 Part B and S4
+  apply the symmetric window exclusion, so their abundance values differ from the
+  earlier ID-only exclusion where stated (R-DX-FI-ABUND-01, R-TA-FI-01). The pass is
+  complete. Mapping:
 
   | Old script (now in `R/old/`) | New script |
   | --- | --- |
@@ -522,8 +532,13 @@ Current source (v0.7.5): `3-1a_quantity_trajectories.R`, run of 2026-10-28; outp
 `outputs/tables/3-1a_quantity_trajectories_pair_models.csv` (primary and complementary
 pairs, Holm) and `3-1a_quantity_trajectories_test_model_ANOVA_III.csv` (omnibus). The
 pairing sensitivities, Block random and the post hoc removal of the first 3 days
-(R-TB-AF-01, R-TB-AI-01, R-TB-FI-01) and R-TB-ALL-ID-01 move to
-`supplementary/S1_pair_model_sensitivity.R`, not yet run.
+(R-TB-AF-01, R-TB-AI-01, R-TB-FI-01), R-TB-ALL-02 and R-TB-ALL-ID-01 come from
+`supplementary/S1_pair_model_sensitivity.R`, run of 2026-10-29; output
+`outputs/console/S1_pair_model_sensitivity_output.txt`, tables
+`outputs/tables/S1_pair_model_sensitivity_pairing.csv` (the 11 pair rows of
+`Scherber_biomass_pairs.csv`, identical in n, Wald and LRT p, LRT level and AIC; the
+omnibus row is in 3-1a), `S1_pair_model_sensitivity_block_robustness.csv` and
+`S1_pair_model_sensitivity_identity_link.csv` (both identical to the earlier tables).
 
 ---
 
@@ -532,6 +547,18 @@ pairing sensitivities, Block random and the post hoc removal of the first 3 days
 - Data: 12-day AMMOD window (Aug 23 to Sep 3), FULL, ID full series.
 - Result: Date x Device_type p = 0.0063 (Wald, 6 df).
 - Reading: not all three trajectories are parallel.
+
+**R-TB-ALL-02, omnibus three systems, model-specification checks** | CURRENT (S1)
+- Source: `supplementary/S1_pair_model_sensitivity.R`, run of 2026-10-29 (table
+  `S1_pair_model_sensitivity_block_robustness.csv`). Earlier source: block comparison of
+  2026-10 (`Scherber_biomass_block_comparison.csv`, same values); the Gaussian
+  cross-check had no registry entry before.
+- Result: Block random, (1|Block/Site/Device) + AR1, interaction p = 0.0052, Block
+  variance 3.3e-4 (AIC 1658.7 vs 1656.1 with Block fixed). Gaussian `nlme::lme` on the
+  raw response, random slope ~Date.num | Site/Device, corAR1 (phi 0.24): interaction
+  chi² = 28.99, 6 df, p = 6.1e-5 (Type II).
+- Reading: the omnibus rejection does not depend on Block being fixed or on the
+  Tweedie family.
 
 **R-TB-AF-01, AMMOD vs FAIRD, primary** | CURRENT
 - Data: A_12d, PAIRED_BLOCK.
@@ -576,7 +603,9 @@ primary (kept as sensitivity)
   R-TB-ALL-ID-01; shared shape tested in R-CC-FI-22-01.]
 
 **R-TB-ALL-ID-01, constant-difference test (identity link), all pairs** | CURRENT
-- Source: `Scherber_temporal_biomass_5.R`, Section 2f. Same runs and data as above; only
+- Source: `supplementary/S1_pair_model_sensitivity.R`, identity link, run of 2026-10-29
+  (table `S1_pair_model_sensitivity_identity_link.csv`, all values below reproduced).
+  Earlier source: `Scherber_temporal_biomass_5.R`, Section 2f. Same runs and data as above; only
   the link changes. AMMOD divided by the dual-axis figure factor k. Cascade: Tweedie
   identity, then Gaussian identity with dispersion by system.
 - Result (LRT, Holm over the A_12d primary pairs): AMMOD-FAIRD 0.018 (Holm 0.054;
@@ -706,6 +735,30 @@ TEXT (C2)
 - Manuscript use (Juan's decision, 2026-10-28): Spearman of daily means in parentheses
   next to the model-based results, for every comparison; Pearson and both measures in
   Supplementary Material S2.
+
+**R-CC-S2-01, conventional correlations between paired units, log10(x + 1)** | CURRENT,
+DESCRIPTIVE, NOT FOR MAIN TEXT (C2)
+- Source: `supplementary/S2_unit_pair_correlations.R`, run of 2026-10-29; output
+  `outputs/console/S2_unit_pair_correlations_output.txt`, table
+  `outputs/tables/S2_unit_pair_correlations.csv`. Pearson r, R², p and OLS slope with
+  95% CI on log10(x + 1), x = first unit (AMMOD for the between-system rows); Spearman
+  rho on the raw values. No AR1, no random effects; stacked rows are not independent.
+- Reproduces (same values): R-V5-H1Q-FAIRD-01 (abundance rows: FAIRD1 vs FAIRD2 R² 0.674,
+  slope 0.84 [0.56, 1.11], rho 0.808; FAIRD3 vs FAIRD4 R² 0.733, slope 1.15 [0.83, 1.48],
+  rho 0.837); R-V5-H1Q-AMMOD-01 (R² 0.741, slope 1.135 [0.663, 1.607], rho 0.874);
+  R-V5-H1Q-ID-01 output values (abundance, 22 days R² 0.027, p 0.463, slope 0.19
+  [-0.34, 0.73], rho 0.284; window excluded, n = 17, R² 0.434, p 0.004, slope 0.489
+  [0.181, 0.796], rho 0.625); R-V5-H2Q-01 (Sites 1 to 3 R² 0.282 / 0.445 / 0.058,
+  slopes 1.44 / 0.86 / 0.33, rho 0.238 / 0.566 / 0.214); R-V5-H2Q-02 (Maize stacked,
+  n = 24, R² 0.311, p 0.005, slope 1.08 [0.37, 1.79], rho 0.482); R-V5-H2Q-03 (Sites 1
+  to 3 stacked, n = 32, R² 0.321, p 0.0007, slope 1.03 [0.47, 1.58], rho 0.491). The
+  status flags of those entries are unchanged (they compare V5 with these values).
+- New rows (biomass within camera systems, not in V5): FAIRD1 vs FAIRD2 R² 0.424,
+  p 0.001, slope 0.68 [0.31, 1.06], rho 0.787; FAIRD3 vs FAIRD4 R² 0.643, p < 0.001,
+  slope 0.84 [0.55, 1.14], rho 0.764; ID1 vs ID2, 22 days R² 0.041, p 0.364, rho 0.268;
+  window excluded (n = 17) R² 0.349, p 0.013, rho 0.598.
+- Reading: on the log scale the FAIRD unit pairs agree more in abundance than in
+  biomass, as in R-CC-DESC-01; ID unit agreement depends on the outage window.
 
 **H2 quantitative agreement, FAIRD vs AMMOD (Stage 2 framework)**
 
@@ -981,6 +1034,14 @@ Common to the R-TA-FI entries:
   (B_simple best by AIC, 1039.7 vs 1041.1) (l.170 to 212, 233 to 239).
 - Mean abundance per device-day: FAIRD 12.8 (both runs); ID 35.9 (conservative), 32.4
   (operational) (l.36 to 41, 131 to 136).
+- Descriptive means, symmetric exclusion (v0.7.6): `supplementary/S4_abundance_cameras.R`,
+  run of 2026-10-29 (tables `S4_abundance_cameras_by_system.csv`, `_by_unit.csv`). 22
+  days: FAIRD 12.8 (88 unit-days, median 6), ID 35.9 (66, median 20.5); window excluded
+  for both systems: FAIRD 12.6 (68, median 6), ID 32.4 (51, median 21). The earlier
+  operational FAIRD value 12.8 kept the window for FAIRD. Per unit (22 days, mean /
+  maximum): FAIRD1 12.0 / 90, FAIRD2 8.5 / 67, FAIRD3 12.7 / 46, FAIRD4 18.1 / 73, ID1
+  20.8 / 66, ID2 51.8 / 254, ID4 35.1 / 141. The tests of this entry are not rerun
+  (V6 uses abundance only through R-CC-DESC-01 and S4).
 - Correction of the session summary: it states that the conservative glmmTMB p came
   from an invalid B1. The output shows B1 valid in the conservative run (l.78, 95) and
   invalid only in the operational run (l.173 to 177, 195).
@@ -1409,8 +1470,10 @@ Common to the R-DC entries:
   context Section 13).
 
 **R-DX-INTRA-01, intra-FAIRD check of the PAIRED_BLOCK assumption** | CURRENT
-- Source: `diagnostic_per_site_biomass.R`, Table 3c. Diagnostic only, not for the
-  manuscript.
+- Source: `supplementary/S3_site_diagnostics.R`, Part A, Table 3 (rows 3c), run of
+  2026-10-29; output `outputs/console/S3_site_diagnostics_output.txt`. Part A is
+  identical to `diagnostic_per_site_biomass_output_2.txt` line by line. Earlier source:
+  `diagnostic_per_site_biomass_2.R`, Table 3c. Diagnostic only, not for the main text.
 - Result: FAIRD3/FAIRD4 on AMMOD3 days 0.34 to 1.16 (median 0.87); FAIRD1/FAIRD2 0 to 6.1.
 - Reading: Meadow sites share their dynamics (supports AMMOD3 vs ID4 pairing); Maize
   instability is irrelevant because Maize pairs are co-located.
@@ -1461,16 +1524,27 @@ analysis)
 
 **R-DX-FI-ABUND-01, per-site check of the central ID abundance peak** | CURRENT
 (diagnostic, v0.7), NOT FOR MAIN TEXT (C2)
-- Source: `diagnostic_per_device_operational.R` (throwaway diagnostic, no output file in
-  the repository); values from the session summary of 2026-09-02. Operational period
-  (ID battery window removed), sites with both camera systems (Site1, Site2, Site4),
-  central window Aug 27 to Sep 1 as defined in the script.
-- Result: Site2, marked central ID peak (central mean ID 20 vs FAIRD 12.5; ID2 maximum
-  91); Site4, ID starts high and declines (ID4 maximum 141, the highest daily value of
-  the dataset; central mean FAIRD 30.2 vs ID 19); Site1, nearly parallel.
-- Reading: the aggregated central ID peak of R-TA-FI-01 is the superposition of three
-  different site dynamics, not a consistent system pattern; with one device per system
-  per site it cannot be separated from device idiosyncrasy.
+- Source (v0.7.6): `supplementary/S3_site_diagnostics.R`, Part B, run of 2026-10-29;
+  output `outputs/console/S3_site_diagnostics_output.txt`. All days kept, outage window
+  (Aug 28 to Sep 1) flagged for both systems; sites with both camera systems (Site1,
+  Site2, Site4); central window Aug 27 to Sep 1. Earlier source:
+  `diagnostic_per_device_operational.R`, values from the session summary of 2026-09-02
+  (no output file).
+- Result, central window, all days (FAIRD / ID mean per day; ID maximum): Site1 17.7 /
+  25.3 (58); Site2 12.5 / 84.8 (254); Site4 30.2 / 18.8 (53). Five of the six central
+  days are outage days. ID2 recorded 254 and 230 on Aug 30 and 31 (outage days) and
+  0 to 20 on the other central days. Full-effort days (17): peaks FAIRD1 90, FAIRD2 67,
+  FAIRD4 73 (all Aug 26); ID1 66 (Sep 3), ID2 91 (Aug 26), ID4 141 (Aug 24).
+- Correction of the earlier values (verified 2026-10-29 from the source tables): the
+  earlier ID central means (Site2 20, Site4 19) are the counts of Aug 27 alone, the only
+  full-effort day of the central window, while the FAIRD means (12.5, 30.2) covered all
+  six days, because the earlier diagnostic removed the window for ID only. The earlier
+  "marked central ID peak" at Site2 is therefore not shown by those values; it appears
+  only with the outage days included.
+- Reading: the central ID abundance peak of the all-days series (R-TA-FI-01,
+  conservative run) is carried by ID2 on two outage days of partial, unknown effort; it
+  is absent at Site4 (FAIRD higher) and small at Site1. With one unit per system per
+  site it cannot be separated from unit idiosyncrasy.
 
 ---
 
@@ -1620,5 +1694,4 @@ script would settle it.
 | R-CC-INT-01 | ID1 vs ID2 B_22d full LOW 0.991, interval [-0.558, 0.982] | estimate above the upper limit; interval differs from the 2026-10-05 log ([-0.60, 0.988]) although the seed is fixed | change the LOW interval method for the paper, or report LOW without interval |
 | R-OBS-06 | hour of `Checkin` of FAIRD Lepidoptera and Hemiptera records | not computed | `table()` of the hour by Order in `faird_data` |
 | R-DC-BM-02 | Tweedie power from `tweedie_profile` | printed as NULL | print the correct element of the profile object |
-| R-TA-FI-01 | interaction p BX 0.828 / 0.647 vs Tweedie 0.0002 / < 0.0001 | operational exclusion asymmetric (ID only); reading of the BX vs Tweedie disagreement (distributional framework) not validated | rerun R-TA-FI-02 with symmetric exclusion; Scherber's reading of the disagreement |
-| R-DX-FI-ABUND-01 | per-site central means and maxima | values only from the session summary; no output file | rerun `diagnostic_per_device_operational.R` with console capture, if the values are needed |
+| R-TA-FI-01 | interaction p BX 0.828 / 0.647 vs Tweedie 0.0002 / < 0.0001 | operational exclusion asymmetric (ID only); reading of the BX vs Tweedie disagreement (distributional framework) not validated | rerun R-TA-FI-02 with symmetric exclusion; Scherber's reading of the disagreement. Not needed for V6 (abundance enters only through R-CC-DESC-01 and S4) |
