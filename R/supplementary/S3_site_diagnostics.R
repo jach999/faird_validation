@@ -19,6 +19,11 @@
 #   flagged for both systems: per-unit peak (all days and full-effort days),
 #   mean in the central window of the season, one panel per site with both
 #   camera systems (Site1, Site2, Site4; Site3 has no ID data).
+# Part C, ID detection classes (Pre-classification) per unit: daily counts per
+#   class on the outage-window days against the same class on full-effort days,
+#   and class shares per day. Shows whether the high counts of some
+#   outage-window days sit in one class or are spread over all classes. ID body
+#   length and live mass are class means, so classes cannot separate individuals.
 # ==============================================================================
 
 required_packages <- c("tidyverse", "here", "splines", "scales")
@@ -38,11 +43,16 @@ source(here::here("R", "00_custom_colors.R"))
 SCRIPT  <- "S3_site_diagnostics"
 FIG_DIR <- here::here("outputs", "figures")
 CON_DIR <- here::here("outputs", "console")
-for (d in c(FIG_DIR, CON_DIR)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
+TAB_DIR <- here::here("outputs", "tables")
+for (d in c(FIG_DIR, CON_DIR, TAB_DIR)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 
 # Central window of the season for Part B (late-August peak of ID abundance).
 CENTRAL_START <- as.Date("2023-08-27")
 CENTRAL_END   <- as.Date("2023-09-01")
+
+# Part C: number of most frequent ID classes shown separately (display
+# parameter); the remaining classes are pooled as "other classes".
+N_TOP_CLASSES <- 3
 
 while (sink.number() > 0) sink()
 sink(file.path(CON_DIR, paste0(SCRIPT, "_output.txt")), split = TRUE)
@@ -602,6 +612,110 @@ out_file <- file.path(FIG_DIR, paste0(SCRIPT, "_abundance_by_site.png"))
 print(p)
 ggplot2::ggsave(out_file, p, width = 9, height = 10, dpi = 200, bg = "white")
 cat(sprintf("\n[OK] Saved: %s\n", out_file))
+
+
+# ==============================================================================
+# PART C: ID DETECTION CLASSES ON OUTAGE-WINDOW DAYS
+# ==============================================================================
+
+cat("\n\n=== PART C: ID DETECTION CLASSES ON OUTAGE-WINDOW DAYS ===\n\n")
+
+id_class <- data_list$id %>%
+  dplyr::mutate(Date = as.Date(Date), Class_ID = `Pre-classification`)
+
+top_classes <- id_class %>%
+  dplyr::count(Class_ID, sort = TRUE) %>%
+  dplyr::slice_head(n = N_TOP_CLASSES) %>%
+  dplyr::pull(Class_ID)
+class_levels <- c(top_classes, "other classes")
+cat(sprintf("Most frequent ID classes (all units, all days): %s; the rest pooled as 'other classes'.\n",
+            paste(top_classes, collapse = ", ")))
+
+class_counts <- id_class %>%
+  dplyr::mutate(Class_ID = ifelse(Class_ID %in% top_classes, Class_ID, "other classes")) %>%
+  dplyr::count(Device, Date, Class_ID, name = "n")
+
+# Unit-day grid from the daily abundance table, so that zero days are kept.
+id_grid <- abund %>%
+  dplyr::filter(Device_type == "ID") %>%
+  dplyr::distinct(Device, Date, Effort)
+
+id_class_daily <- id_grid %>%
+  tidyr::crossing(Class_ID = class_levels) %>%
+  dplyr::left_join(class_counts, by = c("Device", "Date", "Class_ID")) %>%
+  dplyr::mutate(n = tidyr::replace_na(n, 0L),
+                Class_ID = factor(Class_ID, levels = class_levels)) %>%
+  dplyr::arrange(Device, Date, Class_ID)
+
+# Check: class counts add up to the daily abundance of each unit.
+check_tot <- id_class_daily %>%
+  dplyr::group_by(Device, Date) %>%
+  dplyr::summarise(n_classes = sum(n), .groups = "drop") %>%
+  dplyr::left_join(abund %>% dplyr::select(Device, Date, abundance), by = c("Device", "Date"))
+n_mismatch <- sum(check_tot$n_classes != check_tot$abundance, na.rm = TRUE)
+cat(sprintf("Check: class counts equal daily abundance on %d of %d unit-days %s\n\n",
+            nrow(check_tot) - n_mismatch, nrow(check_tot),
+            ifelse(n_mismatch == 0, "[OK]", "[MISMATCH]")))
+
+# --- Table C1: counts per class, outage-window days vs full-effort days ---------
+cat("--- Table C1: detections per class and day ---\n")
+cat("full_* = over full-effort days; day_MMDD = count on that outage-window day;\n")
+cat("n_above_full_max = outage-window days on which the count exceeds full_max.\n\n")
+
+full_stats <- id_class_daily %>%
+  dplyr::filter(Effort == "full effort") %>%
+  dplyr::group_by(Device, Class_ID) %>%
+  dplyr::summarise(full_n_days = dplyr::n(),
+                   full_mean   = round(mean(n), 1),
+                   full_median = stats::median(n),
+                   full_max    = max(n),
+                   .groups = "drop")
+
+outage_long <- id_class_daily %>%
+  dplyr::filter(Effort == "outage window") %>%
+  dplyr::left_join(full_stats %>% dplyr::select(Device, Class_ID, full_max),
+                   by = c("Device", "Class_ID"))
+
+outage_above <- outage_long %>%
+  dplyr::group_by(Device, Class_ID) %>%
+  dplyr::summarise(n_above_full_max = sum(n > full_max), .groups = "drop")
+
+outage_wide <- outage_long %>%
+  dplyr::arrange(Date) %>%
+  dplyr::mutate(Day = paste0("day_", format(Date, "%m%d"))) %>%
+  dplyr::select(Device, Class_ID, Day, n) %>%
+  tidyr::pivot_wider(names_from = Day, values_from = n)
+
+table_c1 <- full_stats %>%
+  dplyr::left_join(outage_wide,  by = c("Device", "Class_ID")) %>%
+  dplyr::left_join(outage_above, by = c("Device", "Class_ID")) %>%
+  dplyr::arrange(Device, Class_ID)
+print(as.data.frame(table_c1), row.names = FALSE)
+
+# --- Table C2: class shares per day ---------------------------------------------
+cat("\n--- Table C2: class shares (%) per outage-window day and over full-effort days ---\n\n")
+table_c2 <- dplyr::bind_rows(
+  id_class_daily %>%
+    dplyr::filter(Effort == "outage window") %>%
+    dplyr::mutate(Period = format(Date, "%Y-%m-%d")),
+  id_class_daily %>%
+    dplyr::filter(Effort == "full effort") %>%
+    dplyr::mutate(Period = "full-effort days, pooled")
+) %>%
+  dplyr::group_by(Device, Period, Class_ID) %>%
+  dplyr::summarise(n = sum(n), .groups = "drop") %>%
+  dplyr::group_by(Device, Period) %>%
+  dplyr::mutate(total = sum(n)) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(share_pct = ifelse(total > 0, round(100 * n / total, 1), NA_real_)) %>%
+  dplyr::select(Device, Period, total, Class_ID, share_pct) %>%
+  tidyr::pivot_wider(names_from = Class_ID, values_from = share_pct, names_prefix = "pct_") %>%
+  dplyr::arrange(Device, Period)
+print(as.data.frame(table_c2), row.names = FALSE)
+
+readr::write_csv(table_c1, file.path(TAB_DIR, paste0(SCRIPT, "_id_class_counts.csv")))
+readr::write_csv(table_c2, file.path(TAB_DIR, paste0(SCRIPT, "_id_class_shares.csv")))
+cat(sprintf("\n[OK] Tables written to %s\n", TAB_DIR))
 
 
 cat("\nFinished:", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n")
