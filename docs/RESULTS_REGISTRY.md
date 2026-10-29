@@ -1,6 +1,11 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
 
-**Version:** 0.7.7 (October 29, 2026). Former `SAS/` and `diagnostics/` folders moved to
+**Version:** 0.7.8 (October 29, 2026, session close). Decision D4 applied: R-V5-H2T-01
+to -04 and R-OUT-H2Q-04 reclassified as CURRENT (flags kept; reproduced by
+`3-2b_composition_overlap.R` on 2026-10-28, except R-OUT-H2Q-04, which no current script
+prints, see its entry). S3 Part C (ID detection classes) added to the script, not yet
+run; result to be entered next to R-DX-ID-BOUT-01. No result changed.
+v0.7.7 (October 29, 2026). Former `SAS/` and `diagnostics/` folders moved to
 `R/old/sas_v5/` and `R/old/diagnostics/` (Section 2.5 location note). No result changed.
 v0.7.6 (October 29, 2026). Supplementary scripts S1 to S4 run and checked:
 citation pass completed; new entries R-TB-ALL-02 (Block random and Gaussian cross-check
@@ -639,7 +644,7 @@ primary (kept as sensitivity)
 | R-OUT-H2Q-01 | OUTPUT ONLY | Spearman rho on daily log changes, all levels (entry below) |
 | R-OUT-H2Q-02 | OUTPUT ONLY | Robust regression check, all levels (entry below) |
 | R-OUT-H2Q-03 | OUTPUT ONLY | Overall CCF and Fisher z average (entry below) |
-| R-OUT-H2Q-04 | OUTPUT ONLY | FAIRD body-length classes by site (entry below) |
+| R-OUT-H2Q-04 | CURRENT (D4), was OUTPUT ONLY | FAIRD body-length classes by site (entry below) |
 | (moved) | see Section 2.5 | Diagnostic mixed models A and B (R-V5-H2Q-MM-01, -02) |
 
 Common to the entries below: `Scherber_temporal_concordance_biomass.R`, spline df 3,
@@ -985,13 +990,17 @@ R-CC-AI-01
 - Caution: V5 states the Overall CCF was not computed (Methods, H2 Quantitative; Table
   13 footnote).
 
-**R-OUT-H2Q-04, FAIRD body-length classes by site** | OUTPUT ONLY
+**R-OUT-H2Q-04, FAIRD body-length classes by site** | CURRENT (D4, 2026-10-29), was OUTPUT ONLY
 - Source: output Section 6, "Table 15", l.283 to 291 (labelled Table 15 but unrelated to
   V5 Table 15).
 - Result (% of individuals < 3 mm / 3 to 5 mm / > 5 mm): Site 1 (n = 265) 0 / 48.3 /
   51.7; Site 2 (186) 0 / 34.4 / 65.6; Site 3 (279) 0.7 / 25.8 / 73.5; Site 4 (398) 0.5 /
   39.4 / 60.1; Overall (1128) 0.4 / 37.3 / 62.3.
 - Reading: FAIRD records almost no individuals below 3 mm at any site.
+- Current script (v0.7.8): none. The values come from `H2_quanti_validation.R`
+  (archived in `R/old/stage2_v5/`); no script of the published repository prints them.
+  Used in V6 (3.2, claim 4), so a print of FAIRD body-length classes (overall and by
+  site) is to be added to `3-2b_composition_overlap.R` (open item).
 
 ### 2.3 Temporal abundance, FAIRD vs ID
 
@@ -1062,10 +1071,10 @@ Common to the R-TA-FI entries:
 
 | ID | Status | Note |
 | --- | --- | --- |
-| R-V5-H2T-01 | LEGACY V5 | FAIRD vs AMMOD Izsak-Price, 3-day windows, Superfamily: site, intra-habitat, overall (entry below) |
-| R-V5-H2T-02 | LEGACY V5, V5 NOT REPRODUCED | Size-threshold sensitivity and sub-3 mm diagnostic (entry below) |
-| R-V5-H2T-03 | LEGACY V5, DISCREPANCY V5/V16, V5 NOT REPRODUCED | Taxonomic breadth, FAIRD, ID, AMMOD (entry below) |
-| R-V5-H2T-04 | LEGACY V5, DISCREPANCY V5/V16, V5 NOT REPRODUCED | FAIRD identification success by Order (entry below) |
+| R-V5-H2T-01 | CURRENT (D4), was LEGACY V5 | FAIRD vs AMMOD Izsak-Price, 3-day windows, Superfamily: site, intra-habitat, overall (entry below) |
+| R-V5-H2T-02 | CURRENT (D4), was LEGACY V5; V5 NOT REPRODUCED | Size-threshold sensitivity and sub-3 mm diagnostic (entry below) |
+| R-V5-H2T-03 | CURRENT (D4), was LEGACY V5; DISCREPANCY V5/V16, V5 NOT REPRODUCED | Taxonomic breadth, FAIRD, ID, AMMOD (entry below) |
+| R-V5-H2T-04 | CURRENT (D4), was LEGACY V5; DISCREPANCY V5/V16, V5 NOT REPRODUCED | FAIRD identification success by Order (entry below) |
 | R-V5-H2T-05 | LEGACY V5, DISCREPANCY V5/V16 | Genus-level daily values quoted in V5 as comparison (entry below) |
 | R-V16-H3T-01 | SUPERSEDED by R-V5-H2T-01 and -02 | Daily genus-level Izsak-Price, FAIRD vs AMMOD (entry below) |
 | R-V16-H3T-02 | SUPERSEDED by R-V5-H2T-03 | FAIRD vs ID taxonomic comparison (entry below) |
@@ -1095,7 +1104,7 @@ Common to the R-V5-H2T entries (Stage 2 framework, `H2_quali_validation.R`):
   of the entries are unchanged: V5 NOT REPRODUCED still means that V5 differs from this
   output.
 
-**R-V5-H2T-01, FAIRD vs AMMOD similarity, 3-day windows** | LEGACY V5
+**R-V5-H2T-01, FAIRD vs AMMOD similarity, 3-day windows** | CURRENT (D4, 2026-10-29), was LEGACY V5
 - Level: Site (FAIRD vs co-located AMMOD), Intra-Habitat (site-windows pooled by
   habitat), Overall (all 24 site-windows). Metric: community composition,
   presence/absence, Superfamily.
@@ -1113,7 +1122,7 @@ Common to the R-V5-H2T entries (Stage 2 framework, `H2_quali_validation.R`):
 - Reading: FAIRD-AMMOD compositional similarity higher in Meadow than in Maize; all
   sites between 61 and 72%.
 
-**R-V5-H2T-02, size-threshold sensitivity and sub-3 mm diagnostic** | LEGACY V5, V5 NOT
+**R-V5-H2T-02, size-threshold sensitivity and sub-3 mm diagnostic** | CURRENT (D4, 2026-10-29), was LEGACY V5; V5 NOT
 REPRODUCED
 - Metric: DeltaS of R-V5-H2T-01 with three AMMOD pools by body length (raw, >= 3 mm,
   >= 5 mm), same FAIRD pool; differences in percentage points (pp).
@@ -1137,7 +1146,7 @@ REPRODUCED
 - Reading: removing the sub-3 mm fraction barely changes DeltaS; restricting AMMOD to
   >= 5 mm raises it by about 4 pp.
 
-**R-V5-H2T-03, taxonomic breadth** | LEGACY V5, DISCREPANCY V5/V16, V5 NOT REPRODUCED
+**R-V5-H2T-03, taxonomic breadth** | CURRENT (D4, 2026-10-29), was LEGACY V5; DISCREPANCY V5/V16, V5 NOT REPRODUCED
 - Metric: distinct Orders, Families and Genera per system over the full study period,
   #N/C excluded; coverage = genera of the e-trap / AMMOD genera.
 - Source: V5, Results 3.3.2 (Taxonomic breadth) and Table 18.
@@ -1157,7 +1166,7 @@ REPRODUCED
 - Reading: FAIRD covers a broader taxonomic range than ID; its coverage of AMMOD
   decreases from Order to Genus.
 
-**R-V5-H2T-04, FAIRD identification success by Order** | LEGACY V5, DISCREPANCY V5/V16,
+**R-V5-H2T-04, FAIRD identification success by Order** | CURRENT (D4, 2026-10-29), was LEGACY V5; DISCREPANCY V5/V16,
 V5 NOT REPRODUCED
 - Metric: % of FAIRD individuals resolved to Genus, to Family only, and to Superfamily
   or lower; denominator 1102 (#N/C excluded).
@@ -1492,6 +1501,17 @@ Common to the R-DC entries:
   0.23 for ID4 Aug 24, against device medians about 0.6; a session-level Poisson model
   predicts much of it.
 - Reading: compatible with revisits, not separable from dense genuine activity.
+- Class composition (v0.7.8; session check of 2026-10-29 on `ID_For_Statistics.csv`,
+  to be replaced by the output of S3 Part C): ID2 on Aug 30 / Aug 31 (outage days)
+  fly 197 / 193, flesh_fly 35 / 20, hoverfly 22 / 14 (shares 78 / 84%, 14 / 9%, 9 / 6%);
+  ID2 over the season 79, 12 and 8%. Full-effort days of ID2: fly mean 29.9, maximum
+  80; flesh_fly 4.5, 25; hoverfly 3.0, 19. On Aug 30 all three classes exceed their
+  full-effort maximum, on Aug 31 only fly. No earlier record of a composition check of
+  these days was found (searched 2026-10-29: registry, session log, EXPERIMENT_CONTEXT,
+  earlier chats); the check proposed on 2026-09-02 was not documented as run.
+- Reading (composition): the rise is spread over the three classes ID distinguishes,
+  with the usual shares, so it is not carried by one class; within "fly" (Brachycera,
+  not resolved further) a single-species aggregation cannot be excluded.
 
 **R-DX-WX-01, weather during the campaign** | CURRENT
 - Result: cold front Aug 27 to Sep 1 (daytime mean 14 C on Aug 28 and 29, radiation

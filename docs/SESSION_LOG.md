@@ -1,6 +1,6 @@
 # FAIR-DEVICE VALIDATION STUDY, SESSION LOG (cumulative)
 
-**Last update:** October 27, 2026
+**Last update:** October 29, 2026
 **Rule:** one cumulative document. Each session is appended at the end, in chronological
 order; earlier sessions are never deleted (corrections are added as bracketed notes).
 Since 2026-10-27 the log lives in the repository as `docs/SESSION_LOG.md`, without a date
@@ -24,6 +24,8 @@ Stable methods live in EXPERIMENT_CONTEXT_STATIC; results per analysis live in
 8. 2026-10-12b/13: GitHub repository, ADP restructuring, registry v0.7 and v0.7.1.
 9. 2026-10-13/14 (closed 2026-10-27): line endings, registry and Scherber's script moved
    to the repository, Scherber guidelines, V6 outline.
+10. 2026-10-27/29: V6 draft, simple correlations (Spearman), repository reorganised into
+    one script per V6 section, all scripts rerun and checked, registry v0.7.3 to v0.7.8.
 
 [Note added 2026-10-10: sessions 3 to 5 were written on 2026-10-10 from the chats of
 those sessions, not at their close. Reconstructed entries, reviewed by Juan.]
@@ -1122,6 +1124,8 @@ after Juan returned to the project.
 
 ### 5. Open items (consolidated)
 
+[Superseded on 2026-10-29 by the consolidated list at the end of session 2026-10-27/29.]
+
 Earlier logs list items by session; they are consolidated here by type. Items closed in
 earlier sessions are not repeated.
 
@@ -1177,3 +1181,216 @@ earlier sessions are not repeated.
 22. Project knowledge at 94% of capacity (1.87 M of 2 M); if exceeded, exclude `R/old/`
     from the sync. (2026-10-12b.)
 23. Zenodo release of the V6 state at submission. (2026-10-12b, item 9, redefined.)
+
+---
+
+## SESSION 2026-10-27/29: V6 DRAFT, SIMPLE CORRELATIONS, REPOSITORY REORGANISATION
+
+Chat attached to the project, Claude with push access to the repository. Juan ran every
+script and shared the outputs. Claude ran no R script (no R in the session); it computed
+three checks in Python directly on the source tables (TOTAL against the daily means, ID
+central-window counts, ID class composition), each stated where it is used.
+
+### 1. Work done
+
+**Manuscript**
+- V6 drafted as the Claude Doc "FAIRD Paper V6" (claude.ai artifact
+  `Rh8dWfkNim5wZrbBsbaQ82`) from `docs/V6_OUTLINE.md`: full text, Tables 1 to 4,
+  Figures 1 to 5 as placeholders, supplementary sections S1 to S6 described. Precedent
+  studies cited for the comparison of sensor devices with conventional traps (Rydhmer et
+  al. 2022; Möglich et al. 2022, preprint; Odgaard et al. 2025). Spearman values in
+  parentheses in 3.1.
+- Later corrections in the draft: figure file names of the new scripts (Figures 3 and 4);
+  the Methods sentence on the spline with 4 df (a sensitivity of the concordance, not of
+  the trajectory tests); description of S1 (Block random and Gaussian check added).
+- Prompt for a Gemini deep-research search on precedent studies; the report was reviewed
+  with Juan: its part on whether device failures are reported judged off-topic; the way
+  the precedent studies compared devices with conventional traps (mostly linear or rank
+  correlations of counts) kept. Discussed how Odgaard et al. (2025) converted sensor
+  detections to biomass; nothing taken into V6 beyond the citation.
+- `docs/V6_OUTLINE.md` v0.2 (this close): decisions, figure numbers, supplementary map,
+  script map.
+
+**Repository (branch `revision-scherber`)**
+
+| Commit | Content |
+| --- | --- |
+| `4620d44` | Script of simple correlations of daily system means (biomass and abundance, Pearson and Spearman); later merged into 3-1b |
+| `a37ffbe` | Superseded Stage 3 scripts to `R/old/stage3_versions/`; registry v0.7.3 (which script versions produced the current results; k = 11; denominators of R-DC-TX-03) |
+| `b93c043` | `R/` reorganised: one script per V6 section (`2-4`, `3-1a`, `3-1b`, `3-2a`, `3-2b`), `R/supplementary/S1` to `S4`, shared functions in `00_trajectory_functions.R`; Stage 2 scripts to `R/old/stage2_v5/`; `CLAUDE.md` layout and naming rule |
+| `912695b` (Juan) | Outputs of 2-4, 3-1a, 3-1b, 3-2a, 3-2b |
+| `a4fab32` | Registry v0.7.4: R-TB-INT-01 corrected |
+| `8dc6c16` | Outputs of archived scripts moved to `outputs/console/old/`, `outputs/tables/old/`, `outputs/old/`; registry v0.7.5, citation pass for the main-text scripts |
+| `c711ef7` | Registry v0.7.6: S1 to S4 checked, R-TB-ALL-02 and R-CC-S2-01 added, R-DX-FI-ABUND-01 rewritten |
+| `c5b7e62` (Juan) | Outputs of S1 to S4 |
+| `0eead5e` | `SAS/` to `R/old/sas_v5/` (with README; its `source_tables/` removed, byte-identical to `source_tables/`), `diagnostics/` to `R/old/diagnostics/`; `.gitignore`; registry v0.7.7 |
+| `fc9dc73` | S3 Part C: ID detection classes on outage-window days (not yet run) |
+| (this commit) | Registry v0.7.8 (D4 applied, class composition note), outline v0.2, this log |
+
+Script map: `docs/V6_OUTLINE.md`, Section 8.
+
+**Verification of the reorganised scripts** (outputs of 2026-10-28 and 2026-10-29
+against the earlier outputs)
+- 2-4: all seven checks of the incident log against `effort_base` OK; valid unit-days
+  AMMOD taxonomy 76, AMMOD biomass 32, FAIRD 88, ID 66.
+- 3-1a: figure model identical (intercept 8.2354, FAIRD -3.4157, ID -2.1405, AIC
+  1657.4); k = 11 over 32 site-days; three-system Wald p = 0.0063; primary pairs LRT
+  (Holm) AMMOD-FAIRD 0.013 (0.039), AMMOD-ID 0.083 (0.085), FAIRD-ID 0.043 (0.085);
+  FAIRD-ID 22 days 0.0008 and 4.2e-5; all 13 internal-parallelism rows equal.
+- 3-1b: all 28 LOW / HIGH / TOTAL lines identical; Section 9 reproduces TOTAL exactly.
+- 3-2a: multinomial LR chi² 17.160, 86.092, 59.003; order frequencies of R-DC-TX-03.
+- 3-2b: identical apart from print width.
+- S1: the 11 pair rows (n, Wald, LRT, level, AIC), the Block comparison and the
+  identity-link table identical. S2: every V5 log-scale pair correlation reproduced.
+  S3 Part A identical line by line. S3 Part B and S4: new values with the symmetric
+  exclusion (findings below).
+
+### 2. Decisions (Juan), with reasons
+
+1. **V6 now, compact, from analyses already done; no new tests.** "No quiero hacer
+   nuevas pruebas, solo quiero meter en un paper lo que me sirva de las tantas pruebas
+   que hemos hecho". Consequences: AMMOD3 and ID4 not added as extra internal pairs;
+   Izsak-Price not recomputed at system level (D5 dropped); abundance rerun R-TA-FI-02
+   dropped.
+2. **D1 revised.** AMMOD and ID internal consistency stated in one sentence in the main
+   text (Maize unit pairs), details in S2. Reason: whether FAIRD resembles AMMOD or ID
+   loses weight if the reader does not see whether those systems are consistent within
+   themselves.
+3. **D2, D4 accepted** (Figure 3 from Scherber's model, tests from the same model with
+   Block and AR1; taxonomic entries reclassified as CURRENT). **D6 dropped:** no Venn
+   diagram (Juan never understood what Scherber meant by it).
+4. **Simple correlations in the main text, briefly** (D7): Spearman rho of daily system
+   means in parentheses next to the model-based results; Pearson and both measures in
+   S2. Reasons: a reviewer will want to know what a simple correlation gives and would
+   suspect cherry-picking if it were missing; what Scherber rejects is figure slots and
+   whole sections on simple correlations, not a mention. Spearman because the precedent
+   studies used it mostly, and because it answers the old problem of raw Pearson being
+   driven by the peak days without a log transform (which Scherber had rejected).
+5. **Abundance within the camera systems** reported next to biomass: the mass estimates
+   add noise to the camera comparisons.
+6. **Repository as the supplementary repository of the paper:** one script per V6
+   section, supplementary scripts apart, no person names in file names, outputs or
+   printed text. `R/old/` and the `old/` output folders are exempt and will not be
+   published. `SAS/` and `diagnostics/` moved to `R/old/`.
+7. **No unsupported claims in the Introduction.** "Few studies compared devices with
+   conventional traps" and "failures are rarely reported" removed: Juan does not sign
+   claims he cannot verify.
+8. **Next step:** Juan merges the V5 Introduction and Methods into V6 by hand, to give the
+   text a more personal voice; Claude then checks the merged text.
+
+### 3. Findings
+
+- **R-TB-INT-01 had transposed Maize-pair values** (registry transcription): FAIRD1 vs
+  FAIRD2 is 0.59 / 0.51 / 0.14 and ID1 vs ID2 0.71 / 0.99 / 0.99 (12 days / 22 days /
+  22 days without the window). Reading unchanged.
+- **The central ID abundance peak sits on two outage days of one unit.** The earlier
+  per-site diagnostic (2026-09-02) removed the outage window for ID only, so its ID
+  central means (Site2 20, Site4 19) were the counts of 27 August alone, against six
+  FAIRD days; the "marked central ID peak" was not shown by those values. With all days
+  and the window flagged for both systems (S3 Part B), the peak is ID2 on 30 and 31
+  August (254 and 230 detections; 0 to 20 on the other central days), both days of
+  partial, unknown effort. Site4: FAIRD higher than ID in that window (30.2 vs 18.8).
+- **ID class composition on those days** (Python on `ID_For_Statistics.csv`; S3 Part C
+  added to make it reproducible): fly 78 / 84%, flesh_fly 14 / 9%, hoverfly 9 / 6% on
+  30 / 31 August, against 79, 12 and 8% over the season; on 30 August all three classes
+  exceed their full-effort maximum, on 31 August only fly. The rise is spread over the
+  classes, so it is not one individual of one class; within "fly" (not resolved below
+  Brachycera) a single-species aggregation cannot be excluded. Juan remembered a species
+  composition check of these peaks; no record of it was found (registry, this log,
+  EXPERIMENT_CONTEXT, earlier chats). What was recorded is the temporal clustering
+  analysis of 2026-10-02 (R-DX-ID-BOUT-01) and a check proposed on 2026-09-02.
+- **S4 means with symmetric exclusion:** FAIRD 12.6, ID 32.4 per unit-day without the
+  window (FAIRD 12.8 earlier, when the window was removed for ID only); 12.8 and 35.9
+  over 22 days, as in V6.
+- **S2:** on the log scale too, the FAIRD unit pairs agree more in abundance (R² 0.67,
+  0.73) than in biomass (0.42, 0.64).
+- **S1:** the Gaussian `nlme` check of the three-system test (interaction p = 6.1e-5)
+  had no registry entry; now R-TB-ALL-02, with Block random (p = 0.0052).
+- **FAIRD body-length classes** (R-OUT-H2Q-04, used for V6 3.2 claim 4) are printed by
+  no current script, only by the archived `H2_quanti_validation.R`.
+- **Script versions:** the docs called `Scherber_temporal_biomass_5.R` and the unsuffixed
+  concordance script current; the scripts that produced the current results were `_6.R`
+  and `_4.R` (registry v0.7.3).
+- `levels2dates`, used in Scherber's composition figure (now 3-2a), was not found in the
+  repository or on the web; left unqualified as in his script, which runs.
+
+### 4. Errors and fixes
+
+- **Unsupported Introduction claims (Claude, first V6 draft).** Removed after Juan's
+  question (decision 7).
+- **Partial archiving (Claude).** The first step moved only duplicate scripts; Juan
+  expected the full reorganisation, done in `b93c043`.
+- **`git pull` blocked by untracked local outputs** (Juan's machine, files later added
+  by a Claude commit). Moved to `%TEMP%\faird_backup`, pull succeeded.
+- **R-TB-INT-01 transcription** (registry, earlier session). Corrected in v0.7.4.
+- **Asymmetric exclusion in the per-site abundance diagnostic** (2026-09-02) and its
+  reading. Corrected in R-DX-FI-ABUND-01 (v0.7.6).
+- **Misplaced sensitivity in the V6 Methods (Claude).** The spline with 4 df was given
+  as a sensitivity of the trajectory tests; it belongs to the concordance. Corrected.
+- **Overstatement (Claude, 2026-10-29).** Said that every ID class exceeded its
+  full-effort maximum on 30 and 31 August; true for 30 August only. Corrected in the
+  same session.
+- **S3 Part C written without a test run** (no R in the session); to be checked when
+  Juan runs it.
+
+### 5. Open items (consolidated)
+
+Replaces the list of session 2026-10-13/14. Closed since then: k printed and the
+interaction test with the figure model (3-1a); counts for Table 1 (2-4); denominators of
+R-DC-TX-03; D1, D2, D4 to D7; abundance rerun R-TA-FI-02 and the ID battery-window
+sensitivity of the biomass figure (dropped, decision 1); output folders `old/`;
+unified output names; duplicate `SAS/source_tables/`; "k = 11" in the guidelines.
+
+**Analyses (Juan runs)**
+1. Run S3 (Part C) and send the output; Claude enters it next to R-DX-ID-BOUT-01.
+2. Print of FAIRD body-length classes (overall and by site) in `3-2b`, so that V6 3.2
+   claim 4 rests on a current script (R-OUT-H2Q-04). Claude writes, Juan runs.
+3. Optional: FAIRD `Checkin` hour by Order for Lepidoptera and Hemiptera (R-OBS-06).
+
+**Manuscript (V6)**
+4. Juan: merge the V5 Introduction and Methods into V6. To watch, from the V5
+   Introduction: V5 presents ID as secondary and exploratory, V6 compares the three
+   systems; the V5 hypotheses H1/H2 do not match the V6 Results (3.1 Quantity, 3.2
+   Composition); V5 statistical methods are legacy (OLS on log10, SAS, site /
+   intra-habitat / overall levels); outage days are partial-effort days, not zeros; AMMOD
+   biomass is live mass; em dashes in the V5 text; the claims removed in decision 7.
+5. Claude, after the merge: check pass (every value against the registry, Methods
+   against Results, terminology, references, placeholders).
+6. Placeholders in the draft: power-supply contradiction (2.1); metabarcoding protocol
+   (Kirse); source of AMMOD body length; time to data in Table 4; Figure 5 decision tree
+   (G3); Sohlström et al. 2018 reference; Möglich et al. author list and published
+   version; Figures 1 and 2 (photographs, site map).
+7. Supplementary Material text S1 to S6 from the script outputs; S4 caption: the highest
+   ID2 values fall on outage days.
+8. Registry Section 5 corrections for every value carried over from V5 (relevant to the
+   merge, item 4).
+9. LOW interval method (registry Section 6), only if ID1 vs ID2 LOW over 22 days is
+   reported (V6 does not report it).
+
+**Documents**
+10. Registry: replace the citation of `H1_consistency_summary_output_20261006_114514.txt`
+    with the 2026-10-10 output; update the entries that say a Stage 1 script is "not in
+    ADP". (2026-10-10, 2026-10-12b.)
+11. Optional: registry Section 6 rows testable with the Stage 1 scripts or extra prints;
+    no V6 value depends on them.
+12. EXPERIMENT_CONTEXT V1.5, Section 15 (ID looping hypothesis): add the class
+    composition check next to the clustering observation at its next revision (Juan's
+    document in ADP).
+
+**Correspondence**
+13. Scherber has not answered Juan's objections to E6 point 6 (concordance, reliability
+    ranking). (10-02b.)
+14. Original and corrected versions of Scherber's figures: send with V6 rather than
+    separately, one sentence per input correction. (2026-10-12, redefined.)
+15. Inform Max Sittinger before the manuscript is circulated. (10-02b.)
+
+**Repository**
+16. Define what the published repository contains (without `R/old/`, the `old/` output
+    folders, `docs/old/`). Pending answers: `docs/section_mapping.md` (V5 refactoring) to
+    `docs/old/`?; `docs/Executive_Summary_for_Scherber.docx` carries a person name, which
+    matters only if `docs/` is published.
+17. Review Scherber's commits on `main` against `revision-scherber` before any merge
+    (`git diff --stat revision-scherber main --ignore-cr-at-eol`). (2026-10-12b.)
+18. ADP sync: the filter excluding `/SAS/source_tables/` is obsolete (folder removed);
+    project knowledge capacity to check; exclude `R/old/` from the sync if needed.
+19. Zenodo release of the V6 state at submission. (2026-10-12b.)
