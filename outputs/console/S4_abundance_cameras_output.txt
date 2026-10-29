@@ -1,0 +1,37 @@
+==============================================================================
+SUPPLEMENTARY S4: DAILY ABUNDANCE OF THE CAMERA SYSTEMS
+==============================================================================
+Script started: 2026-10-29 10:54:30 
+
+154 unit-days (FAIRD1, FAIRD2, FAIRD3, FAIRD4, ID1, ID2, ID4); outage window: 2023-08-28, 2023-08-29, 2023-08-30, 2023-08-31, 2023-09-01
+
+=== MEAN ABUNDANCE PER UNIT-DAY, BY SYSTEM ===
+# A tibble: 4 × 7
+  Days                   Device_type n_units n_unit_days total mean_per_unit_day
+  <chr>                  <chr>         <int>       <int> <dbl>             <dbl>
+1 22 days                FAIRD             4          88  1128              12.8
+2 22 days                ID                3          66  2370              35.9
+3 outage window excluded FAIRD             4          68   855              12.6
+4 outage window excluded ID                3          51  1652              32.4
+  median_per_unit_day
+                <dbl>
+1                 6  
+2                20.5
+3                 6  
+4                21  
+
+=== BY UNIT (22 days) ===
+# A tibble: 7 × 8
+  Device_type Device Site  n_days total mean_per_day max_per_day zero_days
+  <chr>       <chr>  <chr>  <int> <dbl>        <dbl>       <dbl>     <int>
+1 FAIRD       FAIRD1 Site1     22   265         12            90         3
+2 FAIRD       FAIRD2 Site2     22   186          8.5          67         5
+3 FAIRD       FAIRD3 Site3     22   279         12.7          46         0
+4 FAIRD       FAIRD4 Site4     22   398         18.1          73         0
+5 ID          ID1    Site1     22   458         20.8          66         2
+6 ID          ID2    Site2     22  1139         51.8         254         2
+7 ID          ID4    Site4     22   773         35.1         141         1
+
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/S4_abundance_cameras_daily_abundance.png 
+wrote 2.15GB in  0s, 2.15GB/s                                                                                             wrote 2.15GB in  0s, 2.15GB/s                                                                                             [OK] Tables written to C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/tables 
+Finished: 2026-10-29 10:54:32 

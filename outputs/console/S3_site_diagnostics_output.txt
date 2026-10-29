@@ -1,0 +1,352 @@
+==============================================================================
+SUPPLEMENTARY S3: PER-SITE DIAGNOSTICS
+==============================================================================
+Script started: 2026-10-29 10:54:18 
+
+=== PART A: BIOMASS BY SITE (12 days with AMMOD biomass) ===
+
+Overlap window: 2023-08-23 to 2023-09-03 | 116 observations
+
+Devices present per site:
+# A tibble: 10 × 4
+   Site  Device_type Device n_days
+   <fct> <fct>       <chr>   <int>
+ 1 Site1 AMMOD       AMMOD1     12
+ 2 Site1 FAIRD       FAIRD1     12
+ 3 Site1 ID          ID1        12
+ 4 Site2 AMMOD       AMMOD2     12
+ 5 Site2 FAIRD       FAIRD2     12
+ 6 Site2 ID          ID2        12
+ 7 Site3 AMMOD       AMMOD3      8
+ 8 Site3 FAIRD       FAIRD3     12
+ 9 Site4 FAIRD       FAIRD4     12
+10 Site4 ID          ID4        12
+
+ID battery-window days flagged (Field_Valid_Operational_ID not TRUE):
+# A tibble: 3 × 6
+  Device     n first      last       n_zero_days biomass_sum
+  <chr>  <int> <date>     <date>           <int>       <dbl>
+1 ID1        5 2023-08-28 2023-09-01           2       1291.
+2 ID2        5 2023-08-28 2023-09-01           2       4291.
+3 ID4        5 2023-08-28 2023-09-01           1        876.
+  n_zero_days < n means the device recorded on some flagged days.
+
+Dual-axis scale factor (sum AMMOD / sum FAIRD, co-located site-days): 11
+
+=== TABLE 1: DAILY BIOMASS (mg) PER SITE ===
+ID_window = TRUE marks ID battery-window days (partial, unknown effort).
+
+# A tibble: 48 × 6
+   Site  Date       AMMOD FAIRD     ID ID_window
+   <fct> <date>     <dbl> <dbl>  <dbl> <lgl>    
+ 1 Site1 2023-08-23  2488  63.9  178.  FALSE    
+ 2 Site1 2023-08-24  2276 115.    71.4 FALSE    
+ 3 Site1 2023-08-25  3832  54.3  326   FALSE    
+ 4 Site1 2023-08-26  3584 996.   303.  FALSE    
+ 5 Site1 2023-08-27  1636 440.   147.  FALSE    
+ 6 Site1 2023-08-28   612  29.2  300.  TRUE     
+ 7 Site1 2023-08-29   496   0      0   TRUE     
+ 8 Site1 2023-08-30  1240 297.   463.  TRUE     
+ 9 Site1 2023-08-31  1492 201.     0   TRUE     
+10 Site1 2023-09-01   896 306.   527.  TRUE     
+11 Site1 2023-09-02  2748 179.   201.  FALSE    
+12 Site1 2023-09-03  2048  35.5  648.  FALSE    
+13 Site2 2023-08-23  3840  55.4  331.  FALSE    
+14 Site2 2023-08-24  2372  52    224.  FALSE    
+15 Site2 2023-08-25  3788 244.   977   FALSE    
+16 Site2 2023-08-26  7300 595.   778.  FALSE    
+17 Site2 2023-08-27  1500 337.   192.  FALSE    
+18 Site2 2023-08-28   480  43.6   42   TRUE     
+19 Site2 2023-08-29   464   8.4    0   TRUE     
+20 Site2 2023-08-30   892 115.  2230.  TRUE     
+21 Site2 2023-08-31   640  54.2 2019   TRUE     
+22 Site2 2023-09-01  1032  50.4    0   TRUE     
+23 Site2 2023-09-02  1196  75    801.  FALSE    
+24 Site2 2023-09-03  1516  31.4  695.  FALSE    
+25 Site3 2023-08-23  4128 221.    NA   FALSE    
+26 Site3 2023-08-24  7192 155.    NA   FALSE    
+27 Site3 2023-08-25  4772 402.    NA   FALSE    
+28 Site3 2023-08-26  2736 670.    NA   FALSE    
+29 Site3 2023-08-27  1532 319     NA   FALSE    
+30 Site3 2023-08-28  1900  43.6   NA   FALSE    
+31 Site3 2023-08-29  1284 128.    NA   FALSE    
+32 Site3 2023-08-30  3248 278.    NA   FALSE    
+33 Site3 2023-08-31    NA  76.2   NA   FALSE    
+34 Site3 2023-09-01    NA 176.    NA   FALSE    
+35 Site3 2023-09-02    NA  46.3   NA   FALSE    
+36 Site3 2023-09-03    NA 109.    NA   FALSE    
+37 Site4 2023-08-23    NA 258.   377.  FALSE    
+38 Site4 2023-08-24    NA 133.  1263.  FALSE    
+39 Site4 2023-08-25    NA 375.   197.  FALSE    
+40 Site4 2023-08-26    NA 800.   367.  FALSE    
+41 Site4 2023-08-27    NA 720.   167.  FALSE    
+42 Site4 2023-08-28    NA 129.   134.  TRUE     
+43 Site4 2023-08-29    NA 145.     0   TRUE     
+44 Site4 2023-08-30    NA 244.   220.  TRUE     
+45 Site4 2023-08-31    NA 148.   504.  TRUE     
+46 Site4 2023-09-01    NA 306.    16.8 TRUE     
+47 Site4 2023-09-02    NA 320.   588.  FALSE    
+48 Site4 2023-09-03    NA  95.8  848.  FALSE    
+
+=== TABLE 2: WINDOW PROFILE PER DEVICE ===
+
+Window definition:
+# A tibble: 3 × 4
+  Window  from       to         n_days
+  <fct>   <date>     <date>      <int>
+1 early   2023-08-23 2023-08-26      4
+2 central 2023-08-27 2023-08-30      4
+3 late    2023-08-31 2023-09-03      4
+
+Per device and window (n_window = ID battery-window days, n_valid = full-effort days):
+# A tibble: 29 × 9
+   Site  Device_type Device Window  n_days n_window n_valid mean_all mean_valid
+   <fct> <fct>       <chr>  <fct>    <int>    <int>   <int>    <dbl>      <dbl>
+ 1 Site1 AMMOD       AMMOD1 early        4        0       4   3045       3045  
+ 2 Site1 AMMOD       AMMOD1 central      4        0       4    996        996  
+ 3 Site1 AMMOD       AMMOD1 late         4        0       4   1796       1796  
+ 4 Site1 FAIRD       FAIRD1 early        4        0       4    307.       307. 
+ 5 Site1 FAIRD       FAIRD1 central      4        0       4    192.       192. 
+ 6 Site1 FAIRD       FAIRD1 late         4        0       4    180.       180. 
+ 7 Site1 ID          ID1    early        4        0       4    220.       220. 
+ 8 Site1 ID          ID1    central      4        3       1    228.       147. 
+ 9 Site1 ID          ID1    late         4        2       2    344.       425. 
+10 Site2 AMMOD       AMMOD2 early        4        0       4   4325       4325  
+11 Site2 AMMOD       AMMOD2 central      4        0       4    834        834  
+12 Site2 AMMOD       AMMOD2 late         4        0       4   1096       1096  
+13 Site2 FAIRD       FAIRD2 early        4        0       4    237.       237. 
+14 Site2 FAIRD       FAIRD2 central      4        0       4    126.       126. 
+15 Site2 FAIRD       FAIRD2 late         4        0       4     52.8       52.8
+16 Site2 ID          ID2    early        4        0       4    578.       578. 
+17 Site2 ID          ID2    central      4        3       1    616.       192. 
+18 Site2 ID          ID2    late         4        2       2    879.       748  
+19 Site3 AMMOD       AMMOD3 early        4        0       4   4707       4707  
+20 Site3 AMMOD       AMMOD3 central      4        0       4   1991       1991  
+21 Site3 FAIRD       FAIRD3 early        4        0       4    362        362  
+22 Site3 FAIRD       FAIRD3 central      4        0       4    192.       192. 
+23 Site3 FAIRD       FAIRD3 late         4        0       4    102        102  
+24 Site4 FAIRD       FAIRD4 early        4        0       4    391.       391. 
+25 Site4 FAIRD       FAIRD4 central      4        0       4    310.       310. 
+26 Site4 FAIRD       FAIRD4 late         4        0       4    217.       217. 
+27 Site4 ID          ID4    early        4        0       4    551        551  
+28 Site4 ID          ID4    central      4        3       1    131.       167. 
+29 Site4 ID          ID4    late         4        2       2    489.       718. 
+
+Ratios to the early window (valid days only):
+# A tibble: 10 × 8
+   Site  Device_type Device early central   late central_vs_early late_vs_early
+   <fct> <fct>       <chr>  <dbl>   <dbl>  <dbl>            <dbl>         <dbl>
+ 1 Site1 AMMOD       AMMOD1 3045     996  1796               0.33          0.59
+ 2 Site1 FAIRD       FAIRD1  307.    192.  180.              0.62          0.59
+ 3 Site1 ID          ID1     220.    147.  425.              0.67          1.93
+ 4 Site2 AMMOD       AMMOD2 4325     834  1096               0.19          0.25
+ 5 Site2 FAIRD       FAIRD2  237.    126.   52.8             0.53          0.22
+ 6 Site2 ID          ID2     578.    192.  748               0.33          1.3 
+ 7 Site3 AMMOD       AMMOD3 4707    1991    NA               0.42         NA   
+ 8 Site3 FAIRD       FAIRD3  362     192.  102               0.53          0.28
+ 9 Site4 FAIRD       FAIRD4  391.    310.  217.              0.79          0.55
+10 Site4 ID          ID4     551     167.  718.              0.3           1.3 
+
+=== TABLE 3: DAILY RATIO PER PAIR OF SYSTEMS ===
+
+Summary per pair and unit (3a site, 3b block, 3c intra-FAIRD check):
+# A tibble: 34 × 11
+   Level    Pair  Unit  Subset n_days n_den_zero ratio_overall ratio_median ratio_min ratio_max
+   <chr>    <chr> <chr> <chr>   <int>      <int>         <dbl>        <dbl>     <dbl>     <dbl>
+ 1 3a_site  AMMO… Site1 all_d…     12          1          8.6         15.4       2.92     70.5 
+ 2 3a_site  AMMO… Site1 outsi…      7          0          9.89        19.9       3.6      70.5 
+ 3 3a_site  AMMO… Site2 all_d…     12          0         15.1         15.7       4.45     69.3 
+ 4 3a_site  AMMO… Site2 outsi…      7          0         15.5         15.9       4.45     69.3 
+ 5 3a_site  AMMO… Site3 all_d…      8          0         12.1         11.8       4.08     46.4 
+ 6 3a_site  AMMO… Site3 outsi…      5          0         11.5         11.9       4.08     46.4 
+ 7 3a_site  AMMO… Site1 all_d…     12          2          7.37        11.4       1.7      31.9 
+ 8 3a_site  AMMO… Site1 outsi…      7          0          9.93        11.8       3.16     31.9 
+ 9 3a_site  AMMO… Site2 all_d…     12          2          3.02         5.85      0.32     11.6 
+10 3a_site  AMMO… Site2 outsi…      7          0          5.38         7.83      1.49     11.6 
+11 3a_site  FAIR… Site1 all_d…     12          2          0.86         0.61      0.05      3.28
+12 3a_site  FAIR… Site1 outsi…      7          0          1            0.89      0.05      3.28
+13 3a_site  FAIR… Site2 all_d…     12          2          0.2          0.2       0.03      1.76
+14 3a_site  FAIR… Site2 outsi…      7          0          0.35         0.23      0.05      1.76
+15 3a_site  FAIR… Site4 all_d…     12          1          0.78         0.96      0.11     18.2 
+16 3a_site  FAIR… Site4 outsi…      7          0          0.71         0.68      0.11      4.3 
+17 3b_block AMMO… BLOC… all_d…     12          0         11.0         15.3       4.04    114.  
+18 3b_block AMMO… BLOC… outsi…      7          0         12.3         25.5       4.04     53.3 
+19 3b_block AMMO… BLOC… all_d…      8          0         10.7         12.4       2.95     49.9 
+20 3b_block AMMO… BLOC… outsi…      5          0         10.0         12.3       2.95     49.9 
+21 3b_block AMMO… BLOC… all_d…     12          1          4.22         3.94      0.79     15.8 
+22 3b_block AMMO… BLOC… outsi…      7          0          6.83         9.27      2.65     15.8 
+23 3b_block AMMO… BLOC… all_d…      8          1          9.83        11.0       5.7      24.2 
+24 3b_block AMMO… BLOC… outsi…      5          0          8.59         9.15      5.7      24.2 
+25 3b_block FAIR… BLOC… all_d…     12          1          0.38         0.23      0.05      2.3 
+26 3b_block FAIR… BLOC… outsi…      7          0          0.56         0.25      0.05      2.3 
+27 3b_block FAIR… BLOC… all_d…     12          1          0.67         0.64      0.11     14.3 
+28 3b_block FAIR… BLOC… outsi…      7          0          0.61         0.64      0.11      3.1 
+29 3c_intr… FAIR… BLOC… AMMOD…     12          0          1.63         1.49      0         6.08
+30 3c_intr… FAIR… BLOC… all_d…     12          0          1.63         1.49      0         6.08
+31 3c_intr… FAIR… BLOC… outsi…      7          0          1.35         1.3       0.22      2.38
+32 3c_intr… FAIR… BLOC… AMMOD…      8          0          0.79         0.87      0.34      1.16
+33 3c_intr… FAIR… BLOC… all_d…     12          0          0.71         0.85      0.14      1.16
+34 3c_intr… FAIR… BLOC… outsi…      7          0          0.71         0.86      0.14      1.16
+# ℹ 1 more variable: rho_ratio_vs_date <dbl>
+
+Daily ratios, 3b (block level) and 3c (intra-FAIRD check):
+# A tibble: 88 × 9
+   Level          Pair          Unit   Date          num    den  ratio in_window ammod_day
+   <chr>          <chr>         <chr>  <date>      <dbl>  <dbl>  <dbl> <lgl>     <lgl>    
+ 1 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-23 3164     59.7  53.0  FALSE     TRUE     
+ 2 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-24 2324     83.3  27.9  FALSE     TRUE     
+ 3 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-25 3810    149.   25.5  FALSE     TRUE     
+ 4 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-26 5442    795     6.84 FALSE     TRUE     
+ 5 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-27 1568    388.    4.04 FALSE     TRUE     
+ 6 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-28  546     36.4  15.0  TRUE      TRUE     
+ 7 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-29  480      4.2 114.   TRUE      TRUE     
+ 8 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-30 1066    206     5.17 TRUE      TRUE     
+ 9 3b_block       AMMOD/FAIRD   BLOCK1 2023-08-31 1066    128.    8.35 TRUE      TRUE     
+10 3b_block       AMMOD/FAIRD   BLOCK1 2023-09-01  964    178.    5.4  TRUE      TRUE     
+11 3b_block       AMMOD/FAIRD   BLOCK1 2023-09-02 1972    127.   15.5  FALSE     TRUE     
+12 3b_block       AMMOD/FAIRD   BLOCK1 2023-09-03 1782     33.5  53.3  FALSE     TRUE     
+13 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-23 4128    240.   17.2  FALSE     TRUE     
+14 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-24 7192    144.   49.9  FALSE     TRUE     
+15 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-25 4772    388.   12.3  FALSE     TRUE     
+16 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-26 2736    735.    3.72 FALSE     TRUE     
+17 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-27 1532    520.    2.95 FALSE     TRUE     
+18 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-28 1900     86.1  22.1  TRUE      TRUE     
+19 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-29 1284    137.    9.4  TRUE      TRUE     
+20 3b_block       AMMOD/FAIRD   BLOCK2 2023-08-30 3248    261.   12.4  TRUE      TRUE     
+21 3b_block       AMMOD/ID      BLOCK1 2023-08-23 3164    255.   12.4  FALSE     TRUE     
+22 3b_block       AMMOD/ID      BLOCK1 2023-08-24 2324    148.   15.8  FALSE     TRUE     
+23 3b_block       AMMOD/ID      BLOCK1 2023-08-25 3810    652.    5.85 FALSE     TRUE     
+24 3b_block       AMMOD/ID      BLOCK1 2023-08-26 5442    541.   10.1  FALSE     TRUE     
+25 3b_block       AMMOD/ID      BLOCK1 2023-08-27 1568    169.    9.27 FALSE     TRUE     
+26 3b_block       AMMOD/ID      BLOCK1 2023-08-28  546    171.    3.19 TRUE      TRUE     
+27 3b_block       AMMOD/ID      BLOCK1 2023-08-29  480      0    NA    TRUE      TRUE     
+28 3b_block       AMMOD/ID      BLOCK1 2023-08-30 1066   1346.    0.79 TRUE      TRUE     
+29 3b_block       AMMOD/ID      BLOCK1 2023-08-31 1066   1010.    1.06 TRUE      TRUE     
+30 3b_block       AMMOD/ID      BLOCK1 2023-09-01  964    264.    3.66 TRUE      TRUE     
+31 3b_block       AMMOD/ID      BLOCK1 2023-09-02 1972    501     3.94 FALSE     TRUE     
+32 3b_block       AMMOD/ID      BLOCK1 2023-09-03 1782    672.    2.65 FALSE     TRUE     
+33 3b_block       AMMOD/ID      BLOCK2 2023-08-23 4128    377.   11.0  FALSE     TRUE     
+34 3b_block       AMMOD/ID      BLOCK2 2023-08-24 7192   1263.    5.7  FALSE     TRUE     
+35 3b_block       AMMOD/ID      BLOCK2 2023-08-25 4772    197.   24.2  FALSE     TRUE     
+36 3b_block       AMMOD/ID      BLOCK2 2023-08-26 2736    367.    7.45 FALSE     TRUE     
+37 3b_block       AMMOD/ID      BLOCK2 2023-08-27 1532    167.    9.15 FALSE     TRUE     
+38 3b_block       AMMOD/ID      BLOCK2 2023-08-28 1900    134.   14.1  TRUE      TRUE     
+39 3b_block       AMMOD/ID      BLOCK2 2023-08-29 1284      0    NA    TRUE      TRUE     
+40 3b_block       AMMOD/ID      BLOCK2 2023-08-30 3248    220.   14.7  TRUE      TRUE     
+41 3b_block       FAIRD/ID      BLOCK1 2023-08-23   59.7  255.    0.23 FALSE     TRUE     
+42 3b_block       FAIRD/ID      BLOCK1 2023-08-24   83.3  148.    0.56 FALSE     TRUE     
+43 3b_block       FAIRD/ID      BLOCK1 2023-08-25  149.   652.    0.23 FALSE     TRUE     
+44 3b_block       FAIRD/ID      BLOCK1 2023-08-26  795    541.    1.47 FALSE     TRUE     
+45 3b_block       FAIRD/ID      BLOCK1 2023-08-27  388.   169.    2.3  FALSE     TRUE     
+46 3b_block       FAIRD/ID      BLOCK1 2023-08-28   36.4  171.    0.21 TRUE      TRUE     
+47 3b_block       FAIRD/ID      BLOCK1 2023-08-29    4.2    0    NA    TRUE      TRUE     
+48 3b_block       FAIRD/ID      BLOCK1 2023-08-30  206   1346.    0.15 TRUE      TRUE     
+49 3b_block       FAIRD/ID      BLOCK1 2023-08-31  128.  1010.    0.13 TRUE      TRUE     
+50 3b_block       FAIRD/ID      BLOCK1 2023-09-01  178.   264.    0.68 TRUE      TRUE     
+51 3b_block       FAIRD/ID      BLOCK1 2023-09-02  127.   501     0.25 FALSE     TRUE     
+52 3b_block       FAIRD/ID      BLOCK1 2023-09-03   33.5  672.    0.05 FALSE     TRUE     
+53 3b_block       FAIRD/ID      BLOCK2 2023-08-23  240.   377.    0.64 FALSE     TRUE     
+54 3b_block       FAIRD/ID      BLOCK2 2023-08-24  144.  1263.    0.11 FALSE     TRUE     
+55 3b_block       FAIRD/ID      BLOCK2 2023-08-25  388.   197.    1.97 FALSE     TRUE     
+56 3b_block       FAIRD/ID      BLOCK2 2023-08-26  735.   367.    2    FALSE     TRUE     
+57 3b_block       FAIRD/ID      BLOCK2 2023-08-27  520.   167.    3.1  FALSE     TRUE     
+58 3b_block       FAIRD/ID      BLOCK2 2023-08-28   86.1  134.    0.64 TRUE      TRUE     
+59 3b_block       FAIRD/ID      BLOCK2 2023-08-29  137.     0    NA    TRUE      TRUE     
+60 3b_block       FAIRD/ID      BLOCK2 2023-08-30  261.   220.    1.18 TRUE      TRUE     
+61 3b_block       FAIRD/ID      BLOCK2 2023-08-31  112.   504.    0.22 TRUE      FALSE    
+62 3b_block       FAIRD/ID      BLOCK2 2023-09-01  241     16.8  14.3  TRUE      FALSE    
+63 3b_block       FAIRD/ID      BLOCK2 2023-09-02  183.   588.    0.31 FALSE     FALSE    
+64 3b_block       FAIRD/ID      BLOCK2 2023-09-03  103.   848.    0.12 FALSE     FALSE    
+65 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-23   63.9   55.4   1.15 FALSE     TRUE     
+66 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-24  115.    52     2.2  FALSE     TRUE     
+67 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-25   54.3  244.    0.22 FALSE     TRUE     
+68 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-26  996.   595.    1.67 FALSE     TRUE     
+69 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-27  440.   337.    1.3  FALSE     TRUE     
+70 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-28   29.2   43.6   0.67 TRUE      TRUE     
+71 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-29    0      8.4   0    TRUE      TRUE     
+72 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-30  297.   115.    2.58 TRUE      TRUE     
+73 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-08-31  201.    54.2   3.71 TRUE      TRUE     
+74 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-09-01  306.    50.4   6.08 TRUE      TRUE     
+75 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-09-02  179.    75     2.38 FALSE     TRUE     
+76 3c_intra_FAIRD FAIRD1/FAIRD2 BLOCK1 2023-09-03   35.5   31.4   1.13 FALSE     TRUE     
+77 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-23  221.   258.    0.86 FALSE     TRUE     
+78 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-24  155.   133.    1.16 FALSE     TRUE     
+79 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-25  402.   375.    1.07 FALSE     TRUE     
+80 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-26  670.   800.    0.84 FALSE     TRUE     
+81 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-27  319    720.    0.44 FALSE     TRUE     
+82 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-28   43.6  129.    0.34 TRUE      TRUE     
+83 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-29  128.   145.    0.88 TRUE      TRUE     
+84 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-30  278.   244.    1.14 TRUE      TRUE     
+85 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-08-31   76.2  148.    0.52 TRUE      FALSE    
+86 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-09-01  176.   306.    0.58 TRUE      FALSE    
+87 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-09-02   46.3  320.    0.14 FALSE     FALSE    
+88 3c_intra_FAIRD FAIRD3/FAIRD4 BLOCK2 2023-09-03  109.    95.8   1.14 FALSE     FALSE    
+  in_window = ID battery-window day; ammod_day = block has AMMOD biomass.
+
+=== TABLE 4: DIRECTION CONCORDANCE PER SITE ===
+
+# A tibble: 8 × 4
+  Site  Pair           n_intervals pct_same_direction
+  <fct> <chr>                <int>              <dbl>
+1 Site1 AMMOD vs FAIRD          11               45.5
+2 Site2 AMMOD vs FAIRD          11               81.8
+3 Site3 AMMOD vs FAIRD           7               28.6
+4 Site1 AMMOD vs ID              5               80  
+5 Site2 AMMOD vs ID              5               60  
+6 Site1 FAIRD vs ID              5               20  
+7 Site2 FAIRD vs ID              5               80  
+8 Site4 FAIRD vs ID              5               40  
+
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/S3_site_diagnostics_biomass_dualaxis.png
+
+=== FIGURE B: COMMON VALID DAYS USED FOR NORMALISATION ===
+
+# A tibble: 4 × 4
+  Site  n_days from       to        
+  <fct>  <int> <date>     <date>    
+1 Site1      7 2023-08-23 2023-09-03
+2 Site2      7 2023-08-23 2023-09-03
+3 Site3      8 2023-08-23 2023-08-30
+4 Site4      7 2023-08-23 2023-09-03
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/S3_site_diagnostics_biomass_relative.png
+
+
+=== PART B: ABUNDANCE OF THE CAMERA SYSTEMS BY SITE ===
+
+Sites with both FAIRD and ID: Site1, Site2, Site4
+Outage window (flagged for both systems): 2023-08-28, 2023-08-29, 2023-08-30, 2023-08-31, 2023-09-01
+
+=== PEAK AND MEAN PER UNIT ===
+
+# A tibble: 12 × 8
+   Days        Site  Device_type Device n_days peak_date  peak_value mean_abund
+   <chr>       <chr> <chr>       <chr>   <int> <date>          <int>      <dbl>
+ 1 all days    Site1 FAIRD       FAIRD1     22 2023-08-26         90       12  
+ 2 all days    Site1 ID          ID1        22 2023-09-03         66       20.8
+ 3 all days    Site2 FAIRD       FAIRD2     22 2023-08-26         67        8.5
+ 4 all days    Site2 ID          ID2        22 2023-08-30        254       51.8
+ 5 all days    Site4 FAIRD       FAIRD4     22 2023-08-26         73       18.1
+ 6 all days    Site4 ID          ID4        22 2023-08-24        141       35.1
+ 7 full effort Site1 FAIRD       FAIRD1     17 2023-08-26         90       11.9
+ 8 full effort Site1 ID          ID1        17 2023-09-03         66       19  
+ 9 full effort Site2 FAIRD       FAIRD2     17 2023-08-26         67        9.1
+10 full effort Site2 ID          ID2        17 2023-08-26         91       38.2
+11 full effort Site4 FAIRD       FAIRD4     17 2023-08-26         73       16.9
+12 full effort Site4 ID          ID4        17 2023-08-24        141       39.9
+
+=== MEAN ABUNDANCE IN THE CENTRAL WINDOW (2023-08-27 to 2023-09-01), ALL DAYS ===
+
+# A tibble: 6 × 7
+  Site  Device_type Device n_days n_outage_days mean_central max_central
+  <chr> <chr>       <chr>   <int>         <int>        <dbl>       <int>
+1 Site1 FAIRD       FAIRD1      6             5         17.7          43
+2 Site1 ID          ID1         6             5         25.3          58
+3 Site2 FAIRD       FAIRD2      6             5         12.5          43
+4 Site2 ID          ID2         6             5         84.8         254
+5 Site4 FAIRD       FAIRD4      6             5         30.2          70
+6 Site4 ID          ID4         6             5         18.8          53
+  Outage-window days are days of partial, unknown ID recording effort.
+
+[OK] Saved: C:/Users/juan/GitHubProjects/fd_id_AMMOD_stats/FAIRD_validation/outputs/figures/S3_site_diagnostics_abundance_by_site.png
+
+Finished: 2026-10-29 10:54:25 
