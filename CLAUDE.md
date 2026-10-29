@@ -10,8 +10,8 @@ Field validation of the FAIR-Device (FAIRD), a non-lethal camera trap, against t
 multisampler (Malaise trap, gravimetric biomass and DNA metabarcoding) and Insect Detect
 (ID). Triesdorf, Bavaria, 23 August to 13 September 2023; two habitats (Maize, Meadow),
 four sites, one unit per system and site. Target journal: Methods in Ecology and
-Evolution. Current draft: V5 (in the claude.ai project); V6 is being planned from
-`docs/V6_OUTLINE.md`.
+Evolution. Current draft: V6 (Claude Doc "FAIRD Paper V6", written from
+`docs/V6_OUTLINE.md`); the previous draft V5 is in the claude.ai project.
 
 ## Where things are
 
