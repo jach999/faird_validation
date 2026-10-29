@@ -37,13 +37,13 @@ R/            one script per V6 section (since 2026-10-28):
               3-2b_composition_overlap.R     Results 3.2, Izsak-Price, Table 3
 R/supplementary/  S1 to S4, one script per supplementary section
 R/old/        archived scripts, not part of the published repository
-              (stage2_v5/: V5 framework; stage3_versions/: superseded Stage 3 versions)
+              (stage2_v5/: V5 framework; stage3_versions/: superseded Stage 3 versions;
+              sas_v5/: V5 diagnostic mixed models, program and results;
+              diagnostics/: throwaway diagnostic scripts)
 outputs/      console/ and tables/, file names prefixed with the script name;
               figures not versioned; old/ subfolders (and outputs/old/) hold outputs
               of archived scripts, not part of the published repository
 source_tables/  the four input CSV files (read-only)
-SAS/          V5 diagnostic mixed models (program and results)
-diagnostics/  throwaway diagnostic scripts
 docs/         registry, outline, namespace standards, old/ for retired documents
 ```
 

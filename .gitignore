@@ -65,11 +65,13 @@ R/outputs/**
 
 # Old/backup folders (tracked selectively if needed)
 # Old/backup folders: root ignored entirely; in R/old only R scripts and notes are tracked
-SAS/old/
 /old/
 R/old/**
 !R/old/**/
 !R/old/**/*.R
 !R/old/**/*.md
 R/old/outputs/
+# V5 SAS material in R/old/sas_v5: program, inputs and results tracked; its old/ is not
+!R/old/sas_v5/**
+R/old/sas_v5/old/
 older/

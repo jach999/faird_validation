@@ -1,6 +1,8 @@
 # FAIR-DEVICE VALIDATION STUDY, RESULTS REGISTRY
 
-**Version:** 0.7.6 (October 29, 2026). Supplementary scripts S1 to S4 run and checked:
+**Version:** 0.7.7 (October 29, 2026). Former `SAS/` and `diagnostics/` folders moved to
+`R/old/sas_v5/` and `R/old/diagnostics/` (Section 2.5 location note). No result changed.
+v0.7.6 (October 29, 2026). Supplementary scripts S1 to S4 run and checked:
 citation pass completed; new entries R-TB-ALL-02 (Block random and Gaussian cross-check
 of the omnibus test) and R-CC-S2-01 (log-scale unit-pair correlations, S2);
 R-DX-FI-ABUND-01 rewritten from the S3 output (earlier ID central means were Aug 27
@@ -1260,7 +1262,9 @@ Common to R-V5-H2Q-MM-01 and -02:
   Tables 6 and 7 listed below is printed there (F, df, LS means, contrasts, slices; null
   LRT chi² = 5.88, p = 0.0153 for Analysis B). The back-transformed LS means and the
   17.7-fold ratio are not printed (computed outside SAS, PC V16). An older results file
-  (`SAS/old/`, not tracked) is superseded by this one.
+  (`SAS/old/`, not tracked) is superseded by this one. Location (v0.7.7): since
+  2026-10-29 the former `SAS/` folder is `R/old/sas_v5/` (same file names; its duplicate
+  `source_tables/` removed, see its README).
 
 **R-V5-H2Q-MM-01, Analysis A, biomass level by device type** | LEGACY V5
 - Level: device type x site. Metric: daily biomass (mg), log10 (PC V16). Window: 12-day
